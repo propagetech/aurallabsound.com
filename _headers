@@ -1,0 +1,44 @@
+/*
+  # Security Headers
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+  # Cache Control
+  Cache-Control: public, max-age=3600
+
+  # Content Security Policy
+  Content-Security-Policy: default-src 'self' https:; script-src 'self' https://fonts.googleapis.com; style-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:
+
+/index.html
+  Cache-Control: public, max-age=3600
+
+/projects-page.html
+  Cache-Control: public, max-age=3600
+
+/studio-page.html
+  Cache-Control: public, max-age=3600
+
+/equipment-page.html
+  Cache-Control: public, max-age=3600
+
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: text/css; charset=utf-8
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/javascript; charset=utf-8
+
+/imgs/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+  Content-Type: application/xml; charset=utf-8
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8

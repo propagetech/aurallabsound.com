@@ -1,0 +1,15 @@
+name = "aurallabsound"
+type = "javascript"
+account_id = ""
+workers_dev = true
+route = ""
+zone_id = ""
+
+[env.production]
+route = "aurallabsound.com/*"
+zone_id = ""
+
+[[migrations]]
+tag = "v1"
+date = "2026-07-30T00:00:00Z"
+new_sqlite_schema = true
