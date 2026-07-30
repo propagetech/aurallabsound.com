@@ -1,0 +1,62 @@
+{
+  "name": "Aural Lab Sound",
+  "short_name": "ALS",
+  "description": "Professional audio and sound design studio in Bangalore, India",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["music", "audio"],
+  "theme_color": "#1D4ED8",
+  "background_color": "#FFFFFF",
+  "screenshots": [
+    {
+      "src": "assets/images/gallery/sound-recording.webp",
+      "sizes": "540x720",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Credits",
+      "short_name": "Credits",
+      "description": "View film and production credits",
+      "url": "/#credits",
+      "icons": [
+        {
+          "src": "assets/icons/favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Get in touch with Aural Lab Sound",
+      "url": "/#contact",
+      "icons": [
+        {
+          "src": "assets/icons/favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

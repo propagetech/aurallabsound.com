@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="100" height="60">
+  <!-- IMDB Logo - Dark Theme -->
+  <defs>
+    <style>
+      .imdb-bg-dark { fill: #1A1A1A; }
+      .imdb-text-dark { fill: #FFD700; }
+    </style>
+  </defs>
+
+  <!-- Dark background -->
+  <rect class="imdb-bg-dark" width="100" height="60" rx="4"/>
+
+  <!-- Gold/Yellow text -->
+  <text x="50" y="42" font-family="Arial, sans-serif" font-size="32" font-weight="900" text-anchor="middle" class="imdb-text-dark">IMDb</text>
+</svg>

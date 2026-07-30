@@ -2,6 +2,31 @@
 const themeToggle = document.querySelector('.theme-toggle');
 const html = document.documentElement;
 
+function updateThemeIcon() {
+  const sunIcon = document.querySelector('.icon-sun');
+  const moonIcon = document.querySelector('.icon-moon');
+  const currentTheme = html.getAttribute('data-theme');
+
+  if (currentTheme === 'dark') {
+    if (sunIcon) sunIcon.setAttribute('hidden', '');
+    if (moonIcon) moonIcon.removeAttribute('hidden');
+    updateFavicon('dark');
+  } else {
+    if (sunIcon) sunIcon.removeAttribute('hidden');
+    if (moonIcon) moonIcon.setAttribute('hidden', '');
+    updateFavicon('light');
+  }
+}
+
+function updateFavicon(theme) {
+  const faviconLink = document.querySelector('link[rel="icon"]');
+  if (faviconLink) {
+    faviconLink.href = theme === 'dark'
+      ? 'assets/icons/favicon-dark.svg'
+      : 'assets/icons/favicon.svg';
+  }
+}
+
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
     const currentTheme = html.getAttribute('data-theme');
@@ -9,6 +34,7 @@ if (themeToggle) {
 
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme-preference', newTheme);
+    updateThemeIcon();
   });
 }
 
@@ -27,9 +53,13 @@ function initTheme() {
 
 // Initialize on load
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initTheme);
+  document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+    updateThemeIcon();
+  });
 } else {
   initTheme();
+  updateThemeIcon();
 }
 
 // Listen for system theme changes
