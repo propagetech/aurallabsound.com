@@ -1,0 +1,228 @@
+/* Aural Lab Sound - Design tokens & base */
+
+:root {
+  /* Typography */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Quicksand", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: clamp(2.25rem, 5vw, 3.25rem);
+  --text-5xl: clamp(2.75rem, 6vw, 4.25rem);
+  --text-hero: clamp(2.5rem, 8vw, 4.5rem);
+  --text-section: clamp(2rem, 5vw, 3rem);
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.14em;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Layout */
+  --layout-max-width: 68rem;
+  --container-narrow: 40rem;
+  --container-default: 68rem;
+  --container-wide: 80rem;
+  --header-height: 4.5rem;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
+  /* Borders */
+  --border-width: 1px;
+  --border-style: solid;
+}
+
+/* Light theme (default) */
+html {
+  --color-bg: #FFFFFF;
+  --color-surface: #F5F7F9;
+  --color-text-primary: #1C1C1C;
+  --color-text-secondary: #4A4A4A;
+  --color-border: #E0E0E0;
+  --color-accent: #2563EB;
+  --color-accent-hover: #1D4ED8;
+
+  /* Backwards compatibility */
+  --color-bg-elevated: #F5F7F9;
+  --color-bg-subtle: #FAFBFC;
+  --color-text: #1C1C1C;
+  --color-text-muted: #4A4A4A;
+  --color-text-subtle: #6A6A6A;
+  --color-border-strong: #D0D0D0;
+  --color-accent-muted: rgba(37, 99, 235, 0.1);
+  --color-focus: #2563EB;
+  --color-hero-overlay: rgba(255, 255, 255, 0.1);
+  --color-header-bg: rgba(255, 255, 255, 0.98);
+  --color-panel-overlay: rgba(255, 255, 255, 0.95);
+  --color-on-image-heading: #1C1C1C;
+  --color-on-image-lead: rgba(28, 28, 28, 0.9);
+  --color-on-image-body: rgba(28, 28, 28, 0.85);
+  --color-on-image-muted: rgba(28, 28, 28, 0.65);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --wave-opacity: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --color-bg: #121212;
+    --color-surface: #1E1E1E;
+    --color-text-primary: #E0E0E0;
+    --color-text-secondary: #B0B0B0;
+    --color-border: #333333;
+    --color-accent: #60A5FA;
+    --color-accent-hover: #93C5FD;
+
+    /* Backwards compatibility */
+    --color-bg-elevated: #1E1E1E;
+    --color-bg-subtle: #2A2A2A;
+    --color-text: #E0E0E0;
+    --color-text-muted: #B0B0B0;
+    --color-text-subtle: #909090;
+    --color-border-strong: #4A4A4A;
+    --color-accent-muted: rgba(96, 165, 250, 0.1);
+    --color-focus: #60A5FA;
+    --color-hero-overlay: rgba(0, 0, 0, 0.3);
+    --color-header-bg: rgba(18, 18, 18, 0.98);
+    --color-panel-overlay: rgba(18, 18, 18, 0.95);
+    --color-on-image-heading: #E0E0E0;
+    --color-on-image-lead: rgba(224, 224, 224, 0.9);
+    --color-on-image-body: rgba(224, 224, 224, 0.85);
+    --color-on-image-muted: rgba(224, 224, 224, 0.65);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: var(--leading-tight);
+}
+
+h1 {
+  font-size: var(--text-hero);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--text-section);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+p {
+  line-height: var(--leading-normal);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Container */
+.container {
+  max-width: var(--container-default);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+/* Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
