@@ -465,6 +465,19 @@ const movies = [
 const AUTOPLAY_MS = 4500;
 const SWIPE_THRESHOLD = 56;
 const SWIPE_VELOCITY = 0.35;
+const TRANSITION_FALLBACK_MS = 520;
+const POSTER_DECODE_MS = 140;
+// Kept below the 62% exit travel in CSS so a released swipe never doubles back
+const DRAG_LIMIT_RATIO = 0.42;
+const DRAG_FREE_RATIO = 0.6;
+const DRAG_FADE = 0.45;
+const DISMISS_THRESHOLD = 110;
+const DISMISS_VELOCITY = 0.45;
+// A fast flick still has to travel a bit, so a twitch cannot close the viewer
+const DISMISS_MIN_TRAVEL = 64;
+const DISMISS_SCALE = 0.08;
+const DISMISS_OUT_MS = 240;
+const DISMISS_RETURN_MS = 320;
 const STUDIO_NAME = "Aural Lab Sound Post";
 
 const gallery = document.getElementById("image-gallery");
@@ -510,12 +523,31 @@ const swipe = {
   startX: 0,
   startY: 0,
   currentX: 0,
-  startTime: 0
+  currentY: 0,
+  startTime: 0,
+  canDismiss: true,
+  isDismissing: false
 };
+
+let dismissSettleTimer = null;
+let dismissBaseAlpha = 0.95;
 
 function clampIndex(index) {
   const total = filteredMovies.length;
   return total === 0 ? 0 : ((index % total) + total) % total;
+}
+
+// Tracks the finger 1:1 for most of the travel, then eases to an asymptote so
+// a hard flick cannot drag the card further than the exit animation will take it
+function rubberBand(delta, limit) {
+  const distance = Math.abs(delta);
+  const free = limit * DRAG_FREE_RATIO;
+  if (distance <= free) {
+    return delta;
+  }
+  const span = limit - free;
+  const eased = free + span * (1 - Math.exp(-(distance - free) / span));
+  return Math.sign(delta) * eased;
 }
 
 function renderTeam(team) {
@@ -545,6 +577,23 @@ function renderMovie(movie, index) {
   counterText.textContent = `${index + 1} / ${filteredMovies.length}`;
 
   renderProgress(index);
+  preloadNeighbours(index);
+}
+
+function preloadNeighbours(index) {
+  if (filteredMovies.length < 2) {
+    return;
+  }
+
+  [1, -1].forEach((offset) => {
+    const neighbour = filteredMovies[clampIndex(index + offset)];
+    if (!neighbour) {
+      return;
+    }
+    const image = new Image();
+    image.decoding = "async";
+    image.src = neighbour.poster;
+  });
 }
 
 function renderProgress(index) {
@@ -568,6 +617,7 @@ function renderProgress(index) {
 function clearBodyMotionClasses() {
   lightboxBody.classList.remove(
     "is-dragging",
+    "is-instant",
     "is-exit-next",
     "is-exit-prev",
     "is-enter-next",
@@ -594,8 +644,20 @@ function waitForTransition(element) {
       }
     }
     element.addEventListener("transitionend", onEnd);
-    window.setTimeout(finish, 420);
+    window.setTimeout(finish, TRANSITION_FALLBACK_MS);
   });
+}
+
+// The card is off-screen at this point, so a brief wait for the new poster is
+// invisible and stops a half-painted image sliding into view
+function settlePoster() {
+  if (typeof lightboxPoster.decode !== "function") {
+    return Promise.resolve();
+  }
+  return Promise.race([
+    lightboxPoster.decode().catch(() => {}),
+    new Promise((resolve) => window.setTimeout(resolve, POSTER_DECODE_MS))
+  ]);
 }
 
 async function goTo(index, direction) {
@@ -618,18 +680,27 @@ async function goTo(index, direction) {
   const exitClass = direction === "next" ? "is-exit-next" : "is-exit-prev";
   const enterClass = direction === "next" ? "is-enter-next" : "is-enter-prev";
 
+  // Phase 1 — the current card continues out the way the swipe was heading
   lightboxBody.classList.add(exitClass);
   await waitForTransition(lightboxBody);
 
   currentIndex = nextIndex;
   renderMovie(filteredMovies[currentIndex], currentIndex);
+  await settlePoster();
+
+  // Phase 2 — plant the new card on the opposite edge with transitions off.
+  // Without suppressing them it animates across from the exit edge, which
+  // reads as the next card arriving from the side it should be leaving.
   clearBodyMotionClasses();
-  lightboxBody.classList.add(enterClass);
-
+  lightboxBody.classList.add("is-instant", enterClass);
   void lightboxBody.offsetWidth;
-  lightboxBody.classList.remove(enterClass);
 
+  lightboxBody.classList.remove("is-instant");
+  void lightboxBody.offsetWidth;
+
+  lightboxBody.classList.remove(enterClass);
   await waitForTransition(lightboxBody);
+
   clearBodyMotionClasses();
   isAnimating = false;
 }
@@ -817,6 +888,49 @@ function initFilters() {
   });
 }
 
+function resetDismissState() {
+  if (dismissSettleTimer) {
+    window.clearTimeout(dismissSettleTimer);
+    dismissSettleTimer = null;
+  }
+  lightboxContent.classList.remove("is-dismissing", "is-dismiss-return", "is-dismiss-out");
+  lightboxContent.style.transform = "";
+  lightbox.classList.remove("is-settling");
+  lightbox.style.removeProperty("--backdrop-alpha");
+}
+
+function applyDismissDrag(travel) {
+  const reach = Math.max(window.innerHeight * 0.5, 1);
+  const progress = Math.min(travel / reach, 1);
+  const scale = 1 - progress * DISMISS_SCALE;
+  lightboxContent.style.transform = `translate3d(0, ${travel}px, 0) scale(${scale})`;
+  lightbox.style.setProperty("--backdrop-alpha", String(dismissBaseAlpha * (1 - progress * 0.7)));
+}
+
+function finishDismiss() {
+  lightboxContent.classList.remove("is-dismissing");
+  lightboxContent.classList.add("is-dismiss-out");
+  lightbox.classList.add("is-settling");
+  lightboxContent.style.transform = `translate3d(0, 100%, 0) scale(${1 - DISMISS_SCALE})`;
+  lightbox.style.setProperty("--backdrop-alpha", "0");
+
+  dismissSettleTimer = window.setTimeout(closeLightbox, DISMISS_OUT_MS);
+}
+
+function cancelDismiss() {
+  lightboxContent.classList.remove("is-dismissing");
+  lightboxContent.classList.add("is-dismiss-return");
+  lightbox.classList.add("is-settling");
+  lightboxContent.style.transform = "";
+  lightbox.style.removeProperty("--backdrop-alpha");
+
+  dismissSettleTimer = window.setTimeout(() => {
+    lightboxContent.classList.remove("is-dismiss-return");
+    lightbox.classList.remove("is-settling");
+    dismissSettleTimer = null;
+  }, DISMISS_RETURN_MS);
+}
+
 function openLightbox(movieId, trigger) {
   const index = filteredMovies.findIndex((item) => item.id === movieId);
   if (index < 0) {
@@ -826,6 +940,7 @@ function openLightbox(movieId, trigger) {
   lastFocusedTrigger = trigger || document.activeElement;
   currentIndex = index;
   clearBodyMotionClasses();
+  resetDismissState();
   renderMovie(filteredMovies[currentIndex], currentIndex);
 
   lightbox.hidden = false;
@@ -847,9 +962,11 @@ function closeLightbox() {
   lightbox.hidden = true;
   document.body.style.overflow = "";
   clearBodyMotionClasses();
+  resetDismissState();
   isAnimating = false;
   swipe.active = false;
   swipe.axis = null;
+  swipe.isDismissing = false;
 
   if (lastFocusedTrigger) {
     lastFocusedTrigger.focus();
@@ -872,7 +989,14 @@ function onPointerDown(event) {
   swipe.startX = point.clientX;
   swipe.startY = point.clientY;
   swipe.currentX = point.clientX;
+  swipe.currentY = point.clientY;
   swipe.startTime = performance.now();
+  swipe.isDismissing = false;
+
+  // A downward drag only dismisses when the credits have nothing left to scroll
+  const scroller = event.target.closest(".lightbox-credits");
+  swipe.canDismiss = !scroller || scroller.scrollTop <= 0;
+
   lightboxBody.classList.add("is-dragging");
 }
 
@@ -891,12 +1015,31 @@ function onPointerMove(event) {
     }
     swipe.axis = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
     if (swipe.axis === "y") {
-      swipe.active = false;
+      // Upward drags, and downward ones over scrolled credits, belong to the page
+      if (deltaY <= 0 || !swipe.canDismiss) {
+        swipe.active = false;
+        lightboxBody.classList.remove("is-dragging");
+        lightboxBody.style.transform = "";
+        lightboxBody.style.opacity = "";
+        return;
+      }
+
       lightboxBody.classList.remove("is-dragging");
-      lightboxBody.style.transform = "";
-      lightboxBody.style.opacity = "";
-      return;
+      resetDismissState();
+      const declared = parseFloat(getComputedStyle(lightbox).getPropertyValue("--backdrop-alpha"));
+      dismissBaseAlpha = Number.isFinite(declared) ? declared : 0.95;
+      lightboxContent.classList.add("is-dismissing");
+      swipe.isDismissing = true;
     }
+  }
+
+  if (swipe.isDismissing) {
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+    swipe.currentY = point.clientY;
+    applyDismissDrag(Math.max(deltaY, 0));
+    return;
   }
 
   if (swipe.axis !== "x") {
@@ -905,14 +1048,33 @@ function onPointerMove(event) {
 
   event.preventDefault();
   swipe.currentX = point.clientX;
-  const dampened = deltaX * 0.92;
-  const opacity = Math.max(0.35, 1 - Math.abs(dampened) / 420);
-  lightboxBody.style.transform = `translate3d(${dampened}px, 0, 0)`;
-  lightboxBody.style.opacity = String(opacity);
+  const limit = (lightboxBody.offsetWidth || window.innerWidth) * DRAG_LIMIT_RATIO;
+  const shift = rubberBand(deltaX, limit);
+  const progress = Math.min(Math.abs(shift) / limit, 1);
+  lightboxBody.style.transform = `translate3d(${shift}px, 0, 0)`;
+  lightboxBody.style.opacity = String(1 - progress * DRAG_FADE);
 }
 
 async function onPointerUp() {
   if (!swipe.active) {
+    return;
+  }
+
+  if (swipe.isDismissing) {
+    const travel = Math.max(swipe.currentY - swipe.startY, 0);
+    const elapsed = Math.max(performance.now() - swipe.startTime, 1);
+    const isFlick = travel > DISMISS_MIN_TRAVEL && travel / elapsed > DISMISS_VELOCITY;
+    const shouldClose = travel > DISMISS_THRESHOLD || isFlick;
+
+    swipe.active = false;
+    swipe.axis = null;
+    swipe.isDismissing = false;
+
+    if (shouldClose) {
+      finishDismiss();
+    } else {
+      cancelDismiss();
+    }
     return;
   }
 
@@ -937,6 +1099,8 @@ async function onPointerUp() {
   suppressTapUntil = performance.now() + 400;
 
   const direction = deltaX < 0 ? "next" : "prev";
+  // Dropping the inline transform in the same task that goTo() adds the exit
+  // class lets the card carry on from where the finger left it
   lightboxBody.style.transform = "";
   lightboxBody.style.opacity = "";
 
