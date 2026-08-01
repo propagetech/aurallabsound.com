@@ -76,10 +76,10 @@ const movies = [
     poster: "assets/images/gallery/sabar-bonda.jpg",
     title: "Sabar Bonda",
     studio: "Sound · Independent Cinema",
-    workType: "Sound Design · Re-recording Mix",
+    workType: "Sound Designer · Re-recording Mix",
     type: "Feature Film",
     year: 2023,
-    roles: ["Sound Design", "Re-recording Mix"],
+    roles: ["Sound Designer", "Re-recording Mix"],
     team: [
       { name: "Anirban Borthakur", role: "Sound Designer" },
       { name: "Boloy Kumar Doloi", role: "Re-recording Mixer" }
@@ -90,10 +90,10 @@ const movies = [
     poster: "assets/images/gallery/the-disciple.jpg",
     title: "The Disciple",
     studio: "Moonweave Films",
-    workType: "Sound Design",
+    workType: "Sound Designer",
     type: "Feature Film",
     year: 2020,
-    roles: ["Sound Design"],
+    roles: ["Sound Designer"],
     team: [
       { name: "Anirban Borthakur", role: "Sound Designer" },
       { name: "Naren Chandavarkar", role: "Sound Designer" }
@@ -104,10 +104,10 @@ const movies = [
     poster: "assets/images/gallery/second-chance.jpg",
     title: "Second Chance",
     studio: "Moonweave Films",
-    workType: "Sound Design",
+    workType: "Sound Designer",
     type: "Feature Film",
     year: 2021,
-    roles: ["Sound Design"],
+    roles: ["Sound Designer"],
     team: [
       { name: "Anirban Borthakur", role: "Sound Designer" }
     ]
@@ -130,10 +130,10 @@ const movies = [
     poster: "assets/images/gallery/monica-o-my-darling.jpg",
     title: "Monica, O My Darling",
     studio: "Sound · Technical",
-    workType: "Sound Mixing",
+    workType: "Re-recording Mix",
     type: "Feature Film",
     year: 2023,
-    roles: ["Sound Mixing"],
+    roles: ["Re-recording Mix"],
     team: [
       { name: "Boloy Kumar Doloi", role: "Sound Mixing · IIFA 2023" }
     ]
@@ -512,8 +512,7 @@ let suppressTapUntil = 0;
 let activeFilters = {
   role: [],
   type: [],
-  year: [],
-  studio: []
+  year: []
 };
 let filteredMovies = movies;
 
@@ -795,10 +794,8 @@ function applyFilters() {
       activeFilters.type.includes(movie.type);
     const yearMatch = activeFilters.year.length === 0 ||
       activeFilters.year.includes(movie.year);
-    const studioMatch = activeFilters.studio.length === 0 ||
-      activeFilters.studio.includes(movie.studio);
 
-    return roleMatch && typeMatch && yearMatch && studioMatch;
+    return roleMatch && typeMatch && yearMatch;
   });
 
   updateGalleryDisplay();
@@ -831,7 +828,6 @@ function getActiveFilterValues() {
   return [
     ...activeFilters.role,
     ...activeFilters.type,
-    ...activeFilters.studio,
     ...activeFilters.year
   ];
 }
@@ -860,7 +856,6 @@ function initFilters() {
   const allRoles = [...new Set(movies.flatMap(m => m.roles))].sort();
   const allTypes = [...new Set(movies.map(m => m.type))].sort();
   const allYears = [...new Set(movies.map(m => m.year))].sort((a, b) => b - a);
-  const allStudios = [...new Set(movies.map(m => m.studio))].sort();
 
   const renderGroup = (label, filterType, values) => `
     <div class="filter-group">
@@ -876,7 +871,6 @@ function initFilters() {
       ${renderGroup("Role", "role", allRoles)}
       ${renderGroup("Type", "type", allTypes)}
       ${renderGroup("Year", "year", allYears)}
-      ${renderGroup("Studio", "studio", allStudios)}
       <div class="filter-status">
         <p class="filter-summary" role="status" aria-live="polite"></p>
         <button type="button" class="filter-reset" disabled>Reset filters</button>
@@ -906,7 +900,7 @@ function initFilters() {
   });
 
   document.querySelector(".filter-reset").addEventListener("click", () => {
-    activeFilters = { role: [], type: [], year: [], studio: [] };
+    activeFilters = { role: [], type: [], year: [] };
     document.querySelectorAll(".filter-btn").forEach((btn) => btn.setAttribute("aria-pressed", "false"));
     applyFilters();
   });
