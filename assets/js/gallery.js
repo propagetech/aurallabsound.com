@@ -487,6 +487,8 @@ let lastFocusedTrigger = null;
 let isAnimating = false;
 let isAutoplayOn = false;
 let autoplayTimer = null;
+let swipeIndicatorTimer = null;
+let hasUserSwiped = false;
 let activeFilters = {
   role: [],
   type: [],
@@ -648,6 +650,30 @@ function setAutoplay(enabled) {
   }
 }
 
+function hideSwipeIndicator() {
+  const swipeInd = document.getElementById("swipe-indicator");
+  if (swipeInd) {
+    swipeInd.style.display = "none";
+  }
+}
+
+function showSwipeIndicator() {
+  const swipeInd = document.getElementById("swipe-indicator");
+  if (swipeInd && !hasUserSwiped) {
+    swipeInd.style.display = "block";
+    if (swipeIndicatorTimer) {
+      clearTimeout(swipeIndicatorTimer);
+    }
+    swipeIndicatorTimer = setTimeout(() => {
+      swipeInd.style.opacity = "0";
+      swipeInd.style.transition = "opacity 0.5s ease";
+      setTimeout(() => {
+        swipeInd.style.display = "none";
+      }, 500);
+    }, 3000);
+  }
+}
+
 function applyFilters() {
   filteredMovies = movies.filter((movie) => {
     const roleMatch = activeFilters.role.length === 0 ||
@@ -764,6 +790,9 @@ function openLightbox(movieId, trigger) {
   document.body.style.overflow = "hidden";
   lightboxClose.focus();
 
+  hasUserSwiped = false;
+  showSwipeIndicator();
+
   if (isAutoplayOn) {
     startAutoplay();
   }
@@ -771,6 +800,10 @@ function openLightbox(movieId, trigger) {
 
 function closeLightbox() {
   stopAutoplay();
+  hideSwipeIndicator();
+  if (swipeIndicatorTimer) {
+    clearTimeout(swipeIndicatorTimer);
+  }
   lightbox.hidden = true;
   document.body.style.overflow = "";
   clearBodyMotionClasses();
@@ -857,6 +890,9 @@ async function onPointerUp() {
     lightboxBody.style.opacity = "";
     return;
   }
+
+  hasUserSwiped = true;
+  hideSwipeIndicator();
 
   const direction = deltaX < 0 ? "next" : "prev";
   lightboxBody.style.transform = "";
