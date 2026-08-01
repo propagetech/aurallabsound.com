@@ -477,6 +477,10 @@ const lightboxNext = document.getElementById("lightbox-next");
 const lightboxAutoplay = document.getElementById("lightbox-autoplay");
 const lightboxCounter = document.getElementById("lightbox-counter");
 const lightboxPoster = document.getElementById("lightbox-poster");
+const lightboxStage = document.getElementById("lightbox-stage");
+const lightboxTapPrev = document.getElementById("lightbox-tap-prev");
+const lightboxTapNext = document.getElementById("lightbox-tap-next");
+const swipeIndicator = document.getElementById("swipe-indicator");
 const lightboxTitle = document.getElementById("lightbox-title");
 const creditsStudio = document.getElementById("credits-studio");
 const creditsWorkType = document.getElementById("credits-work-type");
@@ -491,6 +495,7 @@ let isAutoplayOn = false;
 let autoplayTimer = null;
 let swipeIndicatorTimer = null;
 let hasUserSwiped = false;
+let suppressTapUntil = 0;
 let activeFilters = {
   role: [],
   type: [],
@@ -539,18 +544,25 @@ function renderMovie(movie, index) {
 
   counterText.textContent = `${index + 1} / ${filteredMovies.length}`;
 
-  if (progressDotsContainer) {
-    const maxDots = 10;
-    const dotsToShow = Math.min(filteredMovies.length, maxDots);
+  renderProgress(index);
+}
+
+function renderProgress(index) {
+  if (!progressDotsContainer) {
+    return;
+  }
+
+  const total = filteredMovies.length;
+  if (progressDotsContainer.childElementCount !== total) {
     progressDotsContainer.replaceChildren(
-      ...Array.from({ length: dotsToShow }, (_, i) => {
-        const span = document.createElement('span');
-        const movieIndex = Math.floor((filteredMovies.length - 1) * (i / (dotsToShow - 1)));
-        if (movieIndex === index) span.classList.add('active');
-        return span;
-      })
+      ...Array.from({ length: total }, () => document.createElement("span"))
     );
   }
+
+  Array.from(progressDotsContainer.children).forEach((segment, i) => {
+    segment.classList.toggle("is-past", i < index);
+    segment.classList.toggle("is-active", i === index);
+  });
 }
 
 function clearBodyMotionClasses() {
@@ -630,6 +642,13 @@ function showPrev() {
   return goTo(currentIndex - 1, "prev");
 }
 
+function navigate(direction) {
+  if (isAutoplayOn) {
+    startAutoplay();
+  }
+  return direction === "next" ? showNext() : showPrev();
+}
+
 function updateAutoplayUi() {
   if (!lightboxAutoplay) return;
 
@@ -667,27 +686,34 @@ function setAutoplay(enabled) {
 }
 
 function hideSwipeIndicator() {
-  const swipeInd = document.getElementById("swipe-indicator");
-  if (swipeInd) {
-    swipeInd.style.display = "none";
+  if (swipeIndicatorTimer) {
+    window.clearTimeout(swipeIndicatorTimer);
+    swipeIndicatorTimer = null;
+  }
+  if (swipeIndicator) {
+    swipeIndicator.classList.remove("is-visible");
+  }
+  if (lightboxStage) {
+    lightboxStage.classList.remove("is-hinting");
   }
 }
 
 function showSwipeIndicator() {
-  const swipeInd = document.getElementById("swipe-indicator");
-  if (swipeInd && !hasUserSwiped) {
-    swipeInd.style.display = "block";
-    if (swipeIndicatorTimer) {
-      clearTimeout(swipeIndicatorTimer);
-    }
-    swipeIndicatorTimer = setTimeout(() => {
-      swipeInd.style.opacity = "0";
-      swipeInd.style.transition = "opacity 0.5s ease";
-      setTimeout(() => {
-        swipeInd.style.display = "none";
-      }, 500);
-    }, 3000);
+  if (hasUserSwiped) {
+    return;
   }
+
+  if (swipeIndicator) {
+    swipeIndicator.classList.add("is-visible");
+  }
+  if (lightboxStage) {
+    lightboxStage.classList.add("is-hinting");
+  }
+
+  if (swipeIndicatorTimer) {
+    window.clearTimeout(swipeIndicatorTimer);
+  }
+  swipeIndicatorTimer = window.setTimeout(hideSwipeIndicator, 3200);
 }
 
 function applyFilters() {
@@ -804,7 +830,8 @@ function openLightbox(movieId, trigger) {
 
   lightbox.hidden = false;
   document.body.style.overflow = "hidden";
-  lightboxClose.focus();
+  // Focus the dialog itself so no control wears a focus ring on open
+  lightboxContent.focus({ preventScroll: true });
 
   hasUserSwiped = false;
   showSwipeIndicator();
@@ -817,9 +844,6 @@ function openLightbox(movieId, trigger) {
 function closeLightbox() {
   stopAutoplay();
   hideSwipeIndicator();
-  if (swipeIndicatorTimer) {
-    clearTimeout(swipeIndicatorTimer);
-  }
   lightbox.hidden = true;
   document.body.style.overflow = "";
   clearBodyMotionClasses();
@@ -837,7 +861,8 @@ function onPointerDown(event) {
   if (lightbox.hidden || isAnimating) {
     return;
   }
-  if (event.target.closest("button")) {
+  // Tap zones sit on top of the poster, so they must not block dragging
+  if (event.target.closest("button:not([data-swipe-passthrough])")) {
     return;
   }
 
@@ -909,6 +934,7 @@ async function onPointerUp() {
 
   hasUserSwiped = true;
   hideSwipeIndicator();
+  suppressTapUntil = performance.now() + 400;
 
   const direction = deltaX < 0 ? "next" : "prev";
   lightboxBody.style.transform = "";
@@ -942,17 +968,22 @@ function initGallery() {
   });
 
   lightboxClose.addEventListener("click", closeLightbox);
-  lightboxPrev.addEventListener("click", () => {
-    if (isAutoplayOn) {
-      startAutoplay();
+  lightboxPrev.addEventListener("click", () => navigate("prev"));
+  lightboxNext.addEventListener("click", () => navigate("next"));
+
+  [[lightboxTapPrev, "prev"], [lightboxTapNext, "next"]].forEach(([zone, direction]) => {
+    if (!zone) {
+      return;
     }
-    showPrev();
-  });
-  lightboxNext.addEventListener("click", () => {
-    if (isAutoplayOn) {
-      startAutoplay();
-    }
-    showNext();
+    zone.addEventListener("click", () => {
+      // A completed swipe fires a trailing click on the zone underneath it
+      if (performance.now() < suppressTapUntil) {
+        return;
+      }
+      hasUserSwiped = true;
+      hideSwipeIndicator();
+      navigate(direction);
+    });
   });
 
   lightboxAutoplay.addEventListener("click", () => {
