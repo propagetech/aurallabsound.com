@@ -74,6 +74,7 @@ html {
   --color-border: #D9D9D9;
   --color-accent: #1D4ED8;
   --color-accent-hover: #0D47A1;
+  --color-on-accent: #FFFFFF;
 
   /* Backwards compatibility */
   --color-bg-elevated: #F5F7F9;
@@ -105,6 +106,7 @@ html[data-theme="dark"] {
   --color-border: #2D2D2D;
   --color-accent: #7BA3FF;
   --color-accent-hover: #A8D5FF;
+  --color-on-accent: #0F0F0F;
 
   /* Backwards compatibility */
   --color-bg-elevated: #1A1A1A;
@@ -136,6 +138,7 @@ html[data-theme="dark"] {
     --color-border: #2D2D2D;
     --color-accent: #7BA3FF;
     --color-accent-hover: #A8D5FF;
+    --color-on-accent: #0F0F0F;
 
     /* Backwards compatibility */
     --color-bg-elevated: #1A1A1A;

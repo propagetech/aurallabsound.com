@@ -74,9 +74,16 @@
   <main id="main">
     <section id="home" class="hero" aria-labelledby="hero-heading">
       <div class="hero__content">
+        <p class="hero__eyebrow">Sound for picture · Bangalore</p>
         <h1 id="hero-heading">Aural Lab Sound</h1>
-        <p class="hero__tagline">Professional Audio & Sound Design Studio</p>
-        <a href="#scroll" class="scroll-arrow" aria-label="Scroll down">
+        <p class="hero__tagline">Production sound, sound design, and foley for feature films, documentaries, and series.</p>
+        <ul class="hero__proof">
+          <li>33 films &amp; series</li>
+          <li>Academy Award-winning documentary short</li>
+          <li>Busan · BFI London · Cinema Eye Honors</li>
+        </ul>
+        <a class="btn btn--primary" href="#credits">Explore the work</a>
+        <a href="#scroll" class="scroll-arrow" aria-label="Scroll to the next section">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
@@ -84,26 +91,38 @@
       </div>
     </section>
 
-    <section id="scroll" class="social-links-section" aria-label="External links">
-      <div class="social-links">
-        <a href="https://www.imdb.com/name/nm9036699/" class="social-link imdb-link" title="IMDB Profile" rel="noopener noreferrer" aria-label="IMDB">
-          <img src="assets/icons/imdb-light.svg" alt="IMDb" class="imdb-icon">
-          IMDB
-        </a>
-        <a href="https://www.instagram.com/aurallabsound/" class="social-link" title="Instagram" rel="noopener noreferrer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
-            <circle cx="17.5" cy="6.5" r="1.5"></circle>
-          </svg>
-          Instagram
-        </a>
-        <a href="https://www.youtube.com/@AuralLabSound" class="social-link" title="YouTube" rel="noopener noreferrer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-          </svg>
-          YouTube
-        </a>
+    <section id="scroll" class="social-links-section" aria-labelledby="elsewhere-heading">
+      <div class="container social-strip">
+        <h2 id="elsewhere-heading" class="section-eyebrow">Elsewhere</h2>
+        <div class="social-links">
+          <a href="https://www.imdb.com/name/nm9036699/" class="social-link imdb-link" rel="noopener noreferrer">
+            <img src="assets/icons/imdb-light.svg" alt="" class="imdb-icon">
+            <span class="social-link__text">
+              <span class="social-link__name">IMDb</span>
+              <span class="social-link__note">Full filmography</span>
+            </span>
+          </a>
+          <a href="https://www.instagram.com/aurallabsound/" class="social-link" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+              <circle cx="17.5" cy="6.5" r="1.5"></circle>
+            </svg>
+            <span class="social-link__text">
+              <span class="social-link__name">Instagram</span>
+              <span class="social-link__note">Behind the scenes</span>
+            </span>
+          </a>
+          <a href="https://www.youtube.com/@AuralLabSound" class="social-link" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span class="social-link__text">
+              <span class="social-link__name">YouTube</span>
+              <span class="social-link__note">Trailers &amp; clips</span>
+            </span>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -117,7 +136,10 @@
       <div class="page-panel__body">
         <div class="container">
           <div class="gallery-head">
-            <h3 class="gallery-head__label">Selected work</h3>
+            <div class="gallery-head__text">
+              <h3 class="gallery-head__label">Selected work</h3>
+              <p class="gallery-head__hint">Filter by role, type, year, or studio. Open any poster for full credits.</p>
+            </div>
             <span class="gallery-count">33 films</span>
           </div>
           <div class="photo-gallery" id="image-gallery" role="list">

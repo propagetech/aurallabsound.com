@@ -807,16 +807,49 @@ function applyFilters() {
 function updateGalleryDisplay() {
   if (!gallery) return;
 
+  const visibleIds = new Set(filteredMovies.map((movie) => movie.id));
   gallery.querySelectorAll(".gallery-item").forEach((item) => {
-    const movieId = item.getAttribute("data-movie-id");
-    const isVisible = filteredMovies.some(m => m.id === movieId);
+    const isVisible = visibleIds.has(item.getAttribute("data-movie-id"));
     item.style.display = isVisible ? "" : "none";
   });
 
   const visibleCount = filteredMovies.length;
   const countEl = document.querySelector(".gallery-count");
   if (countEl) {
-    countEl.textContent = `${visibleCount} film${visibleCount !== 1 ? 's' : ''}`;
+    countEl.textContent = `${visibleCount} film${visibleCount !== 1 ? "s" : ""}`;
+  }
+
+  const emptyState = document.querySelector(".gallery-empty");
+  if (emptyState) {
+    emptyState.hidden = visibleCount > 0;
+  }
+
+  updateFilterStatus(visibleCount);
+}
+
+function getActiveFilterValues() {
+  return [
+    ...activeFilters.role,
+    ...activeFilters.type,
+    ...activeFilters.studio,
+    ...activeFilters.year
+  ];
+}
+
+function updateFilterStatus(visibleCount) {
+  const summary = document.querySelector(".filter-summary");
+  const reset = document.querySelector(".filter-reset");
+  const selected = getActiveFilterValues();
+
+  if (summary) {
+    const label = `${visibleCount} film${visibleCount !== 1 ? "s" : ""}`;
+    summary.innerHTML = selected.length === 0
+      ? `Showing <strong>all ${label}</strong>.`
+      : `Showing <strong>${label}</strong> for ${selected.map((value) => `<strong>${value}</strong>`).join(" + ")}.`;
+  }
+
+  if (reset) {
+    reset.disabled = selected.length === 0;
   }
 }
 
@@ -829,62 +862,79 @@ function initFilters() {
   const allYears = [...new Set(movies.map(m => m.year))].sort((a, b) => b - a);
   const allStudios = [...new Set(movies.map(m => m.studio))].sort();
 
+  const renderGroup = (label, filterType, values) => `
+    <div class="filter-group">
+      <h4 class="filter-label" id="filter-label-${filterType}">By ${label}</h4>
+      <div class="filter-buttons" role="group" aria-labelledby="filter-label-${filterType}" data-filter-type="${filterType}">
+        ${values.map((value) => `<button type="button" class="filter-btn" aria-pressed="false" data-value="${value}">${value}</button>`).join("")}
+      </div>
+    </div>
+  `;
+
   const filtersHtml = `
     <div class="filters-section">
-      <div class="filter-group">
-        <label class="filter-label">By Role</label>
-        <div class="filter-buttons" data-filter-type="role">
-          ${allRoles.map(r => `<button class="filter-btn" data-value="${r}">${r}</button>`).join('')}
-        </div>
+      ${renderGroup("Role", "role", allRoles)}
+      ${renderGroup("Type", "type", allTypes)}
+      ${renderGroup("Year", "year", allYears)}
+      ${renderGroup("Studio", "studio", allStudios)}
+      <div class="filter-status">
+        <p class="filter-summary" role="status" aria-live="polite"></p>
+        <button type="button" class="filter-reset" disabled>Reset filters</button>
       </div>
-      <div class="filter-group">
-        <label class="filter-label">By Type</label>
-        <div class="filter-buttons" data-filter-type="type">
-          ${allTypes.map(t => `<button class="filter-btn" data-value="${t}">${t}</button>`).join('')}
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label">By Year</label>
-        <div class="filter-buttons" data-filter-type="year">
-          ${allYears.map(y => `<button class="filter-btn" data-value="${y}">${y}</button>`).join('')}
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label">By Studio</label>
-        <div class="filter-buttons" data-filter-type="studio">
-          ${allStudios.map(s => `<button class="filter-btn" data-value="${s}">${s}</button>`).join('')}
-        </div>
-      </div>
-      <button class="filter-reset">Reset Filters</button>
     </div>
   `;
 
   filterContainer.insertAdjacentHTML("afterend", filtersHtml);
+  gallery.insertAdjacentHTML("beforebegin", `
+    <p class="gallery-empty" hidden>No films match these filters. Try removing one.</p>
+  `);
 
   document.querySelectorAll(".filter-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const filterType = e.target.closest(".filter-buttons").getAttribute("data-filter-type");
-      const value = e.target.getAttribute("data-value");
+    btn.addEventListener("click", () => {
+      const filterType = btn.closest(".filter-buttons").getAttribute("data-filter-type");
+      const rawValue = btn.getAttribute("data-value");
+      const value = filterType === "year" ? parseInt(rawValue, 10) : rawValue;
+      const isActive = activeFilters[filterType].includes(value);
 
-      if (filterType === "year") {
-        activeFilters[filterType] = activeFilters[filterType].includes(parseInt(value))
-          ? activeFilters[filterType].filter(v => v !== parseInt(value))
-          : [...activeFilters[filterType], parseInt(value)];
-      } else {
-        activeFilters[filterType] = activeFilters[filterType].includes(value)
-          ? activeFilters[filterType].filter(v => v !== value)
-          : [...activeFilters[filterType], value];
-      }
+      activeFilters[filterType] = isActive
+        ? activeFilters[filterType].filter((entry) => entry !== value)
+        : [...activeFilters[filterType], value];
 
-      e.target.classList.toggle("active");
+      btn.setAttribute("aria-pressed", String(!isActive));
       applyFilters();
     });
   });
 
   document.querySelector(".filter-reset").addEventListener("click", () => {
     activeFilters = { role: [], type: [], year: [], studio: [] };
-    document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".filter-btn").forEach((btn) => btn.setAttribute("aria-pressed", "false"));
     applyFilters();
+  });
+
+  updateFilterStatus(filteredMovies.length);
+}
+
+function initGalleryCaptions() {
+  if (!gallery) return;
+
+  const moviesById = new Map(movies.map((movie) => [movie.id, movie]));
+
+  gallery.querySelectorAll(".gallery-item").forEach((item) => {
+    const movie = moviesById.get(item.getAttribute("data-movie-id"));
+    if (!movie || item.querySelector(".gallery-item__caption")) {
+      return;
+    }
+
+    const caption = document.createElement("span");
+    caption.className = "gallery-item__caption";
+    // The button already carries an accessible name, so this is decorative
+    caption.setAttribute("aria-hidden", "true");
+    caption.innerHTML = `
+      <span class="gallery-item__title">${movie.title}</span>
+      <span class="gallery-item__role">${movie.roles.join(" · ")}</span>
+      <span class="gallery-item__cue">View credits</span>
+    `;
+    item.append(caption);
   });
 }
 
@@ -1121,6 +1171,7 @@ function initGallery() {
   }
 
   updateAutoplayUi();
+  initGalleryCaptions();
   initFilters();
 
   gallery.addEventListener("click", (event) => {
