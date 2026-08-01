@@ -481,6 +481,8 @@ const lightboxTitle = document.getElementById("lightbox-title");
 const creditsStudio = document.getElementById("credits-studio");
 const creditsWorkType = document.getElementById("credits-work-type");
 const creditsTeam = document.getElementById("credits-team");
+const progressDotsContainer = document.getElementById("progress-dots");
+const counterText = document.getElementById("counter-text");
 
 let currentIndex = 0;
 let lastFocusedTrigger = null;
@@ -534,7 +536,21 @@ function renderMovie(movie, index) {
   lightboxTitle.textContent = movie.title;
   creditsWorkType.textContent = movie.workType;
   renderTeam(movie.team);
-  lightboxCounter.textContent = `${index + 1} / ${filteredMovies.length}`;
+
+  counterText.textContent = `${index + 1} / ${filteredMovies.length}`;
+
+  if (progressDotsContainer) {
+    const maxDots = 10;
+    const dotsToShow = Math.min(filteredMovies.length, maxDots);
+    progressDotsContainer.replaceChildren(
+      ...Array.from({ length: dotsToShow }, (_, i) => {
+        const span = document.createElement('span');
+        const movieIndex = Math.floor((filteredMovies.length - 1) * (i / (dotsToShow - 1)));
+        if (movieIndex === index) span.classList.add('active');
+        return span;
+      })
+    );
+  }
 }
 
 function clearBodyMotionClasses() {
