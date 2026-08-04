@@ -307,40 +307,55 @@ function showProgressTip(segment) {
   segment.classList.add("is-tip-visible");
 }
 
+function hapticTick() {
+  try {
+    navigator.vibrate?.(10);
+  } catch (_) {
+    /* Vibration is optional and may be blocked */
+  }
+}
+
 function initProgressScrub() {
   if (!progressDotsContainer) {
     return;
   }
 
-  const LONG_PRESS_MS = 380;
-  let longPressTimer = null;
-  let didLongPress = false;
   let isScrubbing = false;
+  let handledByPointer = false;
   let activePointerId = null;
+  let lastTipIndex = null;
 
   function segmentFromPoint(clientX, clientY) {
     const el = document.elementFromPoint(clientX, clientY);
     return el ? el.closest(".lightbox-progress__seg") : null;
   }
 
-  function clearLongPress() {
-    if (longPressTimer) {
-      window.clearTimeout(longPressTimer);
-      longPressTimer = null;
+  function tipFor(segment, { buzz = false } = {}) {
+    if (!segment) {
+      return;
     }
+
+    const index = Number(segment.getAttribute("data-index"));
+    showProgressTip(segment);
+
+    if (buzz && lastTipIndex !== null && lastTipIndex !== index) {
+      hapticTick();
+    }
+
+    lastTipIndex = index;
   }
 
   function finishPointer() {
-    clearLongPress();
     activePointerId = null;
     isScrubbing = false;
+    lastTipIndex = null;
     window.setTimeout(clearProgressTips, 700);
   }
 
   progressDotsContainer.addEventListener("click", (event) => {
     const segment = event.target.closest(".lightbox-progress__seg");
-    if (!segment || didLongPress) {
-      didLongPress = false;
+    if (!segment || handledByPointer) {
+      handledByPointer = false;
       return;
     }
     event.preventDefault();
@@ -356,17 +371,14 @@ function initProgressScrub() {
     // Keep lightbox swipe/dismiss from stealing this gesture
     event.stopPropagation();
     activePointerId = event.pointerId;
-    didLongPress = false;
     isScrubbing = false;
-    clearLongPress();
+    handledByPointer = false;
+    lastTipIndex = null;
 
     if (event.pointerType === "touch" || event.pointerType === "pen") {
       progressDotsContainer.setPointerCapture?.(event.pointerId);
-      longPressTimer = window.setTimeout(() => {
-        didLongPress = true;
-        showProgressTip(segment);
-        longPressTimer = null;
-      }, LONG_PRESS_MS);
+      // Instant title feedback — no long-press wait
+      tipFor(segment);
     }
   });
 
@@ -386,11 +398,10 @@ function initProgressScrub() {
 
     if (!isScrubbing && (Math.abs(event.movementX) > 3 || Math.abs(event.movementY) > 3)) {
       isScrubbing = true;
-      clearLongPress();
     }
 
-    if (isScrubbing || didLongPress) {
-      showProgressTip(segment);
+    if (isScrubbing) {
+      tipFor(segment, { buzz: true });
     }
   });
 
@@ -400,12 +411,18 @@ function initProgressScrub() {
     }
     event.stopPropagation();
 
-    const segment = segmentFromPoint(event.clientX, event.clientY)
-      || event.target.closest(".lightbox-progress__seg");
+    if (event.pointerType === "touch" || event.pointerType === "pen") {
+      const segment = segmentFromPoint(event.clientX, event.clientY)
+        || event.target.closest(".lightbox-progress__seg");
 
-    if (isScrubbing && segment) {
-      jumpToFilm(Number(segment.getAttribute("data-index")));
-      didLongPress = true;
+      if (segment) {
+        const index = Number(segment.getAttribute("data-index"));
+        if (index !== currentIndex) {
+          hapticTick();
+        }
+        jumpToFilm(index);
+        handledByPointer = true;
+      }
     }
 
     finishPointer();

@@ -1059,8 +1059,8 @@
 /* Story-style segmented progress across the top edge */
 .lightbox-progress {
   display: flex;
-  gap: 2px;
-  padding: var(--space-3) var(--space-6) 0;
+  gap: 3px;
+  padding: var(--space-4) var(--space-6) 0;
   flex-shrink: 0;
   position: relative;
   z-index: 5;
@@ -1087,24 +1087,34 @@
   height: 2px;
   border-radius: 999px;
   background: var(--color-border);
+  opacity: 0.55;
   transition: background var(--duration-base) var(--ease-out),
     opacity var(--duration-base) var(--ease-out),
+    height var(--duration-base) var(--ease-out),
     transform var(--duration-base) var(--ease-out);
 }
 
 .lightbox-progress__seg.is-past::before {
   background: var(--color-text-secondary);
-  opacity: 0.5;
+  opacity: 0.72;
 }
 
 .lightbox-progress__seg.is-active::before {
+  height: 3px;
   background: var(--color-accent);
   opacity: 1;
 }
 
 .lightbox-progress__seg:hover::before,
-.lightbox-progress__seg:focus-visible::before {
+.lightbox-progress__seg:focus-visible::before,
+.lightbox-progress__seg.is-tip-visible::before {
   transform: scaleY(1.8);
+}
+
+.lightbox-progress__seg.is-active:hover::before,
+.lightbox-progress__seg.is-active:focus-visible::before,
+.lightbox-progress__seg.is-active.is-tip-visible::before {
+  transform: none;
 }
 
 .lightbox-progress__seg:focus-visible {
@@ -1204,8 +1214,25 @@
 
 @media (max-width: 47.99rem) {
   .lightbox-progress {
-    padding: var(--space-3) var(--space-4) 0;
+    gap: 3px;
+    padding:
+      calc(var(--space-3) + env(safe-area-inset-top, 0px))
+      var(--space-4)
+      0;
     background: rgba(0, 0, 0, 0.5);
+  }
+
+  .lightbox-progress__seg {
+    /* Thin visual dash, ~44px tall finger target */
+    padding: 1.25rem 0;
+  }
+
+  .lightbox-progress__seg::before {
+    height: 2px;
+  }
+
+  .lightbox-progress__seg.is-active::before {
+    height: 3px;
   }
 
   .lightbox-toolbar {
@@ -1946,22 +1973,5 @@
   .lightbox-autoplay svg {
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-}
-
-/* Progress dots — minimal, cinematic */
-.lightbox-progress {
-  gap: 3px;
-  padding: var(--space-4) var(--space-6) 0;
-}
-
-.lightbox-progress__seg::before {
-  height: 1px;
-}
-
-@media (max-width: 47.99rem) {
-  .lightbox-progress {
-    padding: var(--space-3) var(--space-4) 0;
-    gap: 2px;
   }
 }
