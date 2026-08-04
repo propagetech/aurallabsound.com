@@ -114,26 +114,6 @@
     <!-- Credits lightbox -->
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
       <div class="lightbox-content" id="lightbox-content" tabindex="-1">
-        <div class="lightbox-progress-wrap" id="lightbox-progress-wrap">
-          <div
-            class="lightbox-progress lightbox-progress--scrub"
-            id="progress-dots"
-            role="slider"
-            aria-orientation="vertical"
-            aria-label="Scrub by year"
-            aria-valuemin="1"
-            aria-valuemax="1"
-            aria-valuenow="1"
-            tabindex="0"
-          >
-            <div class="lightbox-progress__thumb" id="lightbox-scrub-thumb" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 3 18 9"></polyline>
-                <polyline points="6 15 12 21 18 15"></polyline>
-              </svg>
-            </div>
-          </div>
-        </div>
         <div class="lightbox-toolbar">
           <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">
             <span id="counter-text"></span>
@@ -196,14 +176,33 @@
             </div>
             <div class="lightbox-credits">
               <p class="credits-studio" id="credits-studio"></p>
-              <h2 id="lightbox-title" class="credits-title"></h2>
+              <div class="credits-title-row">
+                <h2 id="lightbox-title" class="credits-title"></h2>
+                <a
+                  class="credits-imdb-link"
+                  id="credits-imdb"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="View on IMDb"
+                  hidden
+                >
+                  <img src="assets/icons/imdb-light.svg" alt="" class="credits-imdb-link__icon" width="40" height="24" decoding="async">
+                </a>
+              </div>
               <p class="credits-work-type" id="credits-work-type"></p>
-              <p class="credits-imdb" id="credits-imdb" hidden></p>
-              <h3 class="credits-label" id="credits-label">Credits</h3>
-              <ul class="credits-team" id="credits-team" aria-labelledby="credits-label"></ul>
+              <ul class="credits-team" id="credits-team" aria-label="Director"></ul>
             </div>
           </div>
         </div>
+
+        <div
+          class="lightbox-filmstrip"
+          id="lightbox-filmstrip"
+          role="listbox"
+          aria-label="Browse films"
+          hidden
+        ></div>
       </div>
     </div>
 

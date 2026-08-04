@@ -112,21 +112,6 @@ const DISMISS_OUT_MS = 240;
 const DISMISS_RETURN_MS = 320;
 const STUDIO_NAME = "Aural Lab Sound";
 
-function sortMoviesByYear(movieList) {
-  return movieList.sort((a, b) => {
-    if (a.year === b.year) {
-      return a.title.localeCompare(b.title);
-    }
-    if (a.year === null) {
-      return 1;
-    }
-    if (b.year === null) {
-      return -1;
-    }
-    return b.year - a.year;
-  });
-}
-
 const gallery = document.getElementById("image-gallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxContent = document.getElementById("lightbox-content");
@@ -146,9 +131,7 @@ const creditsStudio = document.getElementById("credits-studio");
 const creditsWorkType = document.getElementById("credits-work-type");
 const creditsImdb = document.getElementById("credits-imdb");
 const creditsTeam = document.getElementById("credits-team");
-const progressDotsContainer = document.getElementById("progress-dots");
-const progressWrap = document.getElementById("lightbox-progress-wrap");
-const scrubThumb = document.getElementById("lightbox-scrub-thumb");
+const filmstrip = document.getElementById("lightbox-filmstrip");
 const counterText = document.getElementById("counter-text");
 
 let currentIndex = 0;
@@ -159,13 +142,12 @@ let autoplayTimer = null;
 let swipeIndicatorTimer = null;
 let hasUserSwiped = false;
 let suppressTapUntil = 0;
-let scrubPreviewIndex = null;
 let activeFilters = {
   role: [],
   type: [],
   year: []
 };
-let filteredMovies = sortMoviesByYear([...movies]);
+let filteredMovies = movies;
 
 const swipe = {
   active: false,
@@ -230,17 +212,19 @@ function renderMovie(movie, index) {
   if (creditsImdb) {
     if (movie.imdb && movie.imdb !== "—") {
       creditsImdb.hidden = false;
-      creditsImdb.innerHTML = `<a href="${movie.imdb}" target="_blank" rel="noopener noreferrer">View on IMDb →</a>`;
+      creditsImdb.href = movie.imdb;
+      creditsImdb.setAttribute("aria-label", `View ${movie.title} on IMDb`);
     } else {
       creditsImdb.hidden = true;
-      creditsImdb.textContent = "";
+      creditsImdb.removeAttribute("href");
+      creditsImdb.setAttribute("aria-label", "View on IMDb");
     }
   }
   renderTeam(movie.team);
 
   counterText.textContent = `${index + 1} of ${filteredMovies.length}`;
 
-  renderProgress(index);
+  syncFilmstrip(index);
   preloadNeighbours(index);
 }
 
@@ -249,7 +233,7 @@ function preloadNeighbours(index) {
     return;
   }
 
-  [1, -1].forEach((offset) => {
+  [1, -1, 2, -2].forEach((offset) => {
     const neighbour = filteredMovies[clampIndex(index + offset)];
     if (!neighbour) {
       return;
@@ -260,78 +244,80 @@ function preloadNeighbours(index) {
   });
 }
 
-function yearLabelFor(movie) {
-  if (!movie || movie.year === null || movie.year === undefined) {
-    return "TBD";
-  }
-  return String(movie.year);
-}
-
-function scrubRatioForIndex(index) {
-  const total = filteredMovies.length;
-  if (total <= 1) {
-    return 0;
-  }
-  return index / (total - 1);
-}
-
-function indexFromScrubClientY(clientY) {
-  if (!progressDotsContainer) {
-    return 0;
-  }
-  const total = filteredMovies.length;
-  if (total <= 1) {
-    return 0;
-  }
-  const rect = progressDotsContainer.getBoundingClientRect();
-  const pad = 18;
-  const usable = Math.max(rect.height - pad * 2, 1);
-  const ratio = (clientY - rect.top - pad) / usable;
-  const clamped = Math.min(1, Math.max(0, ratio));
-  return Math.round(clamped * (total - 1));
-}
-
-function setScrubThumbPosition(index) {
-  if (!scrubThumb || !progressDotsContainer) {
+function renderFilmstrip() {
+  if (!filmstrip) {
     return;
   }
-  const ratio = scrubRatioForIndex(index);
-  scrubThumb.style.top = `calc(18px + (100% - 36px) * ${ratio})`;
-}
 
-function updateScrubVisibility() {
-  if (!progressWrap) {
-    return;
-  }
   const shouldShow = filteredMovies.length >= 2;
-  progressWrap.hidden = !shouldShow;
-  progressWrap.setAttribute("aria-hidden", shouldShow ? "false" : "true");
-}
+  filmstrip.hidden = !shouldShow;
 
-function renderProgress(index) {
-  if (!progressDotsContainer) {
+  if (!shouldShow) {
+    filmstrip.replaceChildren();
+    filmstrip.dataset.signature = "";
     return;
   }
 
-  updateScrubVisibility();
-  const total = filteredMovies.length;
-  const safeIndex = Math.min(Math.max(index, 0), Math.max(total - 1, 0));
-  const movie = filteredMovies[safeIndex];
-
-  progressDotsContainer.setAttribute("aria-valuemin", "1");
-  progressDotsContainer.setAttribute("aria-valuemax", String(Math.max(total, 1)));
-  progressDotsContainer.setAttribute("aria-valuenow", String(safeIndex + 1));
-  progressDotsContainer.setAttribute(
-    "aria-valuetext",
-    movie ? `${yearLabelFor(movie)}, ${movie.title}` : ""
-  );
-
-  if (scrubPreviewIndex === null) {
-    setScrubThumbPosition(safeIndex);
+  const signature = filteredMovies.map((movie) => movie.id).join(",");
+  if (filmstrip.dataset.signature === signature) {
+    return;
   }
+
+  filmstrip.dataset.signature = signature;
+  filmstrip.replaceChildren(
+    ...filteredMovies.map((movie, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "lightbox-filmstrip__thumb";
+      button.setAttribute("role", "option");
+      button.setAttribute("data-index", String(index));
+      button.setAttribute("aria-label", movie.title);
+      button.setAttribute("aria-selected", "false");
+
+      const image = document.createElement("img");
+      image.src = movie.poster;
+      image.alt = "";
+      image.loading = index < 12 ? "eager" : "lazy";
+      image.decoding = "async";
+      button.append(image);
+
+      return button;
+    })
+  );
 }
 
-function jumpToFilm(index, { animate = true } = {}) {
+function syncFilmstrip(index) {
+  if (!filmstrip || filmstrip.hidden) {
+    return;
+  }
+
+  const thumbs = filmstrip.querySelectorAll(".lightbox-filmstrip__thumb");
+  thumbs.forEach((thumb, thumbIndex) => {
+    const isActive = thumbIndex === index;
+    thumb.classList.toggle("is-active", isActive);
+    thumb.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+
+  const activeThumb = thumbs[index];
+  if (!activeThumb) {
+    return;
+  }
+
+  const stripRect = filmstrip.getBoundingClientRect();
+  const thumbRect = activeThumb.getBoundingClientRect();
+  const nextLeft =
+    filmstrip.scrollLeft +
+    (thumbRect.left - stripRect.left) -
+    stripRect.width / 2 +
+    thumbRect.width / 2;
+
+  filmstrip.scrollTo({
+    left: Math.max(nextLeft, 0),
+    behavior: "smooth"
+  });
+}
+
+function jumpToFilm(index) {
   if (index === currentIndex || isAnimating || lightbox.hidden) {
     return;
   }
@@ -340,133 +326,28 @@ function jumpToFilm(index, { animate = true } = {}) {
     startAutoplay();
   }
 
-  if (!animate) {
-    return goTo(index);
-  }
-
   const direction = index > currentIndex ? "next" : "prev";
   return goTo(index, direction);
 }
 
-function clearScrubPreview() {
-  scrubPreviewIndex = null;
-  progressWrap?.classList.remove("is-scrubbing");
-  setScrubThumbPosition(currentIndex);
-}
-
-function hapticTick() {
-  try {
-    navigator.vibrate?.(10);
-  } catch (_) {
-    /* Vibration is optional and may be blocked */
-  }
-}
-
-function initProgressScrub() {
-  if (!progressDotsContainer) {
+function initFilmstrip() {
+  if (!filmstrip) {
     return;
   }
 
-  let activePointerId = null;
-  let lastScrubIndex = null;
-  let lastScrubYear = null;
-
-  function scrubToPoint(clientY) {
-    const index = indexFromScrubClientY(clientY);
-    const movie = filteredMovies[index];
-    if (!movie) {
-      return index;
-    }
-
-    const year = yearLabelFor(movie);
-    const yearChanged = lastScrubYear !== null && lastScrubYear !== year;
-    const indexChanged = lastScrubIndex !== index;
-
-    scrubPreviewIndex = index;
-    setScrubThumbPosition(index);
-    progressWrap?.classList.add("is-scrubbing");
-
-    if (yearChanged) {
-      hapticTick();
-    }
-
-    if (indexChanged && !isAnimating) {
-      goTo(index);
-    }
-
-    lastScrubIndex = index;
-    lastScrubYear = year;
-    return index;
-  }
-
-  function finishPointer() {
-    activePointerId = null;
-    lastScrubIndex = null;
-    lastScrubYear = null;
-    if (isAutoplayOn && !lightbox.hidden) {
-      startAutoplay();
-    }
-    window.setTimeout(clearScrubPreview, 180);
-  }
-
-  progressDotsContainer.addEventListener("pointerdown", (event) => {
-    if (filteredMovies.length < 2) {
+  filmstrip.addEventListener("click", (event) => {
+    const thumb = event.target.closest(".lightbox-filmstrip__thumb");
+    if (!thumb || filmstrip.hidden) {
       return;
     }
-
-    // Keep lightbox swipe/dismiss from stealing this gesture
-    event.preventDefault();
-    event.stopPropagation();
-    activePointerId = event.pointerId;
-    lastScrubIndex = null;
-    lastScrubYear = null;
-    stopAutoplay();
-    progressDotsContainer.setPointerCapture?.(event.pointerId);
-    scrubToPoint(event.clientY);
+    jumpToFilm(Number(thumb.getAttribute("data-index")));
   });
 
-  progressDotsContainer.addEventListener("pointermove", (event) => {
-    if (activePointerId !== event.pointerId) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    scrubToPoint(event.clientY);
-  });
-
-  progressDotsContainer.addEventListener("pointerup", (event) => {
-    if (activePointerId !== event.pointerId) {
-      return;
-    }
-    event.preventDefault();
-    event.stopPropagation();
-
-    const index = scrubToPoint(event.clientY);
-    if (index !== currentIndex && !isAnimating) {
-      goTo(index);
-    }
-
-    finishPointer();
-  });
-
-  progressDotsContainer.addEventListener("pointercancel", (event) => {
-    if (activePointerId !== event.pointerId) {
-      return;
-    }
-    finishPointer();
-  });
-
-  progressDotsContainer.addEventListener("keydown", (event) => {
-    if (lightbox.hidden || filteredMovies.length < 2) {
-      return;
-    }
-    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-      event.preventDefault();
-      const delta = event.key === "ArrowUp" ? -1 : 1;
-      const next = Math.min(Math.max(currentIndex + delta, 0), filteredMovies.length - 1);
-      jumpToFilm(next, { animate: true });
-    }
+  // Keep lightbox swipe/dismiss from stealing horizontal filmstrip scrolls
+  ["touchstart", "touchmove", "touchend", "touchcancel"].forEach((type) => {
+    filmstrip.addEventListener(type, (event) => {
+      event.stopPropagation();
+    }, { passive: true });
   });
 }
 
@@ -644,7 +525,7 @@ function showSwipeIndicator() {
 }
 
 function applyFilters() {
-  filteredMovies = sortMoviesByYear(movies.filter((movie) => {
+  filteredMovies = movies.filter((movie) => {
     const roleMatch = activeFilters.role.length === 0 ||
       activeFilters.role.some(r => movie.roles.includes(r));
     const typeMatch = activeFilters.type.length === 0 ||
@@ -653,10 +534,20 @@ function applyFilters() {
       activeFilters.year.includes(movie.year);
 
     return roleMatch && typeMatch && yearMatch;
-  }));
+  });
 
   updateGalleryDisplay();
-  updateScrubVisibility();
+  renderFilmstrip();
+
+  if (!lightbox.hidden && filteredMovies.length > 0) {
+    const activeId = filteredMovies[currentIndex]?.id;
+    if (!activeId) {
+      currentIndex = 0;
+      renderMovie(filteredMovies[0], 0);
+    } else {
+      syncFilmstrip(currentIndex);
+    }
+  }
 }
 
 function updateGalleryDisplay() {
@@ -868,6 +759,7 @@ function openLightbox(movieId, trigger) {
   currentIndex = index;
   clearBodyMotionClasses();
   resetDismissState();
+  renderFilmstrip();
   renderMovie(filteredMovies[currentIndex], currentIndex);
 
   lightbox.hidden = false;
@@ -907,6 +799,10 @@ function onPointerDown(event) {
   }
   // Tap zones sit on top of the poster, so they must not block dragging
   if (event.target.closest("button:not([data-swipe-passthrough])")) {
+    return;
+  }
+  // Filmstrip owns its own horizontal scroll; never start swipe/dismiss there
+  if (event.target.closest(".lightbox-filmstrip")) {
     return;
   }
 
@@ -1051,7 +947,7 @@ function initGallery() {
   renderGalleryItems();
   initGalleryCaptions();
   initFilters();
-  initProgressScrub();
+  initFilmstrip();
   applyFilters();
 
   gallery.addEventListener("click", (event) => {
