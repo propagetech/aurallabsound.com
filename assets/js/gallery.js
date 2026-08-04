@@ -1,466 +1,98 @@
 /* Movie poster gallery — lightbox with nav, swipe, autoplay */
 
-const movies = [
-  {
-    id: "elephant-whisperers",
-    poster: "assets/images/gallery/the-elephant-whisperers.jpg",
-    title: "The Elephant Whisperers",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist",
-    type: "Documentary Short",
-    year: 2021,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Recordist" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "nocturnes",
-    poster: "assets/images/gallery/nocturnes.jpg",
-    title: "Nocturnes",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Documentary",
-    year: 2024,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "shivamma",
-    poster: "assets/images/gallery/shivamma-yarehanchinnala.jpg",
-    title: "Shivamma",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Feature Film",
-    year: 2022,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "bisi-bisi",
-    poster: "assets/images/gallery/bisi-bisi-ice-cream.jpg",
-    title: "Bisi-Bisi Ice-Cream",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Feature Film",
-    year: 2024,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Mix" },
-      { name: "Suresh Bagali", role: "Sound Recordist" }
-    ]
-  },
-  {
-    id: "pedro",
-    poster: "assets/images/gallery/pedro.jpg",
-    title: "Pedro",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist · Foley Supervisor",
-    type: "Feature Film",
-    year: 2023,
-    roles: ["Sound Designer", "Production Sound Recordist", "Foley Supervisor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Foley / Sound Design" }
-    ]
-  },
-  {
-    id: "sabar-bonda",
-    poster: "assets/images/gallery/sabar-bonda.jpg",
-    title: "Sabar Bonda",
-    studio: "Sound · Independent Cinema",
-    workType: "Sound Designer · Re-recording Mix",
-    type: "Feature Film",
-    year: 2023,
-    roles: ["Sound Designer", "Re-recording Mix"],
-    team: [
-      { name: "Anirban Borthakur", role: "Sound Designer" },
-      { name: "Boloy Kumar Doloi", role: "Re-recording Mixer" }
-    ]
-  },
-  {
-    id: "the-disciple",
-    poster: "assets/images/gallery/the-disciple.jpg",
-    title: "The Disciple",
-    studio: "Moonweave Films",
-    workType: "Sound Designer",
-    type: "Feature Film",
-    year: 2020,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Anirban Borthakur", role: "Sound Designer" },
-      { name: "Naren Chandavarkar", role: "Sound Designer" }
-    ]
-  },
-  {
-    id: "second-chance",
-    poster: "assets/images/gallery/second-chance.jpg",
-    title: "Second Chance",
-    studio: "Moonweave Films",
-    workType: "Sound Designer",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Anirban Borthakur", role: "Sound Designer" }
-    ]
-  },
-  {
-    id: "against-the-tide",
-    poster: "assets/images/gallery/against-the-tide.jpg",
-    title: "Against the Tide",
-    studio: "Independent Cinema",
-    workType: "Festival Feature · Sundance Premiere",
-    type: "Feature Film",
-    year: 2020,
-    roles: ["Cinematography"],
-    team: [
-      { name: "Vikas Urs", role: "Cinematography" }
-    ]
-  },
-  {
-    id: "monica-o-my-darling",
-    poster: "assets/images/gallery/monica-o-my-darling.jpg",
-    title: "Monica, O My Darling",
-    studio: "Sound · Technical",
-    workType: "Re-recording Mix",
-    type: "Feature Film",
-    year: 2023,
-    roles: ["Re-recording Mix"],
-    team: [
-      { name: "Boloy Kumar Doloi", role: "Sound Mixing · IIFA 2023" }
-    ]
-  },
-  {
-    id: "kabir-singh",
-    poster: "assets/images/gallery/kabir-singh.jpg",
-    title: "Kabir Singh",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist",
-    type: "Feature Film",
-    year: 2019,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Mixer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "article-15",
-    poster: "assets/images/gallery/article-15.jpg",
-    title: "Article 15",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist",
-    type: "Feature Film",
-    year: 2019,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Production Sound" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "gantumoote",
-    poster: "assets/images/gallery/gantumoote.jpg",
-    title: "Gantumoote",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Designer" }
-    ]
-  },
-  {
-    id: "flickering-lights",
-    poster: "assets/images/gallery/flickering-lights.jpg",
-    title: "Flickering Lights",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist",
-    type: "Documentary",
-    year: 2023,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Production Sound" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "diaries",
-    poster: "assets/images/gallery/diaries-unconventional-journey.jpg",
-    title: "Diaries from an Unconventional Journey",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Documentary",
-    year: 2021,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "puta-tirugisi-nodi",
-    poster: "assets/images/gallery/puta-tirugisi-nodi.jpg",
-    title: "Puta Tirugisi Nodi",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "summer-saying",
-    poster: "assets/images/gallery/and-what-is-the-summer-saying.jpg",
-    title: "And What Is The Summer Saying",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Documentary",
-    year: 2019,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "afternoon-clouds",
-    poster: "assets/images/gallery/afternoon-clouds.jpg",
-    title: "Afternoon Clouds",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Short Film",
-    year: 2019,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "testimony-of-ana",
-    poster: "assets/images/gallery/testimony-of-ana.jpg",
-    title: "Testimony of Ana",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Short Film",
-    year: 2018,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "bulbul-can-sing",
-    poster: "assets/images/gallery/bulbul-can-sing.jpg",
-    title: "Bulbul Can Sing",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Effects Editor",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Effects Editor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Effects Editor" },
-      { name: "Suresh Bagali", role: "Sound Effects" }
-    ]
-  },
-  {
-    id: "dolly-kitty",
-    poster: "assets/images/gallery/dolly-kitty.jpg",
-    title: "Dolly Kitty Aur Woh Chamakte Sitaare",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist (Additional)",
-    type: "Feature Film",
-    year: 2019,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Production Sound" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "jabariya-jodi",
-    poster: "assets/images/gallery/jabariya-jodi.jpg",
-    title: "Jabariya Jodi",
-    studio: "Aural Lab Sound Post",
-    workType: "Production Sound Recordist (Additional)",
-    type: "Feature Film",
-    year: 2019,
-    roles: ["Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Production Sound" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "month-of-madhu",
-    poster: "assets/images/gallery/month-of-madhu.jpg",
-    title: "Month of Madhu",
-    studio: "Aural Lab Sound Post",
-    workType: "Dialogue Editor",
-    type: "Feature Film",
-    year: 2023,
-    roles: ["Dialogue Editor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Dialogue Editor" },
-      { name: "Suresh Bagali", role: "Dialogue Edit" }
-    ]
-  },
-  {
-    id: "ekam",
-    poster: "assets/images/gallery/ekam.jpg",
-    title: "Ekam",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Web Series",
-    year: 2021,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "parisu",
-    poster: "assets/images/gallery/parisu.jpg",
-    title: "Parisu (Appavin Parisu)",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Short Film",
-    year: 2020,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "thinkistaan",
-    poster: "assets/images/gallery/thinkistaan.jpg",
-    title: "Thinkistaan",
-    studio: "Aural Lab Sound Post",
-    workType: "Dialogue Editor",
-    type: "Web Series",
-    year: 2021,
-    roles: ["Dialogue Editor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Dialogue Editor" },
-      { name: "Suresh Bagali", role: "Dialogue Edit" }
-    ]
-  },
-  {
-    id: "season-of-innocence",
-    poster: "assets/images/gallery/season-of-innocence.jpg",
-    title: "Season of Innocence",
-    studio: "Aural Lab Sound Post",
-    workType: "Foley Supervisor · Dialogue Editor",
-    type: "Feature Film",
-    year: 2022,
-    roles: ["Foley Supervisor", "Dialogue Editor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Foley Supervisor" },
-      { name: "Suresh Bagali", role: "Dialogue Edit" }
-    ]
-  },
-  {
-    id: "pathumma",
-    poster: "assets/images/gallery/pathumma.jpg",
-    title: "Pathumma",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "the-plan",
-    poster: "assets/images/gallery/the-plan.jpg",
-    title: "The Plan",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "chipkali",
-    poster: "assets/images/gallery/chipkali.jpg",
-    title: "Chipkali",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer · Production Sound Recordist",
-    type: "Short Film",
-    year: 2020,
-    roles: ["Sound Designer", "Production Sound Recordist"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Production Sound" }
-    ]
-  },
-  {
-    id: "maruts",
-    poster: "assets/images/gallery/maruts.jpg",
-    title: "Maruts",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Documentary",
-    year: 2020,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "artel",
-    poster: "assets/images/gallery/artel.jpg",
-    title: "Artel",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Designer",
-    type: "Documentary",
-    year: 2020,
-    roles: ["Sound Designer"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Designer" },
-      { name: "Suresh Bagali", role: "Sound Design" }
-    ]
-  },
-  {
-    id: "abhi-to-party",
-    poster: "assets/images/gallery/abhi-to-party.jpg",
-    title: "Abhi To Party Shuru Hui Hai",
-    studio: "Aural Lab Sound Post",
-    workType: "Sound Effects Editor",
-    type: "Feature Film",
-    year: 2021,
-    roles: ["Sound Effects Editor"],
-    team: [
-      { name: "Shreyank Nanjappa", role: "Sound Effects Editor" },
-      { name: "Suresh Bagali", role: "Sound Effects" }
-    ]
-  }
+const moviesRaw = [
+  { file: "AFTERNOON CLOUDS.jpg", type: "Short Film", contribution: "Mix, Sound Design", year: 2017, director: "Payal Kapadia", imdb: "https://www.imdb.com/title/tt10012542/" },
+  { file: "AND WHAT IS THE SUMMER SAYING.jpg", type: "Documentary", contribution: "Mix, Sound Design", year: 2018, director: "Payal Kapadia", imdb: "https://www.imdb.com/title/tt10556876/" },
+  { file: "ANUJA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Adam J Graves", imdb: "https://www.imdb.com/title/tt27654431/" },
+  { file: "ARTICLE 15.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Anubhav Sinha", imdb: "https://www.imdb.com/title/tt10324144/" },
+  { file: "BISI BISI ICE CREAM.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2024, director: "Arvind Sastry", imdb: "https://www.imdb.com/title/tt30818503/" },
+  { file: "BULBUL CAN SING.jpg", type: "Feature Film", contribution: "Sound Edit", year: 2018, director: "Rima Das", imdb: "https://www.imdb.com/title/tt8659050/" },
+  { file: "COCONUT DREAMS.jpeg", type: "Feature Film", contribution: "Foley", year: 2025, director: "Rima Das", imdb: "https://www.imdb.com/title/tt36591807/" },
+  { file: "DIARIES FROM AN UNCONVENTIONAL JOURNEY.jpg", type: "Documentary", contribution: "Mix, Sound Design", year: 2022, director: "Sagar Shiriskar", imdb: "https://www.imdb.com/title/tt22248438/" },
+  { file: "DOLLY KITTY AUR WOH CHAMAKTE SITARE.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Alankrita Srivastava", imdb: "https://www.imdb.com/title/tt9176296/" },
+  { file: "DON_T TELL MOTHER.jpeg", type: "Feature Film", contribution: "Mix", year: 2025, director: "Anoop Lokkur", imdb: "https://www.imdb.com/title/tt35612874/" },
+  { file: "EKAM.jpg", type: "Web Series", contribution: "Sync Sound, Sound Design", year: 2024, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt29715884/" },
+  { file: "FLICKERING LIGHTS.jpg", type: "Documentary", contribution: "Mix, Sound Design", year: 2023, director: "Anirban Dutta, Anupama Srinivasan", imdb: "https://www.imdb.com/title/tt29669662/" },
+  { file: "GAME OF FOOLS.jpeg", type: "Feature Film", contribution: "Foley", year: 2022, director: "—", imdb: "https://www.imdb.com/title/tt21923422/" },
+  { file: "GANTUMOOTE.jpg", type: "Feature Film", contribution: "Sync Sound, Sound Design", year: 2019, director: "Roopa Rao", imdb: "https://www.imdb.com/title/tt11042658/" },
+  { file: "JABARIYA JODI.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Prashant Singh", imdb: "https://www.imdb.com/title/tt8785426/" },
+  { file: "KABIR SINGH.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Sandeep Reddy Vanga", imdb: "https://www.imdb.com/title/tt8983202/" },
+  { file: "KOLI ESRU.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2024, director: "Champa Shetty", imdb: "https://www.imdb.com/title/tt31106876/" },
+  { file: "KURKA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: null, director: "Ganesh Hegde", imdb: "https://www.imdb.com/title/tt36747953/" },
+  { file: "MANORATHANGAL.jpeg", type: "Feature Film", contribution: "Foley", year: 2024, director: "—", imdb: "https://www.imdb.com/title/tt15478036/" },
+  { file: "MITHYA.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2023, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt29451496/" },
+  { file: "MONTH OF MADHU.jpg", type: "Feature Film", contribution: "Foley", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt21361340/" },
+  { file: "NIDRADEVI NEXT DOOR.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2025, director: "Suraag Sagar", imdb: "https://www.imdb.com/title/tt33702616/" },
+  { file: "NOCTURNES.jpg", type: "Documentary", contribution: "Sound Design", year: 2024, director: "Anirban Dutta, Anupama Srinivasan", imdb: "https://www.imdb.com/title/tt30320605/" },
+  { file: "NOT A HERO.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2026, director: "Rima Das", imdb: "https://www.imdb.com/title/tt39371375/" },
+  { file: "PARAAGAN.jpg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Akku Kulhari", imdb: "https://www.imdb.com/title/tt26753343/" },
+  { file: "PEDRO.jpg", type: "Feature Film", contribution: "Sync Sound, Sound Design", year: 2021, director: "Natesh Hegde", imdb: "https://www.imdb.com/title/tt15347602/" },
+  { file: "PILL.jpeg", type: "Web Series", contribution: "Dialogue Edit", year: 2024, director: "—", imdb: "https://www.imdb.com/title/tt32729607/" },
+  { file: "PUTA TIRUGISI NODI.jpg", type: "Feature Film", contribution: "Sound Edit", year: 2016, director: "Suneel Raghavendra", imdb: "https://www.imdb.com/title/tt5500794/" },
+  { file: "SAFAR MEIN SHEHER.jpeg", type: "Feature Film", contribution: "Dialogue Edit", year: 2025, director: "Mazhar Kamran", imdb: "https://www.imdb.com/title/tt30759157/" },
+  { file: "SEASON OF INNOCENCE.jpg", type: "Feature Film", contribution: "Foley", year: 2022, director: "—", imdb: "https://www.imdb.com/title/tt17081126/" },
+  { file: "SHANKARABHARANA.jpeg", type: "Feature Film", contribution: "Sound Design", year: null, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt40183137/" },
+  { file: "SHIVAMMA.jpg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2022, director: "Jaishankar", imdb: "https://www.imdb.com/title/tt22171962/" },
+  { file: "SILAN.jpeg", type: "Feature Film", contribution: "Foley", year: 2023, director: "Ashmita Guha Neogi", imdb: "https://www.imdb.com/title/tt31913701/" },
+  { file: "TEJAS.jpeg", type: "Feature Film", contribution: "Dialogue Edit", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt6950476/" },
+  { file: "TESTIMONY OF ANA.jpg", type: "Short Film", contribution: "Sound Design", year: 2021, director: "Sachin Dheeraj", imdb: "https://www.imdb.com/title/tt13681852/" },
+  { file: "THE DAUGHTER.jpeg", type: "Feature Film", contribution: "Foley", year: 2022, director: "—", imdb: "https://www.imdb.com/title/tt17490994/" },
+  { file: "THE ELEPHANT WHISPERERS.jpg", type: "Documentary Short", contribution: "Sync Sound", year: 2022, director: "Kartiki Gonsalves", imdb: "https://www.imdb.com/title/tt23628262/" },
+  { file: "THE HOUSE OF MANIKANTHA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: null, director: "Pinaki Janardhan", imdb: "—" },
+  { file: "THE ORDER OF TIME.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2025, director: "Akshay Padmanabha", imdb: "https://www.imdb.com/title/tt39216209/" },
+  { file: "THE SIGNAL MAN.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2023, director: "K Shivarudraiah", imdb: "https://www.imdb.com/title/tt27302882/" },
+  { file: "VAGACHIPANI.jpeg", type: "Feature Film", contribution: "Sync Sound, Sound Design", year: 2025, director: "Natesh Hegde", imdb: "https://www.imdb.com/title/tt22640628/" },
+  { file: "VILLAGE ROCKSTARS 2.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Rima Das", imdb: "https://www.imdb.com/title/tt33575372/" },
+  { file: "ZUAS.jpeg", type: "Feature Film", contribution: "Mix", year: 2026, director: "Garvit Singh", imdb: "—" }
 ];
+
+const ALLOWED_TYPES = [
+  "Documentary",
+  "Documentary Short",
+  "Feature Film",
+  "Short Film",
+  "Web Series"
+];
+
+function slugify(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function createTitleFromFilename(fileName) {
+  const base = fileName.replace(/\.[^/.]+$/, "");
+  return base
+    .replace(/_/g, "'")
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => {
+      if (/^\d+$/.test(word)) {
+        return word;
+      }
+      return `${word.charAt(0)}${word.slice(1).toLowerCase()}`;
+    })
+    .join(" ");
+}
+
+const movies = moviesRaw.map((item) => {
+  const title = createTitleFromFilename(item.file);
+  const roles = item.contribution.split(",").map((entry) => entry.trim());
+  const yearLabel = item.year ?? "TBD";
+  const directorLabel = item.director === "—" ? "Director not listed" : item.director;
+  const team = [{ name: directorLabel, role: "Director" }];
+  const rolesFormatted = item.contribution.replace(/,/g, " &").replace(/&\s*&/g, "&");
+  return {
+    id: slugify(title),
+    poster: `assets/images/gallery/posters-optimized/${slugify(item.file.replace(/\.[^/.]+$/, ""))}.webp`,
+    title,
+    studio: "Aural Lab Sound",
+    workType: `${rolesFormatted} · ${item.type} · ${yearLabel}`,
+    type: item.type,
+    year: item.year,
+    roles,
+    team,
+    imdb: item.imdb
+  };
+});
 
 const AUTOPLAY_MS = 4500;
 const SWIPE_THRESHOLD = 56;
@@ -478,9 +110,22 @@ const DISMISS_MIN_TRAVEL = 64;
 const DISMISS_SCALE = 0.08;
 const DISMISS_OUT_MS = 240;
 const DISMISS_RETURN_MS = 320;
-const STUDIO_NAME = "Aural Lab Sound Post";
+const STUDIO_NAME = "Aural Lab Sound";
+
+// Featured films: curated selection showcasing range, prestige, and craft variety
+const FEATURED_FILM_IDS = [
+  "the-elephant-whisperers",
+  "anuja",
+  "mithya",
+  "koli-esru",
+  "village-rockstars-2",
+  "flickering-lights",
+  "nocturnes",
+  "the-order-of-time"
+];
 
 const gallery = document.getElementById("image-gallery");
+const featuredGallery = document.getElementById("featured-gallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxContent = document.getElementById("lightbox-content");
 const lightboxBody = document.getElementById("lightbox-body");
@@ -497,9 +142,11 @@ const swipeIndicator = document.getElementById("swipe-indicator");
 const lightboxTitle = document.getElementById("lightbox-title");
 const creditsStudio = document.getElementById("credits-studio");
 const creditsWorkType = document.getElementById("credits-work-type");
+const creditsImdb = document.getElementById("credits-imdb");
 const creditsTeam = document.getElementById("credits-team");
 const progressDotsContainer = document.getElementById("progress-dots");
 const counterText = document.getElementById("counter-text");
+const creditsCatalog = document.getElementById("credits-catalog");
 
 let currentIndex = 0;
 let lastFocusedTrigger = null;
@@ -553,9 +200,14 @@ function renderTeam(team) {
   creditsTeam.replaceChildren(
     ...team.map((member) => {
       const item = document.createElement("li");
-      const name = document.createElement("span");
+      const name = member.url ? document.createElement("a") : document.createElement("span");
       name.className = "credits-team__name";
       name.textContent = member.name;
+      if (member.url) {
+        name.href = member.url;
+        name.target = "_blank";
+        name.rel = "noopener noreferrer";
+      }
       const role = document.createElement("span");
       role.className = "credits-team__role";
       role.textContent = member.role;
@@ -571,9 +223,18 @@ function renderMovie(movie, index) {
   creditsStudio.textContent = movie.studio || STUDIO_NAME;
   lightboxTitle.textContent = movie.title;
   creditsWorkType.textContent = movie.workType;
+  if (creditsImdb) {
+    if (movie.imdb && movie.imdb !== "—") {
+      creditsImdb.hidden = false;
+      creditsImdb.innerHTML = `<a href="${movie.imdb}" target="_blank" rel="noopener noreferrer">View on IMDb →</a>`;
+    } else {
+      creditsImdb.hidden = true;
+      creditsImdb.textContent = "";
+    }
+  }
   renderTeam(movie.team);
 
-  counterText.textContent = `${index + 1} / ${filteredMovies.length}`;
+  counterText.textContent = `${index + 1} of ${filteredMovies.length}`;
 
   renderProgress(index);
   preloadNeighbours(index);
@@ -854,14 +515,22 @@ function initFilters() {
   if (!filterContainer) return;
 
   const allRoles = [...new Set(movies.flatMap(m => m.roles))].sort();
-  const allTypes = [...new Set(movies.map(m => m.type))].sort();
-  const allYears = [...new Set(movies.map(m => m.year))].sort((a, b) => b - a);
+  const allTypes = ALLOWED_TYPES;
+  const allYears = [...new Set(movies.map(m => m.year))].sort((a, b) => {
+    if (a === null) {
+      return 1;
+    }
+    if (b === null) {
+      return -1;
+    }
+    return b - a;
+  });
 
   const renderGroup = (label, filterType, values) => `
     <div class="filter-group">
       <h4 class="filter-label" id="filter-label-${filterType}">By ${label}</h4>
       <div class="filter-buttons" role="group" aria-labelledby="filter-label-${filterType}" data-filter-type="${filterType}">
-        ${values.map((value) => `<button type="button" class="filter-btn" aria-pressed="false" data-value="${value}">${value}</button>`).join("")}
+        ${values.map((value) => `<button type="button" class="filter-btn" aria-pressed="false" data-value="${value}">${value === null ? "TBD" : value}</button>`).join("")}
       </div>
     </div>
   `;
@@ -887,7 +556,9 @@ function initFilters() {
     btn.addEventListener("click", () => {
       const filterType = btn.closest(".filter-buttons").getAttribute("data-filter-type");
       const rawValue = btn.getAttribute("data-value");
-      const value = filterType === "year" ? parseInt(rawValue, 10) : rawValue;
+      const value = filterType === "year"
+        ? (rawValue === "null" ? null : parseInt(rawValue, 10))
+        : rawValue;
       const isActive = activeFilters[filterType].includes(value);
 
       activeFilters[filterType] = isActive
@@ -908,27 +579,96 @@ function initFilters() {
   updateFilterStatus(filteredMovies.length);
 }
 
-function initGalleryCaptions() {
-  if (!gallery) return;
+function renderFeaturedGallery() {
+  if (!featuredGallery) {
+    return;
+  }
 
-  const moviesById = new Map(movies.map((movie) => [movie.id, movie]));
+  const featured = movies.filter((m) => FEATURED_FILM_IDS.includes(m.id));
+  featuredGallery.innerHTML = featured.map((movie) => `
+    <button type="button" class="gallery-item" role="listitem" data-movie-id="${movie.id}" aria-label="View credits for ${movie.title}">
+      <img src="${movie.poster}" alt="${movie.title} poster" loading="eager" decoding="async">
+    </button>
+  `).join("");
+}
 
-  gallery.querySelectorAll(".gallery-item").forEach((item) => {
-    const movie = moviesById.get(item.getAttribute("data-movie-id"));
-    if (!movie || item.querySelector(".gallery-item__caption")) {
-      return;
+function renderGalleryItems() {
+  if (!gallery) {
+    return;
+  }
+
+  gallery.innerHTML = movies.map((movie, index) => `
+    <button type="button" class="gallery-item" role="listitem" data-movie-id="${movie.id}" aria-label="View credits for ${movie.title}">
+      <img src="${movie.poster}" alt="${movie.title} poster" loading="${index < 6 ? "eager" : "lazy"}" decoding="async">
+    </button>
+  `).join("");
+}
+
+function renderCreditsCatalog() {
+  if (!creditsCatalog) {
+    return;
+  }
+
+  const sortedMovies = [...movies].sort((a, b) => {
+    if (a.year === null && b.year === null) {
+      return a.title.localeCompare(b.title);
     }
+    if (a.year === null) {
+      return 1;
+    }
+    if (b.year === null) {
+      return -1;
+    }
+    return b.year - a.year;
+  });
 
-    const caption = document.createElement("span");
-    caption.className = "gallery-item__caption";
-    // The button already carries an accessible name, so this is decorative
-    caption.setAttribute("aria-hidden", "true");
-    caption.innerHTML = `
-      <span class="gallery-item__title">${movie.title}</span>
-      <span class="gallery-item__role">${movie.roles.join(" · ")}</span>
-      <span class="gallery-item__cue">View credits</span>
-    `;
-    item.append(caption);
+  creditsCatalog.innerHTML = `
+    <article class="credits-group">
+      <header class="credits-group__header">
+        <h3>All Projects</h3>
+        <p>Poster, contribution, year, director, and IMDb reference from the current gallery data.</p>
+      </header>
+      <ul class="credits-projects">
+        ${sortedMovies.map((movie) => {
+          const imdbHtml = movie.imdb && movie.imdb !== "—"
+            ? ` · <a href="${movie.imdb}" target="_blank" rel="noopener noreferrer">IMDb</a>`
+            : "";
+          return `
+            <li>
+              <span class="credits-projects__title">${movie.title}</span>
+              <span class="credits-projects__meta">${movie.type} · ${movie.workType}${imdbHtml}</span>
+            </li>
+          `;
+        }).join("")}
+      </ul>
+    </article>
+  `;
+}
+
+function initGalleryCaptions() {
+  const moviesById = new Map(movies.map((movie) => [movie.id, movie]));
+  const galleriesToInit = [];
+
+  if (gallery) galleriesToInit.push(gallery);
+  if (featuredGallery) galleriesToInit.push(featuredGallery);
+
+  galleriesToInit.forEach((galleryEl) => {
+    galleryEl.querySelectorAll(".gallery-item").forEach((item) => {
+      const movie = moviesById.get(item.getAttribute("data-movie-id"));
+      if (!movie || item.querySelector(".gallery-item__caption")) {
+        return;
+      }
+
+      const caption = document.createElement("span");
+      caption.className = "gallery-item__caption";
+      caption.setAttribute("aria-hidden", "true");
+      caption.innerHTML = `
+        <span class="gallery-item__title">${movie.title}</span>
+        <span class="gallery-item__role">${movie.roles.join(" · ")}</span>
+        <span class="gallery-item__cue">View credits</span>
+      `;
+      item.append(caption);
+    });
   });
 }
 
@@ -1165,8 +905,12 @@ function initGallery() {
   }
 
   updateAutoplayUi();
+  renderFeaturedGallery();
+  renderGalleryItems();
+  renderCreditsCatalog();
   initGalleryCaptions();
   initFilters();
+  applyFilters();
 
   gallery.addEventListener("click", (event) => {
     const button = event.target.closest(".gallery-item");

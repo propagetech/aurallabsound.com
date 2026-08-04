@@ -1253,9 +1253,9 @@
 
 @media (min-width: 48rem) {
   .lightbox-body {
-    grid-template-columns: 20rem 1fr;
+    grid-template-columns: 19rem minmax(0, 1fr);
     align-items: start;
-    gap: var(--space-12);
+    gap: var(--space-8);
     padding: var(--space-12);
     height: 100%;
   }
@@ -1425,7 +1425,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--space-4);
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1485,13 +1485,32 @@
   font-weight: 500;
   color: var(--color-text-secondary);
   display: block;
-  line-height: var(--leading-relaxed);
+  line-height: var(--leading-snug);
   opacity: 0.9;
+}
+
+.credits-imdb {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.credits-imdb a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.credits-imdb a:hover,
+.credits-imdb a:focus-visible {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
 }
 
 /* Section label carries the separation, so no rule is needed above it */
 .credits-label {
-  margin: var(--space-2) 0 0 0;
+  margin: var(--space-1) 0 0 0;
   padding: 0;
   font-family: var(--font-body);
   font-size: 0.625rem;
@@ -1508,8 +1527,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6) var(--space-8);
+  grid-template-columns: 1fr;
+  gap: var(--space-3) 0;
 }
 
 .credits-team li {
@@ -1613,5 +1632,166 @@
 @media (prefers-reduced-motion: reduce) {
   .swipe-indicator svg {
     animation: none;
+  }
+}
+
+/* Featured work section — distinct from full archive */
+.featured-work-section {
+  margin-bottom: var(--space-16);
+  padding-bottom: var(--space-12);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.featured-work-head {
+  margin-bottom: var(--space-8);
+}
+
+.featured-work-head h3 {
+  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl, 1.35rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.featured-work-head p {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Featured gallery — smaller, more curated grid */
+.photo-gallery--featured {
+  column-count: 3;
+  column-gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 56.25rem) {
+  .photo-gallery--featured {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 37.5rem) {
+  .photo-gallery--featured {
+    column-count: 2;
+    column-gap: var(--space-3);
+  }
+}
+
+/* All films section — full archive */
+.all-films-section {
+  margin-top: var(--space-12);
+}
+
+/* Modal redesign — poster dominates, credits secondary */
+@media (min-width: 48rem) {
+  .lightbox-body {
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+/* Reduce toolbar visual weight */
+.lightbox-toolbar {
+  background: transparent;
+  border-bottom: none;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  transition: opacity var(--duration-base) var(--ease-out);
+  opacity: 0.7;
+}
+
+.lightbox-toolbar:hover {
+  opacity: 1;
+}
+
+@media (max-width: 47.99rem) {
+  .lightbox-toolbar {
+    background: rgba(0, 0, 0, 0.4);
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+}
+
+/* Make studio label quieter */
+.credits-studio {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .credits-studio {
+    display: block;
+    font-size: 0.65rem;
+    opacity: 0.55;
+    margin-bottom: var(--space-4);
+  }
+}
+
+/* Improve modal title hierarchy */
+.credits-title {
+  margin-bottom: var(--space-4);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+}
+
+/* Work type with clearer formatting */
+.credits-work-type {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+/* Director as inline text, not a team member */
+.credits-director-info {
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.credits-director-info strong {
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+/* Autoplay button — icon-only on mobile */
+@media (max-width: 47.99rem) {
+  .lightbox-autoplay__label {
+    display: none;
+  }
+
+  .lightbox-autoplay {
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  .lightbox-autoplay svg {
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Progress dots — minimal, cinematic */
+.lightbox-progress {
+  gap: 3px;
+  padding: var(--space-4) var(--space-6) 0;
+}
+
+.lightbox-progress span {
+  height: 1px;
+}
+
+@media (max-width: 47.99rem) {
+  .lightbox-progress {
+    padding: var(--space-3) var(--space-4) 0;
+    gap: 2px;
+  }
+
+  .lightbox-progress span {
+    height: 1px;
   }
 }
