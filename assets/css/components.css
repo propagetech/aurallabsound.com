@@ -56,13 +56,6 @@
   filter: brightness(0.3) contrast(1.2);
 }
 
-/* No JS: OS light preference */
-@media (prefers-color-scheme: light) {
-  html:not([data-theme]) .logo-image {
-    filter: brightness(0.3) contrast(1.2);
-  }
-}
-
 /* Header Navigation */
 .header-nav {
   display: flex;
@@ -83,6 +76,7 @@
   color: var(--color-text);
   text-decoration: none;
   font-size: var(--text-sm);
+  font-weight: 600;
   transition: color var(--duration-base) var(--ease-out);
 }
 
@@ -321,7 +315,11 @@
   font-size: var(--text-xs);
   line-height: var(--leading-tight);
   color: var(--color-text-secondary);
-  opacity: 0.7;
+  opacity: 0.85;
+}
+
+html[data-theme="light"] .social-link__note {
+  opacity: 1;
 }
 
 /* IMDB Icon Theme Toggle */
@@ -927,7 +925,7 @@
 
 html[data-theme="light"] .faq-hero {
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.94) 0%, rgba(245, 247, 249, 0.88) 55%, rgba(255, 255, 255, 0.92) 100%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.97) 0%, rgba(250, 251, 252, 0.95) 55%, rgba(255, 255, 255, 0.97) 100%),
     var(--faq-hero-image) center / cover no-repeat;
 }
 
@@ -1010,6 +1008,7 @@ html[data-theme="light"] .faq-hero__veil {
   max-width: 34ch;
   color: var(--color-text-secondary);
   font-size: var(--text-lg);
+  font-weight: 500;
   line-height: var(--leading-snug);
 }
 
@@ -1204,6 +1203,7 @@ html[data-theme="light"] .faq-hero__veil {
   max-width: 42rem;
   color: var(--color-text-secondary);
   font-size: var(--text-base);
+  font-weight: 500;
   line-height: var(--leading-relaxed);
 }
 
@@ -2307,6 +2307,10 @@ html[data-theme="light"] .faq-hero__veil {
   text-wrap: balance;
 }
 
+html[data-theme="light"] .credits-award__detail {
+  color: var(--color-text-primary);
+}
+
 .credits-title-row {
   display: flex;
   align-items: center;
@@ -2581,11 +2585,26 @@ html[data-theme="light"] .faq-hero__veil {
   opacity: 1;
 }
 
+html[data-theme="light"] .lightbox-toolbar {
+  opacity: 1;
+}
+
+html[data-theme="light"] .lightbox-counter {
+  color: var(--color-text-primary);
+  opacity: 1;
+}
+
 @media (max-width: 47.99rem) {
   .lightbox-toolbar {
     background: rgba(0, 0, 0, 0.4);
     padding: calc(var(--space-3) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-3);
     gap: var(--space-3);
+  }
+
+  /* Dark chrome + light-theme text tokens fail AA — use a light bar instead */
+  html[data-theme="light"] .lightbox-toolbar {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--color-border);
   }
 }
 

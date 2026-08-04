@@ -1,20 +1,11 @@
 /* Theme Toggle - Light/Dark mode switcher.
-   Default is dark; light only when the OS prefers light (or a saved choice). */
+   Default is dark; light only when the visitor chooses via the theme toggle. */
 const themeToggle = document.querySelector('.theme-toggle');
 const html = document.documentElement;
 
 function resolveTheme() {
   const saved = localStorage.getItem('theme-preference');
-
-  if (saved) {
-    return saved;
-  }
-
-  if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-    return 'light';
-  }
-
-  return 'dark';
+  return saved === 'light' ? 'light' : 'dark';
 }
 
 function updateThemeIcon() {
@@ -66,10 +57,3 @@ if (document.readyState === 'loading') {
   initTheme();
   updateThemeIcon();
 }
-
-window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-  if (!localStorage.getItem('theme-preference')) {
-    html.setAttribute('data-theme', e.matches ? 'light' : 'dark');
-    updateThemeIcon();
-  }
-});
