@@ -484,7 +484,7 @@ function initProgressScrub() {
       return;
     }
 
-    if (!isScrubbing && (Math.abs(event.movementX) > 3 || Math.abs(event.movementY) > 3)) {
+    if (!isScrubbing && (Math.abs(event.movementY) > 3 || Math.abs(event.movementX) > 3)) {
       isScrubbing = true;
     }
 
