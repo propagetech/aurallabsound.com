@@ -275,7 +275,17 @@ function renderAward(movie) {
   const detail = award.detail || "";
   creditsAward.hidden = false;
   creditsAwardStamp.textContent = stamp;
-  creditsAwardDetail.textContent = detail;
+  // Split category / result on the first • so the laurel detail reads as two lines
+  const bulletIndex = detail.indexOf("•");
+  if (bulletIndex !== -1) {
+    creditsAwardDetail.replaceChildren(
+      document.createTextNode(detail.slice(0, bulletIndex).trim()),
+      document.createElement("br"),
+      document.createTextNode(detail.slice(bulletIndex + 1).trim())
+    );
+  } else {
+    creditsAwardDetail.textContent = detail;
+  }
   creditsAward.setAttribute(
     "aria-label",
     [stamp, detail].filter(Boolean).join(" · ")
