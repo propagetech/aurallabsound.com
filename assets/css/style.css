@@ -254,11 +254,12 @@ ul, ol {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--color-accent);
-  color: white;
+  background: #1a1a1a;
+  color: #ffffff;
   padding: 8px;
   text-decoration: none;
   z-index: 100;
+  font-weight: 600;
 }
 
 .skip-link:focus {

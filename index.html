@@ -24,16 +24,17 @@
   <script src="assets/js/theme-init.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="assets/css/style.min.css">
+  <link rel="stylesheet" href="assets/css/components.min.css">
+  <link rel="stylesheet" href="assets/css/responsive.min.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {"@type": "WebSite", "url": "https://www.aurallabsound.com/", "name": "Aural Lab Sound"},
-      {"@type": "LocalBusiness", "name": "Aural Lab Sound", "description": "Professional sound design and audio recording studio", "address": {"@type": "PostalAddress", "addressLocality": "Bangalore", "addressRegion": "Karnataka", "addressCountry": "IN"}, "telephone": "+91-9900117364"},
+      {"@type": "LocalBusiness", "name": "Aural Lab Sound", "description": "Professional sound design and audio recording studio", "address": {"@type": "PostalAddress", "streetAddress": "754, 11th Main Rd, Vinayaka Layout, 2nd Stage, Nagarbhavi", "addressLocality": "Bengaluru", "addressRegion": "Karnataka", "postalCode": "560072", "addressCountry": "IN"}, "telephone": "+91-9900117364", "areaServed": {"@type": "City", "name": "Bengaluru"}, "hasMap": "https://share.google/v8zD01X4EplH5JuZv"},
       {"@type": "LocalBusinessService", "name": "Sync Sound", "description": "Professional sync sound recording for film and media productions", "provider": {"@type": "LocalBusiness", "name": "Aural Lab Sound"}},
       {"@type": "LocalBusinessService", "name": "Mix", "description": "Audio mixing and sound design services for film, television, and media", "provider": {"@type": "LocalBusiness", "name": "Aural Lab Sound"}},
       {"@type": "LocalBusinessService", "name": "Sound Design", "description": "Creative sound design for film, documentaries, web series, and media productions", "provider": {"@type": "LocalBusiness", "name": "Aural Lab Sound"}},
@@ -83,7 +84,7 @@
     <section id="home" class="hero" aria-labelledby="hero-heading">
       <div class="hero__content">
         <h1 id="hero-heading">Aural Lab Sound</h1>
-        <p class="hero__tagline">Sync Sound . Mix . Sound Design . Foley</p>
+        <p class="hero__tagline">Sync Sound . Equipment Rental<br>Mix . Sound Design . Foley</p>
 
 
         <a href="#credits" class="scroll-arrow" aria-label="Scroll to the next section">
@@ -275,13 +276,19 @@
           </article>
         </div>
 
+        <div class="contact-location">
+          <address class="contact-location__place">
+            754, 11th Main Rd, Vinayaka Layout, 2nd Stage,<br>
+            Nagarbhavi, Bengaluru, Karnataka 560072
+          </address>
+          <a href="https://share.google/v8zD01X4EplH5JuZv" class="contact-location__map" target="_blank" rel="noopener noreferrer">Find us on Google Maps</a>
+        </div>
+
         <div class="contact-studio">
-          <a href="https://www.youtube.com/@AuralLabSound" class="contact-studio__link" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-            </svg>
-            <span>YouTube</span>
-          </a>
+          <nav class="contact-studio__links" aria-label="Studio links">
+            <a href="faq/" class="contact-studio__link">FAQ</a>
+            <a href="#credits" class="contact-studio__link">Credits</a>
+          </nav>
           <a href="mailto:info@aurallabsound.com" class="contact-studio__email">info@aurallabsound.com</a>
         </div>
       </div>
@@ -291,6 +298,11 @@
   <footer class="site-footer">
     <div class="container footer-bottom">
       <span>© <span id="year"></span> Aural Lab Sound</span>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#credits">Credits</a>
+        <a href="faq/">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
       <p class="footer-tagline">Bangalore, India.</p>
     </div>
   </footer>
