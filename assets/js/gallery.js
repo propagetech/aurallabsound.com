@@ -112,20 +112,7 @@ const DISMISS_OUT_MS = 240;
 const DISMISS_RETURN_MS = 320;
 const STUDIO_NAME = "Aural Lab Sound";
 
-// Featured films: curated selection showcasing range, prestige, and craft variety
-const FEATURED_FILM_IDS = [
-  "the-elephant-whisperers",
-  "anuja",
-  "mithya",
-  "koli-esru",
-  "village-rockstars-2",
-  "flickering-lights",
-  "nocturnes",
-  "the-order-of-time"
-];
-
 const gallery = document.getElementById("image-gallery");
-const featuredGallery = document.getElementById("featured-gallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxContent = document.getElementById("lightbox-content");
 const lightboxBody = document.getElementById("lightbox-body");
@@ -579,19 +566,6 @@ function initFilters() {
   updateFilterStatus(filteredMovies.length);
 }
 
-function renderFeaturedGallery() {
-  if (!featuredGallery) {
-    return;
-  }
-
-  const featured = movies.filter((m) => FEATURED_FILM_IDS.includes(m.id));
-  featuredGallery.innerHTML = featured.map((movie) => `
-    <button type="button" class="gallery-item" role="listitem" data-movie-id="${movie.id}" aria-label="View credits for ${movie.title}">
-      <img src="${movie.poster}" alt="${movie.title} poster" loading="eager" decoding="async">
-    </button>
-  `).join("");
-}
-
 function renderGalleryItems() {
   if (!gallery) {
     return;
@@ -646,29 +620,25 @@ function renderCreditsCatalog() {
 }
 
 function initGalleryCaptions() {
+  if (!gallery) return;
+
   const moviesById = new Map(movies.map((movie) => [movie.id, movie]));
-  const galleriesToInit = [];
 
-  if (gallery) galleriesToInit.push(gallery);
-  if (featuredGallery) galleriesToInit.push(featuredGallery);
+  gallery.querySelectorAll(".gallery-item").forEach((item) => {
+    const movie = moviesById.get(item.getAttribute("data-movie-id"));
+    if (!movie || item.querySelector(".gallery-item__caption")) {
+      return;
+    }
 
-  galleriesToInit.forEach((galleryEl) => {
-    galleryEl.querySelectorAll(".gallery-item").forEach((item) => {
-      const movie = moviesById.get(item.getAttribute("data-movie-id"));
-      if (!movie || item.querySelector(".gallery-item__caption")) {
-        return;
-      }
-
-      const caption = document.createElement("span");
-      caption.className = "gallery-item__caption";
-      caption.setAttribute("aria-hidden", "true");
-      caption.innerHTML = `
-        <span class="gallery-item__title">${movie.title}</span>
-        <span class="gallery-item__role">${movie.roles.join(" · ")}</span>
-        <span class="gallery-item__cue">View credits</span>
-      `;
-      item.append(caption);
-    });
+    const caption = document.createElement("span");
+    caption.className = "gallery-item__caption";
+    caption.setAttribute("aria-hidden", "true");
+    caption.innerHTML = `
+      <span class="gallery-item__title">${movie.title}</span>
+      <span class="gallery-item__role">${movie.roles.join(" · ")}</span>
+      <span class="gallery-item__cue">View credits</span>
+    `;
+    item.append(caption);
   });
 }
 
@@ -905,7 +875,6 @@ function initGallery() {
   }
 
   updateAutoplayUi();
-  renderFeaturedGallery();
   renderGalleryItems();
   renderCreditsCatalog();
   initGalleryCaptions();
