@@ -6,7 +6,7 @@ const moviesRaw = [
   { file: "ANUJA.jpeg", type: "Short Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: 2024, director: "Adam J Graves", imdb: "https://www.imdb.com/title/tt27654431/", awards: [{ stamp: "Academy Award • 2025", detail: "Live Action Short Film • Oscar Nominee" }] },
   { file: "ARTICLE 15.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Anubhav Sinha", imdb: "https://www.imdb.com/title/tt10324144/" },
   { file: "BISI BISI ICE CREAM.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2024, director: "Arvind Sastry", imdb: "https://www.imdb.com/title/tt30818503/" },
-  { file: "BULBUL CAN SING.jpg", type: "Feature Film", contribution: "Sound Edit", year: 2018, director: "Rima Das", imdb: "https://www.imdb.com/title/tt8659050/", awards: [{ stamp: "Berlinale • 2019", detail: "Generation KPlus • Special Mention" }] },
+  { file: "BULBUL CAN SING.jpg", type: "Feature Film", contribution: "Sound Edit", year: 2018, director: "Rima Das", imdb: "https://www.imdb.com/title/tt8659050/", awards: [{ stamp: "Berlinale", detail: "Generation KPlus • Special Mention" }] },
   { file: "COCONUT DREAMS.jpeg", type: "Series", contribution: "Foley", year: 2025, director: "Rima Das", imdb: "https://www.imdb.com/title/tt36591807/" },
   { file: "DIARIES FROM AN UNCONVENTIONAL JOURNEY.jpg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit", year: 2022, director: "Sagar Shiriskar", imdb: "https://www.imdb.com/title/tt22248438/" },
   { file: "DOLLY KITTY AUR WOH CHAMAKTE SITARE.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Alankrita Srivastava", imdb: "https://www.imdb.com/title/tt9176296/" },
@@ -20,11 +20,11 @@ const moviesRaw = [
   { file: "KOLI ESRU.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2024, director: "Champa Shetty", imdb: "https://www.imdb.com/title/tt31106876/" },
   { file: "KURKA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: null, director: "Ganesh Hegde", imdb: "https://www.imdb.com/title/tt36747953/" },
   { file: "MANORATHANGAL.jpeg", type: "Series", contribution: "Foley", year: 2024, director: "—", imdb: "https://www.imdb.com/title/tt15478036/" },
-  { file: "MITHYA.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2023, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt29451496/", awards: [{ stamp: "National Award • 2024", detail: "Best Kannada Film" }] },
+  { file: "MITHYA.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2023, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt29451496/", awards: [{ stamp: "National Award • 2024", detail: "Best Kannada Film • Winner" }] },
   { file: "MONTH OF MADHU.jpg", type: "Feature Film", contribution: "Foley", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt21361340/" },
   { file: "NIDRADEVI NEXT DOOR.jpeg", type: "Feature Film", contribution: "Mix, Sound Design, Foley", year: 2025, director: "Suraag Sagar", imdb: "https://www.imdb.com/title/tt33702616/" },
   { file: "NOCTURNES.jpg", type: "Feature Film", contribution: "Sound Design, Dialogue Edit, Foley", year: 2024, director: "Anirban Dutta, Anupama Srinivasan", imdb: "https://www.imdb.com/title/tt30320605/", awards: [{ stamp: "Sundance • 2024", detail: "Special Jury Award for Craft" }] },
-  { file: "NOT A HERO.jpeg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: 2026, director: "Rima Das", imdb: "https://www.imdb.com/title/tt39371375/", awards: [{ stamp: "Berlinale", detail: "Generation KPlus • Best Film" }] },
+  { file: "NOT A HERO.jpeg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: 2026, director: "Rima Das", imdb: "https://www.imdb.com/title/tt39371375/", awards: [{ stamp: "Berlinale", detail: "Generation KPlus • Best Film • Special Mention" }] },
   { file: "PARAAGAN.jpg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: 2024, director: "Akku Kulhari", imdb: "https://www.imdb.com/title/tt26753343/" },
   { file: "PEDRO.jpg", type: "Feature Film", contribution: "Sync Sound, Sound Design, Dialogue Edit, Foley", year: 2021, director: "Natesh Hegde", imdb: "https://www.imdb.com/title/tt15347602/", awards: [{ stamp: "Busan • 2021", detail: "New Currents / Asian Cinema • Official Selection" }] },
   { file: "PILL.jpeg", type: "Series", contribution: "Dialogue Edit", year: 2024, director: "—", imdb: "https://www.imdb.com/title/tt32729607/" },
@@ -32,7 +32,7 @@ const moviesRaw = [
   { file: "SAFAR MEIN SHEHER.jpeg", type: "Feature Film", contribution: "Dialogue Edit", year: 2025, director: "Mazhar Kamran", imdb: "https://www.imdb.com/title/tt30759157/" },
   { file: "SEASON OF INNOCENCE.jpg", type: "Feature Film", contribution: "Foley", year: 2022, director: "—", imdb: "https://www.imdb.com/title/tt17081126/" },
   { file: "SHANKARABHARANA.jpeg", type: "Feature Film", contribution: "Sound Design, Foley", year: null, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt40183137/" },
-  { file: "SHIVAMMA.jpg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2022, director: "Jaishankar", imdb: "https://www.imdb.com/title/tt22171962/", awards: [{ stamp: "Busan", detail: "New Currents • Best Film Winner" }] },
+  { file: "SHIVAMMA.jpg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2022, director: "Jaishankar", imdb: "https://www.imdb.com/title/tt22171962/", awards: [{ stamp: "Busan", detail: "New Currents • Best Film • Winner" }] },
   { file: "SILAN.jpeg", type: "Short Film", contribution: "Foley", year: 2023, director: "Ashmita Guha Neogi", imdb: "https://www.imdb.com/title/tt31913701/" },
   { file: "TEJAS.jpeg", type: "Feature Film", contribution: "Dialogue Edit", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt6950476/" },
   { file: "TESTIMONY OF ANA.jpg", type: "Short Film", contribution: "Sound Design, Dialogue Edit, Foley", year: 2021, director: "Sachin Dheeraj", imdb: "https://www.imdb.com/title/tt13681852/", awards: [{ stamp: "National Film Awards • 2021", detail: "Best Short Film (Non-Fiction) • National Award" }] },
@@ -224,7 +224,7 @@ function rubberBand(delta, limit) {
 
 function renderMovie(movie, index) {
   lightboxPoster.src = movie.poster;
-  lightboxPoster.alt = `${movie.title} movie poster`;
+  lightboxPoster.alt = `Sound design for '${movie.title}' (${movie.year ?? 'TBD'}) — ${movie.roles.join(', ')}`;
   lightboxTitle.textContent = movie.title;
   creditsRoles.innerHTML = movie.rolesHtml;
   creditsTypeYear.textContent = movie.typeYear;
@@ -1072,7 +1072,7 @@ function renderGalleryItems() {
     return `
     <button type="button" class="gallery-item" role="listitem" data-movie-id="${movie.id}" aria-label="View credits for ${movie.title}${awardLabel}">
       <span class="gallery-item__frame">
-        <img src="${movie.poster}" alt="${movie.title} poster" loading="${index < 6 ? "eager" : "lazy"}" decoding="async">
+        <img src="${movie.poster}" alt="Sound design for '${movie.title}' (${movie.year ?? 'TBD'}) — ${movie.roles.join(', ')}" loading="${index < 6 ? "eager" : "lazy"}" decoding="async">
       </span>
     </button>
   `;
