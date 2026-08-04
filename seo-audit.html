@@ -179,11 +179,27 @@
     details.block[open] summary::before{transform:rotate(90deg);}
     details.block summary .num{font-family:var(--font-mono); color:var(--text-faint); font-size:0.75rem;}
     .block-body{padding:0 1.1rem 1.1rem; font-size:0.88rem; color:var(--text-muted);}
-    .block-body dl.kv{display:grid; grid-template-columns:150px 1fr; gap:0.4rem 1rem; font-size:0.86rem;}
-    .block-body dl.kv dt{color:var(--text-faint); font-family:var(--font-mono); font-size:0.74rem; padding-top:0.15rem;}
-    .block-body dl.kv dd{margin:0; color:var(--text);}
+    dl.kv{
+      display:grid; grid-template-columns:minmax(7rem, 10.5rem) minmax(0, 1fr);
+      gap:0.65rem 1.2rem; font-size:0.88rem; margin:0;
+    }
+    dl.kv dt{
+      color:var(--text-faint); font-family:var(--font-mono); font-size:0.74rem;
+      padding-top:0.2rem; line-height:1.4;
+    }
+    dl.kv dd{margin:0; color:var(--text); min-width:0; overflow-wrap:anywhere;}
+    dl.kv dd .chip{margin:0 0.35rem 0.35rem 0; vertical-align:middle;}
+    dl.kv dd ul{margin:0.45rem 0 0; padding-left:1.15rem;}
+    dl.kv dd li{margin-bottom:0.35rem; overflow-wrap:anywhere;}
+    .block-body dl.kv{gap:0.4rem 1rem; font-size:0.86rem;}
     .block-body ul{margin:0.3rem 0 0; padding-left:1.2rem;}
     .block-body li{margin-bottom:0.3rem;}
+    .schema-note{
+      margin-top:1.1rem; border-left:3px solid var(--good); background:var(--good-bg);
+      border-radius:12px; padding:1.1rem 1.2rem;
+    }
+    .schema-note h4{font-size:0.92rem; color:var(--text); margin-bottom:0.4rem; font-family:var(--font-body); font-weight:600;}
+    .schema-note p{margin:0; font-size:0.86rem; color:var(--text-muted); overflow-wrap:anywhere;}
 
     .rec-group{margin-bottom:1.4rem;}
     .rec-group h3{font-family:var(--font-body); font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem;}
@@ -209,7 +225,18 @@
     }
     @media (max-width:640px){
       .exec-grid{grid-template-columns:1fr;}
-      .block-body dl.kv{grid-template-columns:110px 1fr;}
+      .card{padding:1.1rem 1rem;}
+      dl.kv{
+        grid-template-columns:1fr;
+        gap:0.25rem 0;
+      }
+      dl.kv dt{
+        padding-top:0.85rem;
+        border-top:1px solid var(--border);
+      }
+      dl.kv dt:first-child{padding-top:0; border-top:none;}
+      dl.kv dd{padding-bottom:0.35rem;}
+      .schema-note{padding:1rem;}
     }
 
     @media print{
@@ -790,13 +817,17 @@
       <p class="section-sub">Current structured data and recommendations for expansion. Schema helps both Google and AI engines understand your business.</p>
 
       <div class="card">
-        <dl class="kv" style="display:grid; grid-template-columns:170px 1fr; gap:0.5rem 1.2rem; font-size:0.88rem;">
-          <dt style="color:var(--text-faint); font-family:var(--font-mono); font-size:0.76rem;">Homepage</dt>
-          <dd style="margin:0;"><span class="chip done" style="margin-right:0.4rem;">Done</span><span class="mono">WebSite</span> + <span class="mono">LocalBusiness</span> + 6 <span class="mono">LocalBusinessService</span> entries in <span class="mono">@graph</span>. Comprehensive service markup for AI engines.</dd>
+        <dl class="kv">
+          <dt>Homepage</dt>
+          <dd>
+            <span class="chip done">Done</span>
+            <span class="mono">WebSite</span> + <span class="mono">LocalBusiness</span> + 6 <span class="mono">LocalBusinessService</span> entries in <span class="mono">@graph</span>. Comprehensive service markup for AI engines.
+          </dd>
 
-          <dt style="color:var(--text-faint); font-family:var(--font-mono); font-size:0.76rem;">Recommended additions</dt>
-          <dd style="margin:0;"><span class="chip partial" style="margin-right:0.4rem;">Partial</span>
-            <ul style="margin-top:0.5rem; padding-left:1.2rem;">
+          <dt>Recommended additions</dt>
+          <dd>
+            <span class="chip partial">Partial</span>
+            <ul>
               <li><span class="mono">Organization</span> (for social links, logo, extended contact)</li>
               <li><span class="mono">AggregateRating</span> / <span class="mono">Review</span> (if client testimonials available)</li>
               <li><span class="mono">ImageObject</span> (for portfolio images, for Google Images / AI image search)</li>
@@ -805,9 +836,9 @@
           </dd>
         </dl>
 
-        <div class="card" style="margin-top:1.1rem; border-left:3px solid var(--good); background:var(--good-bg);">
-          <h4 style="font-size:0.92rem; color:var(--text); margin-bottom:0.4rem;">✓ Schema expansion complete</h4>
-          <p style="margin:0; font-size:0.86rem; color:var(--text-muted);"><b style="color:var(--text);">Done:</b> 6 <span class="mono">LocalBusinessService</span> entries have been added (Sync Sound, Mix, Sound Design, Foley, Dialogue Editing, Production Sound). This improves AI understanding of your offerings and surfaces them in voice assistant results. Next optional additions: Organization, AggregateRating, ImageObject schemas for additional coverage.</p>
+        <div class="schema-note">
+          <h4>✓ Schema expansion complete</h4>
+          <p><b style="color:var(--text);">Done:</b> 6 <span class="mono">LocalBusinessService</span> entries have been added (Sync Sound, Mix, Sound Design, Foley, Dialogue Editing, Production Sound). This improves AI understanding of your offerings and surfaces them in voice assistant results. Next optional additions: Organization, AggregateRating, ImageObject schemas for additional coverage.</p>
         </div>
       </div>
     </section>
