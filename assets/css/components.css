@@ -1230,11 +1230,19 @@
 
   .lightbox-scrub-title {
     display: block;
+    position: absolute;
+    left: var(--space-4);
+    right: var(--space-4);
+    top: calc(env(safe-area-inset-top, 0px) + var(--space-2));
+    z-index: 7;
     margin: 0;
-    padding: var(--space-2) var(--space-4) 0;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: rgba(15, 15, 15, 0.92);
     color: var(--color-text-primary);
     font-family: var(--font-display);
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     font-weight: 600;
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
@@ -1243,16 +1251,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
     opacity: 0;
-    transform: scale(0.9);
+    visibility: hidden;
+    transform: scale(0.92);
     transform-origin: center top;
     pointer-events: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
     transition:
       opacity 0.18s var(--ease-out),
-      transform 0.18s var(--ease-out);
+      transform 0.18s var(--ease-out),
+      visibility 0.18s var(--ease-out);
   }
 
   .lightbox-progress-wrap.is-scrubbing .lightbox-scrub-title {
     opacity: 1;
+    visibility: visible;
     transform: scale(1);
   }
 
@@ -1282,11 +1294,11 @@
 
   .lightbox-progress {
     gap: 3px;
-    padding: var(--space-2) var(--space-4) var(--space-1);
+    padding: var(--space-3) var(--space-4) var(--space-1);
     background: transparent;
   }
 
-  /* Prefer the top scrub title over tiny per-dash tips */
+  /* Prefer the floating scrub title over tiny per-dash tips */
   .lightbox-progress__tip {
     display: none;
   }
@@ -1301,19 +1313,19 @@
   }
 
   .lightbox-progress__seg.is-active::before {
-    height: 3px;
+    height: 2px;
+    transform: scaleY(1.5);
   }
 
-  /* Zoom the dash under the finger so scrub action is obvious */
+  /* Zoom with transform only — no height change, no layout shift */
   .lightbox-progress-wrap.is-scrubbing .lightbox-progress__seg.is-tip-visible::before {
-    height: 4px;
     opacity: 1;
     background: var(--color-accent);
-    transform: scaleY(2.4) scaleX(1.35);
+    transform: scaleY(2.6) scaleX(1.35);
   }
 
   .lightbox-progress-wrap.is-scrubbing .lightbox-progress__seg.is-active.is-tip-visible::before {
-    transform: scaleY(2.4) scaleX(1.35);
+    transform: scaleY(2.6) scaleX(1.35);
   }
 
   .lightbox-toolbar {

@@ -305,9 +305,9 @@ function clearScrubPreview() {
   clearProgressTips();
   progressWrap?.classList.remove("is-scrubbing");
   if (scrubTitle) {
-    scrubTitle.hidden = true;
     scrubTitle.textContent = "";
     scrubTitle.classList.remove("is-pop");
+    scrubTitle.setAttribute("aria-hidden", "true");
   }
 }
 
@@ -317,6 +317,7 @@ function setScrubTitle(title, { pop = false } = {}) {
   }
 
   scrubTitle.hidden = false;
+  scrubTitle.setAttribute("aria-hidden", "false");
   scrubTitle.textContent = title;
   progressWrap?.classList.add("is-scrubbing");
 
