@@ -83,7 +83,7 @@
           <li>Busan · BFI London · Cinema Eye Honors</li>
         </ul>
         <a class="btn btn--primary" href="#credits">Explore the work</a>
-        <a href="#scroll" class="scroll-arrow" aria-label="Scroll to the next section">
+        <a href="#credits" class="scroll-arrow" aria-label="Scroll to the next section">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
@@ -114,7 +114,7 @@
     <!-- Credits lightbox -->
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
       <div class="lightbox-content" id="lightbox-content" tabindex="-1">
-        <div class="lightbox-progress" id="progress-dots" aria-hidden="true"></div>
+        <div class="lightbox-progress" id="progress-dots" role="navigation" aria-label="Jump to film"></div>
         <div class="lightbox-toolbar">
           <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">
             <span id="counter-text"></span>
@@ -188,50 +188,43 @@
       </div>
     </div>
 
-    <section id="scroll" class="social-links-section" aria-labelledby="elsewhere-heading">
-      <div class="container social-strip">
-        <h2 id="elsewhere-heading" class="section-eyebrow">Elsewhere</h2>
-        <div class="social-links">
-          <a href="https://www.imdb.com/name/nm9036699/" class="social-link imdb-link" rel="noopener noreferrer">
-            <img src="assets/icons/imdb-light.svg" alt="" class="imdb-icon">
-            <span class="social-link__text">
-              <span class="social-link__name">IMDb</span>
-              <span class="social-link__note">Full filmography</span>
-            </span>
-          </a>
-          <a href="https://www.instagram.com/aurallabsound/" class="social-link" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
-              <circle cx="17.5" cy="6.5" r="1.5"></circle>
-            </svg>
-            <span class="social-link__text">
-              <span class="social-link__name">Instagram</span>
-              <span class="social-link__note">Behind the scenes</span>
-            </span>
-          </a>
-          <a href="https://www.youtube.com/@AuralLabSound" class="social-link" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-            </svg>
-            <span class="social-link__text">
-              <span class="social-link__name">YouTube</span>
-              <span class="social-link__note">Trailers &amp; clips</span>
-            </span>
-          </a>
-        </div>
-      </div>
-    </section>
-
     <section id="contact" class="page-panel page-panel--contact" aria-labelledby="contact-heading">
-      <div class="page-banner page-banner--contact">
-        <div class="container">
+      <div class="container contact-close">
+        <div class="contact-close__intro">
           <h2 id="contact-heading">Contact</h2>
+          <p class="lead">For bookings and collaborations.</p>
+          <nav class="social-links" aria-label="Social profiles">
+            <a href="https://www.imdb.com/name/nm9036699/" class="social-link imdb-link" rel="noopener noreferrer">
+              <img src="assets/icons/imdb-light.svg" alt="" class="imdb-icon">
+              <span class="social-link__text">
+                <span class="social-link__name">IMDb</span>
+                <span class="social-link__note">Full filmography</span>
+              </span>
+            </a>
+            <a href="https://www.instagram.com/aurallabsound/" class="social-link" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+                <circle cx="17.5" cy="6.5" r="1.5"></circle>
+              </svg>
+              <span class="social-link__text">
+                <span class="social-link__name">Instagram</span>
+                <span class="social-link__note">Behind the scenes</span>
+              </span>
+            </a>
+            <a href="https://www.youtube.com/@AuralLabSound" class="social-link" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+              <span class="social-link__text">
+                <span class="social-link__name">YouTube</span>
+                <span class="social-link__note">Trailers &amp; clips</span>
+              </span>
+            </a>
+          </nav>
         </div>
-      </div>
-      <div class="page-panel__body">
-        <div class="container contact-details">
+        <div class="contact-details">
           <ul>
             <li><a href="tel:+919900117364">+91 9900 117 364</a></li>
             <li><a href="tel:+918919656889">+91 8919 656 889</a></li>
@@ -247,7 +240,6 @@
     <div class="container footer-bottom">
       <span>© <span id="year"></span> Aural Lab Sound</span>
       <p class="footer-tagline">Professional audio and sound design studio in Bangalore.</p>
-      <span>Bangalore · India</span>
     </div>
   </footer>
 

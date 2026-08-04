@@ -247,16 +247,181 @@ function renderProgress(index) {
     return;
   }
 
-  const total = filteredMovies.length;
-  if (progressDotsContainer.childElementCount !== total) {
+  const signature = filteredMovies.map((movie) => movie.id).join(",");
+
+  if (progressDotsContainer.dataset.signature !== signature) {
+    progressDotsContainer.dataset.signature = signature;
     progressDotsContainer.replaceChildren(
-      ...Array.from({ length: total }, () => document.createElement("span"))
+      ...filteredMovies.map((movie, i) => {
+        const segment = document.createElement("button");
+        segment.type = "button";
+        segment.className = "lightbox-progress__seg";
+        segment.setAttribute("data-index", String(i));
+        segment.setAttribute("aria-label", movie.title);
+        segment.setAttribute("aria-current", i === index ? "true" : "false");
+
+        const tip = document.createElement("span");
+        tip.className = "lightbox-progress__tip";
+        tip.setAttribute("aria-hidden", "true");
+        tip.textContent = movie.title;
+        segment.append(tip);
+        return segment;
+      })
     );
   }
 
   Array.from(progressDotsContainer.children).forEach((segment, i) => {
     segment.classList.toggle("is-past", i < index);
     segment.classList.toggle("is-active", i === index);
+    segment.setAttribute("aria-current", i === index ? "true" : "false");
+  });
+}
+
+function jumpToFilm(index) {
+  if (index === currentIndex || isAnimating || lightbox.hidden) {
+    return;
+  }
+
+  if (isAutoplayOn) {
+    startAutoplay();
+  }
+
+  const direction = index > currentIndex ? "next" : "prev";
+  return goTo(index, direction);
+}
+
+function clearProgressTips() {
+  if (!progressDotsContainer) {
+    return;
+  }
+  progressDotsContainer.querySelectorAll(".lightbox-progress__seg.is-tip-visible").forEach((segment) => {
+    segment.classList.remove("is-tip-visible");
+  });
+}
+
+function showProgressTip(segment) {
+  if (!segment) {
+    return;
+  }
+  clearProgressTips();
+  segment.classList.add("is-tip-visible");
+}
+
+function initProgressScrub() {
+  if (!progressDotsContainer) {
+    return;
+  }
+
+  const LONG_PRESS_MS = 380;
+  let longPressTimer = null;
+  let didLongPress = false;
+  let isScrubbing = false;
+  let activePointerId = null;
+
+  function segmentFromPoint(clientX, clientY) {
+    const el = document.elementFromPoint(clientX, clientY);
+    return el ? el.closest(".lightbox-progress__seg") : null;
+  }
+
+  function clearLongPress() {
+    if (longPressTimer) {
+      window.clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
+  }
+
+  function finishPointer() {
+    clearLongPress();
+    activePointerId = null;
+    isScrubbing = false;
+    window.setTimeout(clearProgressTips, 700);
+  }
+
+  progressDotsContainer.addEventListener("click", (event) => {
+    const segment = event.target.closest(".lightbox-progress__seg");
+    if (!segment || didLongPress) {
+      didLongPress = false;
+      return;
+    }
+    event.preventDefault();
+    jumpToFilm(Number(segment.getAttribute("data-index")));
+  });
+
+  progressDotsContainer.addEventListener("pointerdown", (event) => {
+    const segment = event.target.closest(".lightbox-progress__seg");
+    if (!segment) {
+      return;
+    }
+
+    // Keep lightbox swipe/dismiss from stealing this gesture
+    event.stopPropagation();
+    activePointerId = event.pointerId;
+    didLongPress = false;
+    isScrubbing = false;
+    clearLongPress();
+
+    if (event.pointerType === "touch" || event.pointerType === "pen") {
+      progressDotsContainer.setPointerCapture?.(event.pointerId);
+      longPressTimer = window.setTimeout(() => {
+        didLongPress = true;
+        showProgressTip(segment);
+        longPressTimer = null;
+      }, LONG_PRESS_MS);
+    }
+  });
+
+  progressDotsContainer.addEventListener("pointermove", (event) => {
+    if (activePointerId !== event.pointerId) {
+      return;
+    }
+    if (event.pointerType !== "touch" && event.pointerType !== "pen") {
+      return;
+    }
+
+    event.stopPropagation();
+    const segment = segmentFromPoint(event.clientX, event.clientY);
+    if (!segment || !progressDotsContainer.contains(segment)) {
+      return;
+    }
+
+    if (!isScrubbing && (Math.abs(event.movementX) > 3 || Math.abs(event.movementY) > 3)) {
+      isScrubbing = true;
+      clearLongPress();
+    }
+
+    if (isScrubbing || didLongPress) {
+      showProgressTip(segment);
+    }
+  });
+
+  progressDotsContainer.addEventListener("pointerup", (event) => {
+    if (activePointerId !== event.pointerId) {
+      return;
+    }
+    event.stopPropagation();
+
+    const segment = segmentFromPoint(event.clientX, event.clientY)
+      || event.target.closest(".lightbox-progress__seg");
+
+    if (isScrubbing && segment) {
+      jumpToFilm(Number(segment.getAttribute("data-index")));
+      didLongPress = true;
+    }
+
+    finishPointer();
+  });
+
+  progressDotsContainer.addEventListener("pointercancel", (event) => {
+    if (activePointerId !== event.pointerId) {
+      return;
+    }
+    finishPointer();
+  });
+
+  progressDotsContainer.addEventListener("pointerleave", () => {
+    if (activePointerId === null) {
+      clearProgressTips();
+    }
   });
 }
 
@@ -840,6 +1005,7 @@ function initGallery() {
   renderGalleryItems();
   initGalleryCaptions();
   initFilters();
+  initProgressScrub();
   applyFilters();
 
   gallery.addEventListener("click", (event) => {

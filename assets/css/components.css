@@ -282,40 +282,26 @@
   color: var(--color-text-secondary);
 }
 
-/* Social Links Section */
-.social-links-section {
-  padding: var(--space-12) var(--gutter);
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.social-strip {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4) var(--space-10);
-}
-
+/* Social links — used inside Contact close */
 .social-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4) var(--space-10);
+  gap: var(--space-4) var(--space-6);
 }
 
 .social-link {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  min-height: 2.75rem;
+  gap: var(--space-2);
+  min-height: 2.5rem;
   text-decoration: none;
   color: var(--color-text-primary);
   transition: color var(--duration-base) var(--ease-out);
 }
 
 .social-link svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
   transition: transform var(--duration-base) var(--ease-out);
 }
@@ -335,6 +321,7 @@
   font-size: var(--text-xs);
   line-height: var(--leading-tight);
   color: var(--color-text-secondary);
+  opacity: 0.7;
 }
 
 /* IMDB Icon Theme Toggle */
@@ -343,8 +330,8 @@
 }
 
 .imdb-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
   transition: opacity var(--duration-base) var(--ease-out);
 }
@@ -354,7 +341,7 @@
 }
 
 .social-link:hover svg {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .social-link:focus-visible {
@@ -652,46 +639,117 @@
   display: none;
 }
 
-/* Contact Details */
+/* Contact — compact two-column close */
+.page-panel--contact {
+  padding: var(--space-12) var(--gutter) var(--space-10);
+  border-top: 1px solid var(--color-border);
+}
+
+.contact-close {
+  display: grid;
+  gap: var(--space-8);
+  align-items: end;
+}
+
+.contact-close__intro h2 {
+  margin: 0 0 var(--space-3) 0;
+  color: var(--color-text-primary);
+}
+
+.contact-close__intro .lead {
+  margin: 0;
+  max-width: 22rem;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: var(--color-text-secondary);
+}
+
+.contact-close__intro .social-links {
+  margin-top: var(--space-6);
+}
+
 .contact-details {
-  text-align: center;
+  text-align: left;
 }
 
 .contact-details ul {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  align-items: flex-start;
+  gap: var(--space-3);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .contact-details a {
-  color: var(--color-accent);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition:
+    background-size var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
 }
 
 .contact-details a:hover {
-  color: var(--color-accent-hover);
+  background-size: 100% 1px;
+  opacity: 0.72;
+}
+
+.contact-details a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+.contact-details li span {
+  color: var(--color-text-secondary);
+}
+
+@media (min-width: 48rem) {
+  .contact-close {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--space-10) var(--space-16);
+    align-items: end;
+  }
+
+  .contact-details {
+    justify-self: end;
+  }
+
+  .contact-details ul {
+    align-items: flex-end;
+  }
+
+  .contact-details li {
+    text-align: right;
+  }
 }
 
 /* Footer */
 .site-footer {
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
-  padding: var(--space-12) var(--gutter);
+  padding: var(--space-8) var(--gutter);
 }
 
 .footer-bottom {
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-8);
   color: var(--color-text-secondary);
 }
 
 .footer-bottom span {
-  display: block;
+  display: inline;
 }
 
 .footer-tagline {
-  margin: var(--space-2) 0;
+  margin: 0;
   font-size: var(--text-sm);
 }
 
@@ -961,24 +1019,128 @@
   gap: 2px;
   padding: var(--space-3) var(--space-6) 0;
   flex-shrink: 0;
+  position: relative;
+  z-index: 5;
+  touch-action: none;
 }
 
-.lightbox-progress span {
+.lightbox-progress__seg {
+  position: relative;
   flex: 1 1 0;
   min-width: 2px;
+  margin: 0;
+  padding: 0.75rem 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Visual dash — hit area stays taller for hover / tap */
+.lightbox-progress__seg::before {
+  content: "";
+  display: block;
   height: 2px;
   border-radius: 999px;
   background: var(--color-border);
-  transition: background var(--duration-base) var(--ease-out), opacity var(--duration-base) var(--ease-out);
+  transition: background var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
 }
 
-.lightbox-progress span.is-past {
+.lightbox-progress__seg.is-past::before {
   background: var(--color-text-secondary);
   opacity: 0.5;
 }
 
-.lightbox-progress span.is-active {
+.lightbox-progress__seg.is-active::before {
   background: var(--color-accent);
+  opacity: 1;
+}
+
+.lightbox-progress__seg:hover::before,
+.lightbox-progress__seg:focus-visible::before {
+  transform: scaleY(1.8);
+}
+
+.lightbox-progress__seg:focus-visible {
+  outline: none;
+}
+
+.lightbox-progress__tip {
+  position: absolute;
+  top: calc(100% - 0.15rem);
+  left: 50%;
+  z-index: 6;
+  max-width: min(14rem, 70vw);
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.25rem);
+  transition: opacity 0.16s var(--ease-out), transform 0.16s var(--ease-out);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.lightbox-progress__seg:first-child .lightbox-progress__tip {
+  left: 0;
+  transform: translateX(0) translateY(0.25rem);
+}
+
+.lightbox-progress__seg:last-child .lightbox-progress__tip {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(0.25rem);
+}
+
+.lightbox-progress__seg:hover .lightbox-progress__tip,
+.lightbox-progress__seg:focus-visible .lightbox-progress__tip,
+.lightbox-progress__seg.is-tip-visible .lightbox-progress__tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.lightbox-progress__seg:first-child:hover .lightbox-progress__tip,
+.lightbox-progress__seg:first-child:focus-visible .lightbox-progress__tip,
+.lightbox-progress__seg:first-child.is-tip-visible .lightbox-progress__tip,
+.lightbox-progress__seg:last-child:hover .lightbox-progress__tip,
+.lightbox-progress__seg:last-child:focus-visible .lightbox-progress__tip,
+.lightbox-progress__seg:last-child.is-tip-visible .lightbox-progress__tip {
+  transform: translateX(0) translateY(0);
+}
+
+@media (hover: none) {
+  .lightbox-progress__seg:hover .lightbox-progress__tip {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0.25rem);
+  }
+
+  .lightbox-progress__seg:first-child:hover .lightbox-progress__tip,
+  .lightbox-progress__seg:last-child:hover .lightbox-progress__tip {
+    transform: translateX(0) translateY(0.25rem);
+  }
+
+  .lightbox-progress__seg.is-tip-visible .lightbox-progress__tip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .lightbox-progress__seg:first-child.is-tip-visible .lightbox-progress__tip,
+  .lightbox-progress__seg:last-child.is-tip-visible .lightbox-progress__tip {
+    transform: translateX(0) translateY(0);
+  }
 }
 
 .lightbox-toolbar {
@@ -1750,7 +1912,7 @@
   padding: var(--space-4) var(--space-6) 0;
 }
 
-.lightbox-progress span {
+.lightbox-progress__seg::before {
   height: 1px;
 }
 
@@ -1758,9 +1920,5 @@
   .lightbox-progress {
     padding: var(--space-3) var(--space-4) 0;
     gap: 2px;
-  }
-
-  .lightbox-progress span {
-    height: 1px;
   }
 }
