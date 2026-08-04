@@ -1294,7 +1294,7 @@
 
   .lightbox-progress {
     gap: 3px;
-    padding: var(--space-3) var(--space-4) var(--space-1);
+    padding: var(--space-3) var(--space-4) 0;
     background: transparent;
   }
 
@@ -1304,11 +1304,17 @@
   }
 
   .lightbox-progress__seg {
-    /* Thin visual dash, ~44px tall finger target */
-    padding: 1.25rem 0;
+    /* Dash stays near the top; press/drag lives in the lane below so the title stays visible */
+    position: relative;
+    min-height: 3.5rem;
+    padding: 0.4rem 0 2.75rem;
   }
 
   .lightbox-progress__seg::before {
+    position: absolute;
+    top: 0.4rem;
+    left: 0;
+    right: 0;
     height: 2px;
   }
 
@@ -1329,7 +1335,7 @@
   }
 
   .lightbox-toolbar {
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-2) var(--space-4) var(--space-3);
     background: rgba(0, 0, 0, 0.5);
     border-bottom: none;
   }
