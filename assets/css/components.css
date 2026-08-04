@@ -1941,15 +1941,27 @@
   }
 }
 
+.credits-award-slot {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+}
+
+.credits-award-slot:has(.credits-award[hidden]) {
+  display: none;
+}
+
 .credits-award {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  margin: auto auto var(--space-4);
+  margin: 0;
   max-width: 100%;
   width: fit-content;
-  align-self: center;
   color: #e8c547;
 }
 
@@ -2286,9 +2298,13 @@
 }
 
 @media (max-width: 47.99rem) {
+  .credits-award-slot {
+    min-height: 4.5rem;
+    margin-top: var(--space-4);
+  }
+
   .credits-award {
     gap: 0.35rem;
-    margin-top: var(--space-5);
   }
 
   .credits-award__laurel {
