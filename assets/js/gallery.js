@@ -93,6 +93,21 @@ const movies = moviesRaw.map((item) => {
     imdb: item.imdb,
     awards: Array.isArray(item.awards) ? item.awards : []
   };
+}).sort((a, b) => {
+  // TBD first, then newest → oldest; title as tiebreaker
+  if (a.year === null && b.year === null) {
+    return a.title.localeCompare(b.title);
+  }
+  if (a.year === null) {
+    return -1;
+  }
+  if (b.year === null) {
+    return 1;
+  }
+  if (b.year !== a.year) {
+    return b.year - a.year;
+  }
+  return a.title.localeCompare(b.title);
 });
 
 const AUTOPLAY_MS = 4500;
@@ -985,10 +1000,10 @@ function initFilters() {
   const allTypes = ALLOWED_TYPES;
   const allYears = [...new Set(movies.map(m => m.year))].sort((a, b) => {
     if (a === null) {
-      return 1;
+      return -1;
     }
     if (b === null) {
-      return -1;
+      return 1;
     }
     return b - a;
   });
