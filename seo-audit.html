@@ -9,10 +9,6 @@
   <meta property="og:title" content="SEO &amp; AI-Crawl Audit — Internal | Aural Lab Sound" />
   <meta property="og:description" content="Internal SEO, schema, and AI-crawl readiness dashboard for aurallabsound.com. Not for public sharing." />
   <meta property="og:type" content="website" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root{
       --bg:#080808; --surface:#111111; --surface-2:#1a1a1a; --surface-3:#202020;
@@ -230,7 +226,7 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand"><span class="dot"></span>Aural Lab Sound <span style="color:var(--text-faint); font-weight:400;">/ internal</span></div>
-      <span class="noindex-badge"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i> Internal page — noindex</span>
+      <span class="noindex-badge">🔒 Internal page — noindex</span>
       <nav class="topnav" aria-label="Section navigation">
         <a href="#summary">Summary</a>
         <a href="#checklist">Checklist</a>
@@ -239,14 +235,14 @@
         <a href="#recommendations">Recommendations</a>
       </nav>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
-        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> <span id="themeLabel">Auto</span>
+        ◐ <span id="themeLabel">Auto</span>
       </button>
     </div>
   </div>
 
   <header class="masthead">
     <div class="wrap">
-      <div class="eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Internal &middot; not indexed &middot; not linked from site nav</div>
+      <div class="eyebrow">🛡️ Internal &middot; not indexed &middot; not linked from site nav</div>
       <h1 class="title">SEO &amp; AI-crawl readiness — aurallabsound.com</h1>
       <p class="dek">Where every page stands on SEO fundamentals, schema.org coverage, and readability for AI answer engines (Google AI Overviews, Perplexity, ChatGPT). Built for the Aural Lab Sound team to track and update by hand — not a public asset.</p>
       <div class="meta-row">
@@ -404,27 +400,27 @@
 
       <div class="card">
         <div class="score-row">
-          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-mark" style="color:var(--good);">✓</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">Main content visible without interaction</h4><p>Server-rendered static HTML. Portfolio items present in DOM, not lazy-loaded or JS-gated. AI crawlers can read everything in first pass.</p></div>
         </div>
         <div class="score-row">
-          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-mark" style="color:var(--good);">✓</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">Service/skill keywords in plain text</h4><p>"Sync Sound", "Mix", "Sound Design", "Foley", "Production Sound", "Dialogue Editing" all present in visible copy. Easy for LLMs to extract.</p></div>
         </div>
         <div class="score-row">
-          <div class="score-mark" style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="score-mark" style="color:var(--warn);">⚠</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">Structured data with service details</h4><p>LocalBusiness schema present, but no LocalBusinessService entries. Consider adding detailed service markup (name, description, price if applicable).</p></div>
         </div>
         <div class="score-row">
-          <div class="score-mark" style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="score-mark" style="color:var(--warn);">⚠</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">Location clarity</h4><p>Bangalore, Karnataka, India stated in LocalBusiness schema. Contact section (form, email) visible. Phone number (+91-9900117364) in schema. Consider adding Google Maps embed if geo-relevant.</p></div>
         </div>
         <div class="score-row">
-          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-mark" style="color:var(--good);">✓</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">Unique, valuable content</h4><p>Portfolio + credits section demonstrates real work. This is high-value proof content for LLM citations. Foley/dialogue editing expertise is clearly visible.</p></div>
         </div>
         <div class="score-row">
-          <div class="score-mark" style="color:var(--bad);"><i class="fa-solid fa-circle-xmark"></i></div>
+          <div class="score-mark" style="color:var(--bad);">✕</div>
           <div class="score-body"><h4 style="font-size:0.9rem;">FAQ or "how-to" sections</h4><p>Currently absent. Adding Q&A (e.g., "What's the difference between foley and dialogue editing?", "How do I hire for sound design?") would give AI crawlers specific answers to common queries.</p></div>
         </div>
       </div>
@@ -453,7 +449,7 @@
         </dl>
 
         <div class="card" style="margin-top:1.1rem; border-left:3px solid var(--warn); background:var(--warn-bg);">
-          <h4 style="font-size:0.92rem; color:var(--text); margin-bottom:0.4rem;"><i class="fa-solid fa-lightbulb" aria-hidden="true" style="color:var(--warn);"></i>&nbsp; Priority schema expansion</h4>
+          <h4 style="font-size:0.92rem; color:var(--text); margin-bottom:0.4rem;">💡 Priority schema expansion</h4>
           <p style="margin:0; font-size:0.86rem; color:var(--text-muted);"><b style="color:var(--text);">Next step:</b> Add 3-5 <span class="mono">LocalBusinessService</span> entries describing each service (Sync Sound, Foley, Dialogue Editing, etc.). Each service can include name, description, price range if applicable. This helps AI understand your specific offerings and surfaces them in voice assistant results.</p>
         </div>
       </div>
@@ -466,14 +462,14 @@
 
       <div class="card">
         <div class="rec-group" style="margin-bottom:1.4rem;">
-          <h3 style="color:var(--good);"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Recently completed</h3>
-          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>Responsive design & mobile optimization</b> — Full mobile support verified. Theme toggle present. Accessibility foundations strong.</p></div>
-          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>SEO fundamentals</b> — Title, description, canonical, OG tags, Twitter card all in place.</p></div>
-          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>Basic schema markup</b> — WebSite + LocalBusiness schema deployed. Phone, address, location confirmed.</p></div>
+          <h3 style="color:var(--good);">✓ Recently completed</h3>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>Responsive design & mobile optimization</b> — Full mobile support verified. Theme toggle present. Accessibility foundations strong.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>SEO fundamentals</b> — Title, description, canonical, OG tags, Twitter card all in place.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>Basic schema markup</b> — WebSite + LocalBusiness schema deployed. Phone, address, location confirmed.</p></div>
         </div>
 
         <div class="rec-group high">
-          <h3><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> High priority (1-2 weeks)</h3>
+          <h3>🔴 High priority (1-2 weeks)</h3>
           <div class="rec-item"><span class="rn">01</span><p><b>Expand LocalBusinessService schema.</b> Add markup for each service (Sync Sound, Foley, Dialogue Editing, Sound Design, Production Sound). Improves AI understanding and voice search discoverability. Reference: schema.org/LocalBusinessService.</p></div>
           <div class="rec-item"><span class="rn">02</span><p><b>Verify & update sitemap.xml lastmod dates.</b> Currently shows 31 Jul 2026. If any content changes, update to reflect. Consider adding priority/changefreq for better Google crawl scheduling.</p></div>
           <div class="rec-item"><span class="rn">03</span><p><b>Submit to Google Search Console.</b> Verify domain ownership, submit sitemap, monitor indexation status, track query performance. Essential for tracking AI Overviews eligibility.</p></div>
@@ -481,14 +477,14 @@
         </div>
 
         <div class="rec-group medium">
-          <h3><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> Medium priority (2-4 weeks)</h3>
+          <h3>🟡 Medium priority (2-4 weeks)</h3>
           <div class="rec-item"><span class="rn">05</span><p><b>Create FAQ section.</b> Answer common client questions (e.g., "How much does sound design cost?", "What's foley work?", "Do you work with remote teams?"). Add FAQPage schema. Strengthens AI answer engine eligibility.</p></div>
           <div class="rec-item"><span class="rn">06</span><p><b>Add Organization schema.</b> Expand with sameAs (social links: Instagram, LinkedIn, Twitter), logo URL, contact point details. Better entity recognition for AI.</p></div>
           <div class="rec-item"><span class="rn">07</span><p><b>Review & optimize meta descriptions for dynamic pages.</b> If portfolio filters generate dynamic URLs, ensure each has unique meta descriptions for individual film/credit groupings.</p></div>
         </div>
 
         <div class="rec-group low">
-          <h3><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Low priority (ongoing)</h3>
+          <h3>ℹ️ Low priority (ongoing)</h3>
           <div class="rec-item"><span class="rn">08</span><p><b>Add ImageObject schema for portfolio images.</b> Structured image data helps Google Images and AI image search. Not essential but improves image discoverability long-term.</p></div>
           <div class="rec-item"><span class="rn">09</span><p><b>Create "About" or "Team" page with Person schema.</b> If individuals at Aural Lab Sound want visibility, add Person schema with role, photo, bio. Helps build personal brand within your business domain.</p></div>
           <div class="rec-item"><span class="rn">10</span><p><b>Monitor Core Web Vitals via PageSpeed Insights.</b> Site is already performant (static HTML), but periodic checks ensure no regressions. Set up monitoring dashboard.</p></div>
