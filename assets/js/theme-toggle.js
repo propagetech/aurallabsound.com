@@ -1,6 +1,21 @@
-/* Theme Toggle - Light/Dark mode switcher */
+/* Theme Toggle - Light/Dark mode switcher.
+   Default is dark; light only when the OS prefers light (or a saved choice). */
 const themeToggle = document.querySelector('.theme-toggle');
 const html = document.documentElement;
+
+function resolveTheme() {
+  const saved = localStorage.getItem('theme-preference');
+
+  if (saved) {
+    return saved;
+  }
+
+  if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    return 'light';
+  }
+
+  return 'dark';
+}
 
 function updateThemeIcon() {
   const sunIcon = document.querySelector('.icon-sun');
@@ -38,20 +53,10 @@ if (themeToggle) {
   });
 }
 
-/* Initialize theme from localStorage or system preference */
 function initTheme() {
-  const saved = localStorage.getItem('theme-preference');
-
-  if (saved) {
-    html.setAttribute('data-theme', saved);
-  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    html.setAttribute('data-theme', 'dark');
-  } else {
-    html.setAttribute('data-theme', 'light');
-  }
+  html.setAttribute('data-theme', resolveTheme());
 }
 
-// Initialize on load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
@@ -62,9 +67,9 @@ if (document.readyState === 'loading') {
   updateThemeIcon();
 }
 
-// Listen for system theme changes
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
   if (!localStorage.getItem('theme-preference')) {
-    html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    html.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+    updateThemeIcon();
   }
 });

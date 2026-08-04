@@ -21,8 +21,8 @@
     }
   ],
   "categories": ["music", "audio"],
-  "theme_color": "#1D4ED8",
-  "background_color": "#FFFFFF",
+  "theme_color": "#0F0F0F",
+  "background_color": "#0F0F0F",
   "screenshots": [
     {
       "src": "assets/images/gallery/sound-recording.webp",

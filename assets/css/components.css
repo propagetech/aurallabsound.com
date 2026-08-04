@@ -47,19 +47,19 @@
   display: block;
   object-fit: contain;
   transition: filter var(--duration-base) var(--ease-out);
-  /* Light theme: darken the logo */
-  filter: brightness(0.3) contrast(1.2);
-}
-
-/* Dark theme: lighten the logo */
-[data-theme="dark"] .logo-image {
+  /* Dark theme (default): lighten the logo */
   filter: brightness(2) contrast(1.1);
 }
 
-/* Fallback for system dark mode preference */
-@media (prefers-color-scheme: dark) {
+/* Light theme: darken the logo */
+[data-theme="light"] .logo-image {
+  filter: brightness(0.3) contrast(1.2);
+}
+
+/* No JS: OS light preference */
+@media (prefers-color-scheme: light) {
   html:not([data-theme]) .logo-image {
-    filter: brightness(2) contrast(1.1);
+    filter: brightness(0.3) contrast(1.2);
   }
 }
 
@@ -825,23 +825,23 @@
 }
 
 .icon-sun {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-.icon-moon {
-  opacity: 0;
-  transform: rotate(-180deg) scale(0.8);
-}
-
-[data-theme="dark"] .icon-sun {
   opacity: 0;
   transform: rotate(180deg) scale(0.8);
 }
 
-[data-theme="dark"] .icon-moon {
+.icon-moon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
+}
+
+[data-theme="light"] .icon-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+[data-theme="light"] .icon-moon {
+  opacity: 0;
+  transform: rotate(-180deg) scale(0.8);
 }
 
 /* Poster gallery — masonry columns, fit 5–6 across when space allows */
