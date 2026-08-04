@@ -115,11 +115,24 @@
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
       <div class="lightbox-content" id="lightbox-content" tabindex="-1">
         <div class="lightbox-progress-wrap" id="lightbox-progress-wrap">
-          <p class="lightbox-scrub-title" id="lightbox-scrub-title" aria-live="polite" aria-hidden="true">
-            <span class="lightbox-scrub-letter" id="lightbox-scrub-letter"></span>
-            <span class="lightbox-scrub-name" id="lightbox-scrub-name"></span>
-          </p>
-          <div class="lightbox-progress lightbox-progress--letters" id="progress-dots" role="navigation" aria-label="Jump by title letter"></div>
+          <div
+            class="lightbox-progress lightbox-progress--scrub"
+            id="progress-dots"
+            role="slider"
+            aria-orientation="vertical"
+            aria-label="Scrub by year"
+            aria-valuemin="1"
+            aria-valuemax="1"
+            aria-valuenow="1"
+            tabindex="0"
+          >
+            <div class="lightbox-progress__thumb" id="lightbox-scrub-thumb" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 3 18 9"></polyline>
+                <polyline points="6 15 12 21 18 15"></polyline>
+              </svg>
+            </div>
+          </div>
         </div>
         <div class="lightbox-toolbar">
           <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">

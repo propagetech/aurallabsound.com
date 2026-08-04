@@ -112,6 +112,21 @@ const DISMISS_OUT_MS = 240;
 const DISMISS_RETURN_MS = 320;
 const STUDIO_NAME = "Aural Lab Sound";
 
+function sortMoviesByYear(movieList) {
+  return movieList.sort((a, b) => {
+    if (a.year === b.year) {
+      return a.title.localeCompare(b.title);
+    }
+    if (a.year === null) {
+      return 1;
+    }
+    if (b.year === null) {
+      return -1;
+    }
+    return b.year - a.year;
+  });
+}
+
 const gallery = document.getElementById("image-gallery");
 const lightbox = document.getElementById("lightbox");
 const lightboxContent = document.getElementById("lightbox-content");
@@ -133,9 +148,7 @@ const creditsImdb = document.getElementById("credits-imdb");
 const creditsTeam = document.getElementById("credits-team");
 const progressDotsContainer = document.getElementById("progress-dots");
 const progressWrap = document.getElementById("lightbox-progress-wrap");
-const scrubTitle = document.getElementById("lightbox-scrub-title");
-const scrubLetter = document.getElementById("lightbox-scrub-letter");
-const scrubName = document.getElementById("lightbox-scrub-name");
+const scrubThumb = document.getElementById("lightbox-scrub-thumb");
 const counterText = document.getElementById("counter-text");
 
 let currentIndex = 0;
@@ -146,12 +159,13 @@ let autoplayTimer = null;
 let swipeIndicatorTimer = null;
 let hasUserSwiped = false;
 let suppressTapUntil = 0;
+let scrubPreviewIndex = null;
 let activeFilters = {
   role: [],
   type: [],
   year: []
 };
-let filteredMovies = movies;
+let filteredMovies = sortMoviesByYear([...movies]);
 
 const swipe = {
   active: false,
@@ -246,33 +260,52 @@ function preloadNeighbours(index) {
   });
 }
 
-function getTitleLetter(title) {
-  const match = String(title || "").trim().match(/[A-Za-z0-9]/);
-  if (!match) {
-    return "#";
+function yearLabelFor(movie) {
+  if (!movie || movie.year === null || movie.year === undefined) {
+    return "TBD";
   }
-  const character = match[0].toUpperCase();
-  return /[0-9]/.test(character) ? "#" : character;
+  return String(movie.year);
 }
 
-function buildLetterEntries(movieList) {
-  const entries = [];
-  let lastLetter = null;
+function scrubRatioForIndex(index) {
+  const total = filteredMovies.length;
+  if (total <= 1) {
+    return 0;
+  }
+  return index / (total - 1);
+}
 
-  movieList.forEach((movie, index) => {
-    const letter = getTitleLetter(movie.title);
-    if (letter === lastLetter) {
-      return;
-    }
-    entries.push({
-      letter,
-      index,
-      title: movie.title
-    });
-    lastLetter = letter;
-  });
+function indexFromScrubClientY(clientY) {
+  if (!progressDotsContainer) {
+    return 0;
+  }
+  const total = filteredMovies.length;
+  if (total <= 1) {
+    return 0;
+  }
+  const rect = progressDotsContainer.getBoundingClientRect();
+  const pad = 18;
+  const usable = Math.max(rect.height - pad * 2, 1);
+  const ratio = (clientY - rect.top - pad) / usable;
+  const clamped = Math.min(1, Math.max(0, ratio));
+  return Math.round(clamped * (total - 1));
+}
 
-  return entries;
+function setScrubThumbPosition(index) {
+  if (!scrubThumb || !progressDotsContainer) {
+    return;
+  }
+  const ratio = scrubRatioForIndex(index);
+  scrubThumb.style.top = `calc(18px + (100% - 36px) * ${ratio})`;
+}
+
+function updateScrubVisibility() {
+  if (!progressWrap) {
+    return;
+  }
+  const shouldShow = filteredMovies.length >= 2;
+  progressWrap.hidden = !shouldShow;
+  progressWrap.setAttribute("aria-hidden", shouldShow ? "false" : "true");
 }
 
 function renderProgress(index) {
@@ -280,49 +313,25 @@ function renderProgress(index) {
     return;
   }
 
-  const entries = buildLetterEntries(filteredMovies);
-  const signature = `${filteredMovies.map((movie) => movie.id).join(",")}|${entries.map((entry) => entry.letter).join("")}`;
-  const currentLetter = getTitleLetter(filteredMovies[index]?.title || "");
+  updateScrubVisibility();
+  const total = filteredMovies.length;
+  const safeIndex = Math.min(Math.max(index, 0), Math.max(total - 1, 0));
+  const movie = filteredMovies[safeIndex];
 
-  if (progressDotsContainer.dataset.signature !== signature) {
-    progressDotsContainer.dataset.signature = signature;
-    progressDotsContainer.replaceChildren(
-      ...entries.map((entry) => {
-        const segment = document.createElement("button");
-        segment.type = "button";
-        segment.className = "lightbox-progress__seg";
-        segment.setAttribute("data-index", String(entry.index));
-        segment.setAttribute("data-letter", entry.letter);
-        segment.setAttribute("aria-label", `Jump to films starting with ${entry.letter}`);
-        segment.setAttribute("aria-current", entry.letter === currentLetter ? "true" : "false");
+  progressDotsContainer.setAttribute("aria-valuemin", "1");
+  progressDotsContainer.setAttribute("aria-valuemax", String(Math.max(total, 1)));
+  progressDotsContainer.setAttribute("aria-valuenow", String(safeIndex + 1));
+  progressDotsContainer.setAttribute(
+    "aria-valuetext",
+    movie ? `${yearLabelFor(movie)}, ${movie.title}` : ""
+  );
 
-        const letter = document.createElement("span");
-        letter.className = "lightbox-progress__letter";
-        letter.setAttribute("aria-hidden", "true");
-        letter.textContent = entry.letter;
-        segment.append(letter);
-
-        const tip = document.createElement("span");
-        tip.className = "lightbox-progress__tip";
-        tip.setAttribute("aria-hidden", "true");
-        tip.textContent = entry.title;
-        segment.append(tip);
-
-        return segment;
-      })
-    );
+  if (scrubPreviewIndex === null) {
+    setScrubThumbPosition(safeIndex);
   }
-
-  Array.from(progressDotsContainer.children).forEach((segment) => {
-    const letter = segment.getAttribute("data-letter") || "";
-    const isActive = letter === currentLetter;
-    segment.classList.toggle("is-active", isActive);
-    segment.classList.toggle("is-past", currentLetter !== "#" && letter !== "#" && letter < currentLetter);
-    segment.setAttribute("aria-current", isActive ? "true" : "false");
-  });
 }
 
-function jumpToFilm(index) {
+function jumpToFilm(index, { animate = true } = {}) {
   if (index === currentIndex || isAnimating || lightbox.hidden) {
     return;
   }
@@ -331,62 +340,18 @@ function jumpToFilm(index) {
     startAutoplay();
   }
 
+  if (!animate) {
+    return goTo(index);
+  }
+
   const direction = index > currentIndex ? "next" : "prev";
   return goTo(index, direction);
 }
 
-function clearProgressTips() {
-  if (!progressDotsContainer) {
-    return;
-  }
-  progressDotsContainer.querySelectorAll(".lightbox-progress__seg.is-tip-visible").forEach((segment) => {
-    segment.classList.remove("is-tip-visible");
-  });
-}
-
 function clearScrubPreview() {
-  clearProgressTips();
+  scrubPreviewIndex = null;
   progressWrap?.classList.remove("is-scrubbing");
-  if (scrubTitle) {
-    scrubTitle.classList.remove("is-pop");
-    scrubTitle.setAttribute("aria-hidden", "true");
-  }
-  if (scrubLetter) {
-    scrubLetter.textContent = "";
-  }
-  if (scrubName) {
-    scrubName.textContent = "";
-  }
-}
-
-function setScrubPreview(letter, title, { pop = false } = {}) {
-  if (!scrubTitle) {
-    return;
-  }
-
-  scrubTitle.hidden = false;
-  scrubTitle.setAttribute("aria-hidden", "false");
-  if (scrubLetter) {
-    scrubLetter.textContent = letter;
-  }
-  if (scrubName) {
-    scrubName.textContent = title;
-  }
-  progressWrap?.classList.add("is-scrubbing");
-
-  if (pop) {
-    scrubTitle.classList.remove("is-pop");
-    void scrubTitle.offsetWidth;
-    scrubTitle.classList.add("is-pop");
-  }
-}
-
-function showProgressTip(segment) {
-  if (!segment) {
-    return;
-  }
-  clearProgressTips();
-  segment.classList.add("is-tip-visible");
+  setScrubThumbPosition(currentIndex);
 }
 
 function hapticTick() {
@@ -402,115 +367,84 @@ function initProgressScrub() {
     return;
   }
 
-  let isScrubbing = false;
-  let handledByPointer = false;
   let activePointerId = null;
-  let lastTipIndex = null;
+  let lastScrubIndex = null;
+  let lastScrubYear = null;
 
-  function segmentFromPoint(clientX, clientY) {
-    const el = document.elementFromPoint(clientX, clientY);
-    return el ? el.closest(".lightbox-progress__seg") : null;
-  }
-
-  function tipFor(segment, { buzz = false, pop = false } = {}) {
-    if (!segment) {
-      return;
-    }
-
-    const index = Number(segment.getAttribute("data-index"));
-    const letter = segment.getAttribute("data-letter") || getTitleLetter(filteredMovies[index]?.title || "");
+  function scrubToPoint(clientY) {
+    const index = indexFromScrubClientY(clientY);
     const movie = filteredMovies[index];
-    showProgressTip(segment);
-
-    if (movie) {
-      const didChange = lastTipIndex !== index;
-      setScrubPreview(letter, movie.title, { pop: Boolean(pop && didChange) });
+    if (!movie) {
+      return index;
     }
 
-    if (buzz && lastTipIndex !== null && lastTipIndex !== index) {
+    const year = yearLabelFor(movie);
+    const yearChanged = lastScrubYear !== null && lastScrubYear !== year;
+    const indexChanged = lastScrubIndex !== index;
+
+    scrubPreviewIndex = index;
+    setScrubThumbPosition(index);
+    progressWrap?.classList.add("is-scrubbing");
+
+    if (yearChanged) {
       hapticTick();
     }
 
-    lastTipIndex = index;
+    if (indexChanged && !isAnimating) {
+      goTo(index);
+    }
+
+    lastScrubIndex = index;
+    lastScrubYear = year;
+    return index;
   }
 
   function finishPointer() {
     activePointerId = null;
-    isScrubbing = false;
-    lastTipIndex = null;
-    window.setTimeout(clearScrubPreview, 480);
+    lastScrubIndex = null;
+    lastScrubYear = null;
+    if (isAutoplayOn && !lightbox.hidden) {
+      startAutoplay();
+    }
+    window.setTimeout(clearScrubPreview, 180);
   }
 
-  progressDotsContainer.addEventListener("click", (event) => {
-    const segment = event.target.closest(".lightbox-progress__seg");
-    if (!segment || handledByPointer) {
-      handledByPointer = false;
-      return;
-    }
-    event.preventDefault();
-    jumpToFilm(Number(segment.getAttribute("data-index")));
-  });
-
   progressDotsContainer.addEventListener("pointerdown", (event) => {
-    const segment = event.target.closest(".lightbox-progress__seg");
-    if (!segment) {
+    if (filteredMovies.length < 2) {
       return;
     }
 
     // Keep lightbox swipe/dismiss from stealing this gesture
+    event.preventDefault();
     event.stopPropagation();
     activePointerId = event.pointerId;
-    isScrubbing = false;
-    handledByPointer = false;
-    lastTipIndex = null;
-
-    if (event.pointerType === "touch" || event.pointerType === "pen") {
-      progressDotsContainer.setPointerCapture?.(event.pointerId);
-      tipFor(segment, { pop: true });
-    }
+    lastScrubIndex = null;
+    lastScrubYear = null;
+    stopAutoplay();
+    progressDotsContainer.setPointerCapture?.(event.pointerId);
+    scrubToPoint(event.clientY);
   });
 
   progressDotsContainer.addEventListener("pointermove", (event) => {
     if (activePointerId !== event.pointerId) {
       return;
     }
-    if (event.pointerType !== "touch" && event.pointerType !== "pen") {
-      return;
-    }
 
+    event.preventDefault();
     event.stopPropagation();
-    const segment = segmentFromPoint(event.clientX, event.clientY);
-    if (!segment || !progressDotsContainer.contains(segment)) {
-      return;
-    }
-
-    if (!isScrubbing && (Math.abs(event.movementY) > 3 || Math.abs(event.movementX) > 3)) {
-      isScrubbing = true;
-    }
-
-    if (isScrubbing) {
-      tipFor(segment, { buzz: true, pop: true });
-    }
+    scrubToPoint(event.clientY);
   });
 
   progressDotsContainer.addEventListener("pointerup", (event) => {
     if (activePointerId !== event.pointerId) {
       return;
     }
+    event.preventDefault();
     event.stopPropagation();
 
-    if (event.pointerType === "touch" || event.pointerType === "pen") {
-      const segment = segmentFromPoint(event.clientX, event.clientY)
-        || event.target.closest(".lightbox-progress__seg");
-
-      if (segment) {
-        const index = Number(segment.getAttribute("data-index"));
-        if (index !== currentIndex) {
-          hapticTick();
-        }
-        jumpToFilm(index);
-        handledByPointer = true;
-      }
+    const index = scrubToPoint(event.clientY);
+    if (index !== currentIndex && !isAnimating) {
+      goTo(index);
     }
 
     finishPointer();
@@ -523,9 +457,15 @@ function initProgressScrub() {
     finishPointer();
   });
 
-  progressDotsContainer.addEventListener("pointerleave", () => {
-    if (activePointerId === null) {
-      clearScrubPreview();
+  progressDotsContainer.addEventListener("keydown", (event) => {
+    if (lightbox.hidden || filteredMovies.length < 2) {
+      return;
+    }
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+      const delta = event.key === "ArrowUp" ? -1 : 1;
+      const next = Math.min(Math.max(currentIndex + delta, 0), filteredMovies.length - 1);
+      jumpToFilm(next, { animate: true });
     }
   });
 }
@@ -704,7 +644,7 @@ function showSwipeIndicator() {
 }
 
 function applyFilters() {
-  filteredMovies = movies.filter((movie) => {
+  filteredMovies = sortMoviesByYear(movies.filter((movie) => {
     const roleMatch = activeFilters.role.length === 0 ||
       activeFilters.role.some(r => movie.roles.includes(r));
     const typeMatch = activeFilters.type.length === 0 ||
@@ -713,9 +653,10 @@ function applyFilters() {
       activeFilters.year.includes(movie.year);
 
     return roleMatch && typeMatch && yearMatch;
-  });
+  }));
 
   updateGalleryDisplay();
+  updateScrubVisibility();
 }
 
 function updateGalleryDisplay() {
