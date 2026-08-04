@@ -75,7 +75,7 @@ const movies = moviesRaw.map((item) => {
   const title = createTitleFromFilename(item.file);
   const roles = item.contribution.split(",").map((entry) => entry.trim());
   const yearLabel = item.year ?? "TBD";
-  const directorLabel = item.director === "—" ? "not listed" : item.director;
+  const directorLabel = item.director === "—" ? "" : item.director;
   const roleSep = ' <span class="credits-role-sep">.</span> ';
   const rolesFormatted = roles.join(roleSep);
   return {
@@ -85,7 +85,7 @@ const movies = moviesRaw.map((item) => {
     studio: "Aural Lab Sound",
     rolesHtml: rolesFormatted,
     typeYear: `${item.type} · ${yearLabel}`,
-    director: `Director: ${directorLabel}`,
+    director: directorLabel ? `Director: ${directorLabel}` : "",
     type: item.type,
     year: item.year,
     roles,
@@ -228,7 +228,15 @@ function renderMovie(movie, index) {
   lightboxTitle.textContent = movie.title;
   creditsRoles.innerHTML = movie.rolesHtml;
   creditsTypeYear.textContent = movie.typeYear;
-  creditsDirector.textContent = movie.director;
+  if (creditsDirector) {
+    if (movie.director) {
+      creditsDirector.hidden = false;
+      creditsDirector.textContent = movie.director;
+    } else {
+      creditsDirector.hidden = true;
+      creditsDirector.textContent = "";
+    }
+  }
   if (creditsImdb) {
     if (movie.imdb && movie.imdb !== "—") {
       creditsImdb.hidden = false;
