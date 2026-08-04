@@ -133,7 +133,6 @@ const creditsImdb = document.getElementById("credits-imdb");
 const creditsTeam = document.getElementById("credits-team");
 const progressDotsContainer = document.getElementById("progress-dots");
 const counterText = document.getElementById("counter-text");
-const creditsCatalog = document.getElementById("credits-catalog");
 
 let currentIndex = 0;
 let lastFocusedTrigger = null;
@@ -459,11 +458,6 @@ function updateGalleryDisplay() {
   });
 
   const visibleCount = filteredMovies.length;
-  const countEl = document.querySelector(".gallery-count");
-  if (countEl) {
-    countEl.textContent = `${visibleCount} film${visibleCount !== 1 ? "s" : ""}`;
-  }
-
   const emptyState = document.querySelector(".gallery-empty");
   if (emptyState) {
     emptyState.hidden = visibleCount > 0;
@@ -538,27 +532,14 @@ function initFilters() {
     <p class="gallery-empty" hidden>No films match these filters. Try removing one.</p>
   `);
 
-  if (creditsSidebar) {
-    const toggleBtn = document.createElement("button");
-    toggleBtn.type = "button";
-    toggleBtn.className = "filter-toggle-btn";
-    toggleBtn.setAttribute("aria-expanded", "false");
-    toggleBtn.innerHTML = `
-      <span>Filters</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    `;
-
-    creditsSidebar.parentElement.insertBefore(toggleBtn, creditsSidebar);
-
+  const toggleBtn = document.getElementById("filter-toggle");
+  if (toggleBtn && creditsSidebar) {
     toggleBtn.addEventListener("click", () => {
       const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
-      toggleBtn.setAttribute("aria-expanded", String(!isExpanded));
-      creditsSidebar.style.display = isExpanded ? "none" : "block";
+      const nextExpanded = !isExpanded;
+      toggleBtn.setAttribute("aria-expanded", String(nextExpanded));
+      creditsSidebar.hidden = !nextExpanded;
     });
-
-    creditsSidebar.style.display = "none";
   }
 
   document.querySelectorAll(".filter-btn").forEach((btn) => {
@@ -598,47 +579,6 @@ function renderGalleryItems() {
       <img src="${movie.poster}" alt="${movie.title} poster" loading="${index < 6 ? "eager" : "lazy"}" decoding="async">
     </button>
   `).join("");
-}
-
-function renderCreditsCatalog() {
-  if (!creditsCatalog) {
-    return;
-  }
-
-  const sortedMovies = [...movies].sort((a, b) => {
-    if (a.year === null && b.year === null) {
-      return a.title.localeCompare(b.title);
-    }
-    if (a.year === null) {
-      return 1;
-    }
-    if (b.year === null) {
-      return -1;
-    }
-    return b.year - a.year;
-  });
-
-  creditsCatalog.innerHTML = `
-    <article class="credits-group">
-      <header class="credits-group__header">
-        <h3>All Projects</h3>
-        <p>Poster, contribution, year, director, and IMDb reference from the current gallery data.</p>
-      </header>
-      <ul class="credits-projects">
-        ${sortedMovies.map((movie) => {
-          const imdbHtml = movie.imdb && movie.imdb !== "—"
-            ? ` · <a href="${movie.imdb}" target="_blank" rel="noopener noreferrer">IMDb</a>`
-            : "";
-          return `
-            <li>
-              <span class="credits-projects__title">${movie.title}</span>
-              <span class="credits-projects__meta">${movie.type} · ${movie.workType}${imdbHtml}</span>
-            </li>
-          `;
-        }).join("")}
-      </ul>
-    </article>
-  `;
 }
 
 function initGalleryCaptions() {
@@ -898,7 +838,6 @@ function initGallery() {
 
   updateAutoplayUi();
   renderGalleryItems();
-  renderCreditsCatalog();
   initGalleryCaptions();
   initFilters();
   applyFilters();

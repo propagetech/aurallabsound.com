@@ -92,34 +92,22 @@
     </section>
 
     <section id="credits" class="page-panel page-panel--credits" aria-labelledby="credits-heading">
-      <div class="page-banner page-banner--credits">
-        <div class="container">
+      <div class="credits-shell">
+        <div class="credits-header">
           <h2 id="credits-heading">Credits</h2>
-          <p class="lead">Features, documentaries, shorts, and series.</p>
+          <button type="button" class="filter-toggle-btn" id="filter-toggle" aria-expanded="false" aria-controls="credits-sidebar">
+            <span>Filters</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
         </div>
-      </div>
-      <div class="page-panel__body">
-        <div class="container credits-container">
-          <div class="credits-sidebar" id="credits-sidebar">
-            <div class="sidebar-content">
-              <div class="filters-section" id="filters-container"></div>
-            </div>
+        <div class="credits-sidebar" id="credits-sidebar" hidden>
+          <div class="sidebar-content">
+            <div class="filters-section" id="filters-container"></div>
           </div>
-
-          <div class="all-films-section">
-            <div class="gallery-head">
-              <div class="gallery-head__text">
-                <h3 class="gallery-head__label">All Films</h3>
-                <p class="gallery-head__hint">Filter by role, type, or year. Click any poster to view full credits and details.</p>
-              </div>
-              <span class="gallery-count">43 films</span>
-            </div>
-            <div class="photo-gallery" id="image-gallery" role="list">
-            </div>
-          </div>
-
-          <div class="credits-catalog" id="credits-catalog"></div>
         </div>
+        <div class="photo-gallery" id="image-gallery" role="list"></div>
       </div>
     </section>
 
