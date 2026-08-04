@@ -3,7 +3,7 @@
 const moviesRaw = [
   { file: "AFTERNOON CLOUDS.jpg", type: "Short Film", contribution: "Mix, Sound Design", year: 2017, director: "Payal Kapadia", imdb: "https://www.imdb.com/title/tt10012542/" },
   { file: "AND WHAT IS THE SUMMER SAYING.jpg", type: "Documentary", contribution: "Mix, Sound Design", year: 2018, director: "Payal Kapadia", imdb: "https://www.imdb.com/title/tt10556876/" },
-  { file: "ANUJA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Adam J Graves", imdb: "https://www.imdb.com/title/tt27654431/" },
+  { file: "ANUJA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Adam J Graves", imdb: "https://www.imdb.com/title/tt27654431/", awards: [{ stamp: "Academy Award", detail: "Nominee · Best Live Action Short · 2025" }] },
   { file: "ARTICLE 15.jpg", type: "Feature Film", contribution: "Sync Sound", year: 2019, director: "Anubhav Sinha", imdb: "https://www.imdb.com/title/tt10324144/" },
   { file: "BISI BISI ICE CREAM.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2024, director: "Arvind Sastry", imdb: "https://www.imdb.com/title/tt30818503/" },
   { file: "BULBUL CAN SING.jpg", type: "Feature Film", contribution: "Sound Edit", year: 2018, director: "Rima Das", imdb: "https://www.imdb.com/title/tt8659050/" },
@@ -23,7 +23,7 @@ const moviesRaw = [
   { file: "MITHYA.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2023, director: "Sumanth Bhat", imdb: "https://www.imdb.com/title/tt29451496/" },
   { file: "MONTH OF MADHU.jpg", type: "Feature Film", contribution: "Foley", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt21361340/" },
   { file: "NIDRADEVI NEXT DOOR.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2025, director: "Suraag Sagar", imdb: "https://www.imdb.com/title/tt33702616/" },
-  { file: "NOCTURNES.jpg", type: "Documentary", contribution: "Sound Design", year: 2024, director: "Anirban Dutta, Anupama Srinivasan", imdb: "https://www.imdb.com/title/tt30320605/" },
+  { file: "NOCTURNES.jpg", type: "Documentary", contribution: "Sound Design", year: 2024, director: "Anirban Dutta, Anupama Srinivasan", imdb: "https://www.imdb.com/title/tt30320605/", awards: [{ stamp: "Sundance", detail: "Special Jury Award for Craft · 2024" }] },
   { file: "NOT A HERO.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2026, director: "Rima Das", imdb: "https://www.imdb.com/title/tt39371375/" },
   { file: "PARAAGAN.jpg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2024, director: "Akku Kulhari", imdb: "https://www.imdb.com/title/tt26753343/" },
   { file: "PEDRO.jpg", type: "Feature Film", contribution: "Sync Sound, Sound Design", year: 2021, director: "Natesh Hegde", imdb: "https://www.imdb.com/title/tt15347602/" },
@@ -37,7 +37,7 @@ const moviesRaw = [
   { file: "TEJAS.jpeg", type: "Feature Film", contribution: "Dialogue Edit", year: 2023, director: "—", imdb: "https://www.imdb.com/title/tt6950476/" },
   { file: "TESTIMONY OF ANA.jpg", type: "Short Film", contribution: "Sound Design", year: 2021, director: "Sachin Dheeraj", imdb: "https://www.imdb.com/title/tt13681852/" },
   { file: "THE DAUGHTER.jpeg", type: "Feature Film", contribution: "Foley", year: 2022, director: "—", imdb: "https://www.imdb.com/title/tt17490994/" },
-  { file: "THE ELEPHANT WHISPERERS.jpg", type: "Documentary Short", contribution: "Sync Sound", year: 2022, director: "Kartiki Gonsalves", imdb: "https://www.imdb.com/title/tt23628262/" },
+  { file: "THE ELEPHANT WHISPERERS.jpg", type: "Documentary Short", contribution: "Sync Sound", year: 2022, director: "Kartiki Gonsalves", imdb: "https://www.imdb.com/title/tt23628262/", awards: [{ stamp: "Academy Award", detail: "Winner · Best Documentary Short · 2023" }] },
   { file: "THE HOUSE OF MANIKANTHA.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: null, director: "Pinaki Janardhan", imdb: "—" },
   { file: "THE ORDER OF TIME.jpeg", type: "Feature Film", contribution: "Mix, Sound Design", year: 2025, director: "Akshay Padmanabha", imdb: "https://www.imdb.com/title/tt39216209/" },
   { file: "THE SIGNAL MAN.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design", year: 2023, director: "K Shivarudraiah", imdb: "https://www.imdb.com/title/tt27302882/" },
@@ -90,7 +90,8 @@ const movies = moviesRaw.map((item) => {
     year: item.year,
     roles,
     team,
-    imdb: item.imdb
+    imdb: item.imdb,
+    awards: Array.isArray(item.awards) ? item.awards : []
   };
 });
 
@@ -127,6 +128,9 @@ const lightboxAutoplay = document.getElementById("lightbox-autoplay");
 const lightboxCounter = document.getElementById("lightbox-counter");
 const lightboxPoster = document.getElementById("lightbox-poster");
 const lightboxPosterFrame = document.getElementById("lightbox-poster-frame");
+const lightboxAward = document.getElementById("lightbox-award");
+const lightboxAwardStamp = document.getElementById("lightbox-award-stamp");
+const lightboxAwardDetail = document.getElementById("lightbox-award-detail");
 const lightboxStage = document.getElementById("lightbox-stage");
 const lightboxTapPrev = document.getElementById("lightbox-tap-prev");
 const lightboxTapNext = document.getElementById("lightbox-tap-next");
@@ -244,12 +248,36 @@ function renderMovie(movie, index) {
     }
   }
   renderTeam(movie.team);
+  renderAward(movie);
 
   counterText.textContent = `${index + 1} of ${filteredMovies.length}`;
 
   resetPosterZoom();
   syncFilmstrip(index);
   preloadNeighbours(index);
+}
+
+function renderAward(movie) {
+  if (!lightboxAward || !lightboxAwardStamp || !lightboxAwardDetail) {
+    return;
+  }
+
+  const award = movie.awards?.[0];
+  if (!award) {
+    lightboxAward.hidden = true;
+    lightboxAwardStamp.textContent = "";
+    lightboxAwardDetail.textContent = "";
+    lightboxAward.removeAttribute("aria-label");
+    return;
+  }
+
+  lightboxAward.hidden = false;
+  lightboxAwardStamp.textContent = award.stamp;
+  lightboxAwardDetail.textContent = award.detail || "";
+  lightboxAward.setAttribute(
+    "aria-label",
+    [award.stamp, award.detail].filter(Boolean).join(" · ")
+  );
 }
 
 function preloadNeighbours(index) {
