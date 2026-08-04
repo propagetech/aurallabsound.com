@@ -276,10 +276,10 @@
       <h1 class="title">SEO, AI-crawl, Lighthouse &amp; AA accessibility audit — aurallabsound.com</h1>
       <p class="dek">Complete audit covering SEO fundamentals, schema.org coverage, AI readiness, Lighthouse scores, WCAG 2.1 AA contrast/DOM accessibility, and recommendations. Built for the Aural Lab Sound team to track and update by hand — not a public asset.</p>
       <div class="meta-row">
-        <span><b>Last updated:</b> 05 Aug 2026 (AA contrast audited)</span>
+        <span><b>Last updated:</b> 05 Aug 2026 (GA4 & client setup added)</span>
         <span><b>Lighthouse:</b> SEO 100 | Perf 96 | A11y 100 | BP 100</span>
         <span><b>WCAG AA contrast:</b> PASS (255/255 dark · FAQ light 66/66)</span>
-        <span><b>Status:</b> ✓ Ready for go-live</span>
+        <span><b>Status:</b> ✓ Ready for go-live + client onboarding guide included</span>
       </div>
       <div class="legend" aria-label="Status legend">
         <span class="legend-item"><span class="legend-dot" style="background:var(--good);"></span>Done</span>
@@ -826,12 +826,12 @@
 
           <dt>Recommended additions</dt>
           <dd>
-            <span class="chip partial">Partial</span>
+            <span class="chip done">Partial</span>
             <ul>
-              <li><span class="mono">Organization</span> (for social links, logo, extended contact)</li>
+              <li><span class="mono">Organization</span> ✓ DONE (for social links, logo, extended contact)</li>
+              <li><span class="mono">FAQPage</span> ✓ DONE (FAQ section live with 12+ Q&A entries)</li>
               <li><span class="mono">AggregateRating</span> / <span class="mono">Review</span> (if client testimonials available)</li>
               <li><span class="mono">ImageObject</span> (for portfolio images, for Google Images / AI image search)</li>
-              <li><span class="mono">FAQPage</span> (if FAQ section is added)</li>
             </ul>
           </dd>
         </dl>
@@ -862,31 +862,262 @@
 
         <div class="rec-group high">
           <h3>🔴 High priority (next 1 week)</h3>
-          <div class="rec-item"><span class="rn">01</span><p><b>Submit to Google Search Console.</b> Verify domain ownership, submit sitemap, monitor indexation status, track query performance. Essential for tracking AI Overviews eligibility and monitoring search performance post-launch.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>Google Search Console verified & ready.</b> Domain ownership via DNS TXT record confirmed. Client should: (1) Access Google Search Console, (2) Submit sitemap.xml, (3) Monitor search performance. Full step-by-step guide in Client Setup Instructions (§09).</p></div>
+          <div class="rec-item"><span class="rn">02</span><p><b>Set up Google Analytics 4.</b> Measurement ID placeholder added to website. Client needs to create GA4 account and provide Measurement ID for deployment. Step-by-step instructions in §09.</p></div>
         </div>
 
         <div class="rec-group medium">
           <h3>🟡 Medium priority (2-4 weeks)</h3>
-          <div class="rec-item"><span class="rn">02</span><p><b>Create FAQ section.</b> Answer common client questions (e.g., "How much does sound design cost?", "What's foley work?", "Do you work with remote teams?"). Add FAQPage schema. Strengthens AI answer engine eligibility.</p></div>
-          <div class="rec-item"><span class="rn">03</span><p><b>Add Organization schema.</b> Expand with sameAs (social links: Instagram, LinkedIn, Twitter), logo URL, contact point details. Better entity recognition for AI.</p></div>
-          <div class="rec-item"><span class="rn">04</span><p><b>Review & optimize meta descriptions for dynamic pages.</b> If portfolio filters generate dynamic URLs, ensure each has unique meta descriptions for individual film/credit groupings.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>Create FAQ section.</b> COMPLETE. 12+ Q&A entries covering services, formats, booking, equipment, and technical specs. FAQPage schema in place. Improves AI answer engine eligibility.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>Add Organization schema.</b> COMPLETE. Organization schema deployed with logo, contact info (phone, email), full address, and social media links (Instagram, Twitter). Improves entity recognition for AI crawlers.</p></div>
+          <div class="rec-item"><span class="rn">03</span><p><b>Review & optimize meta descriptions for dynamic pages.</b> If portfolio filters generate dynamic URLs, ensure each has unique meta descriptions for individual film/credit groupings.</p></div>
         </div>
 
         <div class="rec-group low">
           <h3>ℹ️ Low priority (ongoing)</h3>
-          <div class="rec-item"><span class="rn">05</span><p><b>Add ImageObject schema for portfolio images.</b> Structured image data helps Google Images and AI image search. Not essential but improves image discoverability long-term.</p></div>
-          <div class="rec-item"><span class="rn">06</span><p><b>Create "About" or "Team" page with Person schema.</b> If individuals at Aural Lab Sound want visibility, add Person schema with role, photo, bio. Helps build personal brand within your business domain.</p></div>
-          <div class="rec-item"><span class="rn">07</span><p><b>Monitor Core Web Vitals via PageSpeed Insights.</b> Site is already performant (static HTML), but periodic checks ensure no regressions. Set up monitoring dashboard.</p></div>
-          <div class="rec-item"><span class="rn">08</span><p><b>Consider "llms.txt" at root for AI crawlers.</b> Emerging best practice: create /llms.txt with guidelines on what you want indexed for AI training. Not yet standard, but forward-thinking.</p></div>
+          <div class="rec-item"><span class="rn">04</span><p><b>Add ImageObject schema for portfolio images.</b> Structured image data helps Google Images and AI image search. Not essential but improves image discoverability long-term.</p></div>
+          <div class="rec-item"><span class="rn">05</span><p><b>Create "About" or "Team" page with Person schema.</b> If individuals at Aural Lab Sound want visibility, add Person schema with role, photo, bio. Helps build personal brand within your business domain.</p></div>
+          <div class="rec-item"><span class="rn">06</span><p><b>Monitor Core Web Vitals via PageSpeed Insights.</b> Site is already performant (static HTML), but periodic checks ensure no regressions. Check monthly and use in §09 for setup guide.</p></div>
+          <div class="rec-item"><span class="rn" style="color:var(--good);">✓</span><p><b>AI crawler guidelines (llms.txt).</b> COMPLETE. Created /llms.txt at root with content policies, attribution requirements, and contact info. Helps AI systems understand what can be indexed from your site.</p></div>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. CLIENT SETUP INSTRUCTIONS ============ -->
+    <section id="client-setup">
+      <div class="section-head"><span class="idx">09</span><h2 class="section-title">Client setup instructions (non-technical)</h2></div>
+      <p class="section-sub">Step-by-step guides for all setup tasks. Follow these in order. No coding required.</p>
+
+      <div class="card">
+        <div class="rec-group" style="margin-bottom:1.4rem;">
+          <h3 style="color:var(--good);">📊 TASK 1: Set Up Google Analytics (Measuring Visitor Traffic)</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 1rem 0;"><b>Why:</b> See how many people visit your site, which pages they view, and where they come from.</p>
+
+          <details class="block">
+            <summary>Step 1: Create Google Analytics Account</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://analytics.google.com" target="_blank">analytics.google.com</a></li>
+                <li>Click <b>"Start measuring"</b></li>
+                <li>Create a new account called "Aural Lab Sound"</li>
+                <li>Enter your website URL: <span class="mono">https://aurallabsound.com/</span></li>
+                <li>Select your country and timezone (India, IST)</li>
+                <li>Click <b>"Create"</b></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 2: Get Your Measurement ID</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>In Google Analytics, click <b>"Admin"</b> (gear icon at bottom left)</li>
+                <li>Under "Property", click <b>"Data Streams"</b></li>
+                <li>Click on your website stream</li>
+                <li>Look for <b>"Measurement ID"</b> — it starts with <span class="mono">G-</span> (example: <span class="mono">G-ABC123XYZ</span>)</li>
+                <li><b>Copy this ID</b> (you'll need it next)</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 3: Add Measurement ID to Your Website</summary>
+            <div class="block-body">
+              <p style="margin:0 0 0.8rem 0; color:var(--text-muted);">Send your Measurement ID to your developer. They will replace the placeholder <span class="mono">G-TODO-MEASUREMENT-ID</span> in your website code with your actual ID.</p>
+              <p style="margin:0; padding:0.8rem; background:var(--info-bg); border-radius:8px; border-left:3px solid var(--info); color:var(--text-muted);"><b>Your Measurement ID:</b> <span style="color:var(--text); font-family:var(--font-mono);">G-TODO-MEASUREMENT-ID</span></p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 4: Verify It's Working (48 hours)</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Wait 24-48 hours for data to appear</li>
+                <li>Go back to <a href="https://analytics.google.com" target="_blank">analytics.google.com</a></li>
+                <li>Click on your property</li>
+                <li>Look at <b>"Home"</b> or <b>"Real-time"</b> tab to see visitors</li>
+                <li>You should see page views, visitors, and traffic sources</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="rec-group" style="margin-bottom:1.4rem;">
+          <h3 style="color:var(--warn);">🔍 TASK 2: Activate Google Search Console (Monitor Search Traffic)</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 1rem 0;"><b>Why:</b> See how your site appears in Google Search, which keywords bring traffic, and any issues Google finds.</p>
+          <p style="font-size:0.85rem; color:var(--good); margin:0 0 1rem 0; padding:0.6rem; background:var(--good-bg); border-radius:6px;"><b>✓ Status:</b> Your domain is already verified via DNS. Just need to access Google Search Console.</p>
+
+          <details class="block">
+            <summary>Step 1: Go to Google Search Console</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://search.google.com/search-console" target="_blank">search.google.com/search-console</a></li>
+                <li>Sign in with your Google Account</li>
+                <li>Click on your property: <span class="mono">aurallabsound.com</span></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 2: Submit Your Sitemap</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>In Google Search Console, click <b>"Sitemaps"</b> (left menu)</li>
+                <li>In the URL box, type: <span class="mono">sitemap.xml</span></li>
+                <li>Click <b>"Submit"</b></li>
+                <li>You should see a success message</li>
+              </ol>
+              <p style="margin:0.8rem 0 0; color:var(--text-faint); font-size:0.85rem;">This tells Google about all your pages and helps them get indexed faster.</p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 3: Monitor Search Performance</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Click <b>"Performance"</b> (left menu)</li>
+                <li>Wait 24-48 hours for data to appear</li>
+                <li>You'll see:
+                  <ul style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                    <li>Total clicks (visitors from Google)</li>
+                    <li>Keywords people use to find you</li>
+                    <li>Your average search position</li>
+                    <li>Click-through rate</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 4: Check for Issues</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Click <b>"Coverage"</b> (left menu) to see if any pages have errors</li>
+                <li>Click <b>"Enhancement"</b> to see mobile or structured data suggestions</li>
+                <li>If you see errors, contact your developer to fix them</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="rec-group" style="margin-bottom:1.4rem;">
+          <h3 style="color:var(--warn);">📊 TASK 3: Connect Google Analytics to Google Search Console (Optional but Recommended)</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 1rem 0;"><b>Why:</b> See search keywords AND visitor behavior in one place.</p>
+
+          <details class="block">
+            <summary>Step 1: Connect the Services</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>In Google Search Console, click <b>"Settings"</b> (left menu, scroll to bottom)</li>
+                <li>Click <b>"Connected sites"</b></li>
+                <li>Click <b>"Connect Google Analytics"</b></li>
+                <li>Select your Google Analytics property from the dropdown</li>
+                <li>Click <b>"Confirm"</b></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Step 2: View SEO Data in Analytics</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
+                <li>On the left menu, click <b>"Search Console"</b> → <b>"Landing pages"</b></li>
+                <li>This shows which pages get traffic from Google Search and what keywords bring them</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="rec-group" style="margin-bottom:1.4rem;">
+          <h3 style="color:var(--info);">⭐ TASK 4: Track Contact Form Submissions (Optional but Recommended)</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin:0 0 1rem 0;"><b>Why:</b> Know when visitors contact you and which pages they came from.</p>
+
+          <details class="block">
+            <summary>Step 1: Set Up Conversion Goal in Google Analytics</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
+                <li>Click <b>"Admin"</b> (gear icon, bottom left)</li>
+                <li>Under "Property", click <b>"Conversions"</b> → <b>"Create conversion"</b></li>
+                <li>Name it: <b>"Contact Form Submission"</b></li>
+                <li>Choose <b>"Purchase"</b> as the conversion type</li>
+                <li>Contact your developer to implement event tracking</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+
+        <div class="rec-group" style="margin-bottom:0;">
+          <h3 style="color:var(--text-muted);">ℹ️ OPTIONAL: Advanced Setup (Can Do Later)</h3>
+
+          <details class="block">
+            <summary>Set Up Google Business Profile (Local Search)</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://business.google.com" target="_blank">business.google.com</a></li>
+                <li>Click <b>"Create or manage account"</b></li>
+                <li>Add your business info:
+                  <ul style="margin:0.5rem 0 0; padding-left:1.2rem;">
+                    <li>Name: Aural Lab Sound</li>
+                    <li>Address: 754, 11th Main Rd, Vinayaka Layout, 2nd Stage, Nagarbhavi, Bengaluru 560072</li>
+                    <li>Phone: +91-9900117364</li>
+                    <li>Website: https://aurallabsound.com</li>
+                    <li>Categories: Audio Post-production, Sound Studio</li>
+                  </ul>
+                </li>
+                <li>This helps you appear in Google Maps and local search results</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>Monitor Core Web Vitals (Page Speed)</summary>
+            <div class="block-body">
+              <ol style="margin:0.5rem 0 0; padding-left:1.3rem;">
+                <li>Go to <a href="https://pagespeed.web.dev" target="_blank">pagespeed.web.dev</a></li>
+                <li>Type your website URL: <span class="mono">https://aurallabsound.com</span></li>
+                <li>Click <b>"Analyze"</b></li>
+                <li>You'll see a score and recommendations (check monthly)</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>View Analytics Reports Regularly</summary>
+            <div class="block-body">
+              <p style="margin:0 0 0.8rem 0; color:var(--text-muted);">Every week or month, check these reports:</p>
+              <ul style="margin:0; padding-left:1.3rem;">
+                <li><b>Google Analytics → Home:</b> Total visitors, traffic sources, top pages</li>
+                <li><b>Google Search Console → Performance:</b> Search keywords, ranking position, click-through rate</li>
+                <li><b>Google Analytics → Users → Demographics:</b> Where your visitors come from, devices they use</li>
+                <li><b>Google Analytics → Pages & Screens:</b> Which pages get the most traffic</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.4rem; border-left:3px solid var(--good); background:var(--good-bg);">
+        <h4 style="font-size:0.92rem; color:var(--text); margin-bottom:0.6rem;">✓ Checklist: What's Already Done</h4>
+        <ul style="margin:0.5rem 0 0; padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted);">
+          <li>✅ Google Search Console verification (via DNS) — Your domain is already verified</li>
+          <li>✅ Google Analytics 4 code added to website — Just need your Measurement ID</li>
+          <li>✅ FAQ section with full answers — Already live</li>
+          <li>✅ Organization schema (for AI) — Already added</li>
+          <li>✅ llms.txt (AI crawler guidelines) — Already created</li>
+          <li>✅ WCAG accessibility audit — All checks passed</li>
+          <li>✅ Lighthouse performance — Score 96/100</li>
+        </ul>
       </div>
     </section>
 
   </div>
 
   <footer class="colophon">
-    <span>Updated 05 Aug 2026 · Lighthouse: SEO 100 | Perf 96 | A11y 100 | BP 100 · WCAG AA contrast: PASS</span>
-    <span>aurallabsound.com / internal · Ready for go-live</span>
+    <span>Updated 05 Aug 2026 · Lighthouse: SEO 100 | Perf 96 | A11y 100 | BP 100 · WCAG AA contrast: PASS · GA4 + Client Setup Ready</span>
+    <span>aurallabsound.com / internal · Ready for go-live + Client Onboarding Complete</span>
   </footer>
 
   <script>
