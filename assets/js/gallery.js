@@ -498,8 +498,9 @@ function updateFilterStatus(visibleCount) {
 }
 
 function initFilters() {
-  const filterContainer = document.querySelector(".gallery-head");
-  if (!filterContainer) return;
+  const filtersContainer = document.querySelector("#filters-container");
+  const creditsSidebar = document.querySelector(".credits-sidebar");
+  if (!filtersContainer) return;
 
   const allRoles = [...new Set(movies.flatMap(m => m.roles))].sort();
   const allTypes = ALLOWED_TYPES;
@@ -523,21 +524,42 @@ function initFilters() {
   `;
 
   const filtersHtml = `
-    <div class="filters-section">
-      ${renderGroup("Role", "role", allRoles)}
-      ${renderGroup("Type", "type", allTypes)}
-      ${renderGroup("Year", "year", allYears)}
-      <div class="filter-status">
-        <p class="filter-summary" role="status" aria-live="polite"></p>
-        <button type="button" class="filter-reset" disabled>Reset filters</button>
-      </div>
+    ${renderGroup("Role", "role", allRoles)}
+    ${renderGroup("Type", "type", allTypes)}
+    ${renderGroup("Year", "year", allYears)}
+    <div class="filter-status">
+      <p class="filter-summary" role="status" aria-live="polite"></p>
+      <button type="button" class="filter-reset" disabled>Reset filters</button>
     </div>
   `;
 
-  filterContainer.insertAdjacentHTML("afterend", filtersHtml);
+  filtersContainer.innerHTML = filtersHtml;
   gallery.insertAdjacentHTML("beforebegin", `
     <p class="gallery-empty" hidden>No films match these filters. Try removing one.</p>
   `);
+
+  if (creditsSidebar) {
+    const toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.className = "filter-toggle-btn";
+    toggleBtn.setAttribute("aria-expanded", "false");
+    toggleBtn.innerHTML = `
+      <span>Filters</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    `;
+
+    creditsSidebar.parentElement.insertBefore(toggleBtn, creditsSidebar);
+
+    toggleBtn.addEventListener("click", () => {
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      toggleBtn.setAttribute("aria-expanded", String(!isExpanded));
+      creditsSidebar.style.display = isExpanded ? "none" : "block";
+    });
+
+    creditsSidebar.style.display = "none";
+  }
 
   document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
