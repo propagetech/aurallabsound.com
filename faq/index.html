@@ -24,7 +24,8 @@
   <script src="../assets/js/theme-init.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/responsive.css">
@@ -169,7 +170,7 @@
   </script>
 </head>
 
-<body>
+<body class="page-faq">
   <a class="skip-link" href="#main">Skip to main content</a>
   <header class="site-header">
     <div class="container site-header__inner">
@@ -204,114 +205,172 @@
   </header>
 
   <main id="main">
-    <section class="page-banner page-banner--faq" aria-labelledby="faq-heading">
-      <div class="container container--narrow">
-        <h1 id="faq-heading">FAQ</h1>
-        <p class="lead">Aural Lab Sound is a professional audio post-production service specializing in sound design, mixing, dialogue editing, and final mastering for film, television, and digital media. We also offer sync sound recording and equipment rental from Bangalore.</p>
+    <section class="faq-hero" aria-labelledby="faq-heading">
+      <div class="faq-hero__veil" aria-hidden="true"></div>
+      <div class="container container--narrow faq-hero__inner">
+        <nav class="faq-breadcrumb" aria-label="Breadcrumb">
+          <a href="../">Home</a>
+          <span class="faq-breadcrumb__sep" aria-hidden="true">/</span>
+          <span aria-current="page">FAQ</span>
+        </nav>
+        <p class="faq-eyebrow">Common questions</p>
+        <h1 id="faq-heading">Frequently asked questions</h1>
+        <p class="lead">Sound design, mixing, delivery specs, sync sound, and equipment rental from Bangalore.</p>
       </div>
     </section>
 
     <div class="page-panel page-panel--faq">
       <div class="container container--narrow faq-layout">
-        <nav class="faq-toc" aria-label="FAQ categories">
+        <nav class="faq-toc" aria-label="FAQ categories" data-faq-toc>
           <a href="#services">Services</a>
-          <a href="#delivery">Delivery &amp; specs</a>
+          <a href="#delivery">Delivery</a>
           <a href="#booking">Booking</a>
-          <a href="#rental">Equipment rental</a>
+          <a href="#rental">Rental</a>
         </nav>
 
-        <section id="services" class="faq-group" aria-labelledby="services-heading">
-          <h2 id="services-heading">Services and capabilities</h2>
+        <div class="faq-groups" data-faq-accordion>
+          <section id="services" class="faq-group" aria-labelledby="services-heading">
+            <header class="faq-group__head">
+              <span class="faq-group__index" aria-hidden="true">01</span>
+              <h2 id="services-heading">Services and capabilities</h2>
+            </header>
 
-          <details class="faq-item">
-            <summary>What services do you offer?</summary>
-            <p>Full audio post-production including sound design, Foley, ADR, dialogue clean-up, spatial mixing, and final re-recording. We also provide production sync sound recording, ambience and FX recording, and professional equipment rental for film and media shoots.</p>
-          </details>
+            <details class="faq-item" open>
+              <summary>What services do you offer?</summary>
+              <div class="faq-item__body">
+                <p>Full audio post-production including sound design, Foley, ADR, dialogue clean-up, spatial mixing, and final re-recording. We also provide production sync sound recording, ambience and FX recording, and professional equipment rental for film and media shoots.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>What's the difference between Foley and dialogue editing?</summary>
-            <p>Dialogue editing cleans, assembles, and prepares production dialogue tracks so speech is clear, consistent, and sync-accurate. Foley is performance-based sound recorded to picture (footsteps, cloth, props, and other sync elements) that sells physical realism the production mic may have missed.</p>
-          </details>
+            <details class="faq-item">
+              <summary>What's the difference between Foley and dialogue editing?</summary>
+              <div class="faq-item__body">
+                <p>Dialogue editing cleans, assembles, and prepares production dialogue tracks so speech is clear, consistent, and sync-accurate. Foley is performance-based sound recorded to picture (footsteps, cloth, props, and other sync elements) that sells physical realism the production mic may have missed.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>What project formats do you support?</summary>
-            <p>Stereo, 5.1, 7.1, and immersive audio formats like Dolby Atmos.</p>
-          </details>
+            <details class="faq-item">
+              <summary>What project formats do you support?</summary>
+              <div class="faq-item__body">
+                <p>Stereo, 5.1, 7.1, and immersive audio formats like Dolby Atmos.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>Can you handle remote collaboration?</summary>
-            <p>Yes, we use secure cloud platforms for remote spot-checking, live stream monitoring sessions, and asset transfer.</p>
-          </details>
+            <details class="faq-item">
+              <summary>Can you handle remote collaboration?</summary>
+              <div class="faq-item__body">
+                <p>Yes, we use secure cloud platforms for remote spot-checking, live stream monitoring sessions, and asset transfer.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>Do you offer production sound and sync sound recording?</summary>
-            <p>Yes. Our production sound work covers sync sound mixing on set, ambience recording, FX recording, and Foley recording for features, documentaries, and series.</p>
-          </details>
-        </section>
+            <details class="faq-item">
+              <summary>Do you offer production sound and sync sound recording?</summary>
+              <div class="faq-item__body">
+                <p>Yes. Our production sound work covers sync sound mixing on set, ambience recording, FX recording, and Foley recording for features, documentaries, and series.</p>
+              </div>
+            </details>
+          </section>
 
-        <section id="delivery" class="faq-group" aria-labelledby="delivery-heading">
-          <h2 id="delivery-heading">Delivery and technical specs</h2>
+          <section id="delivery" class="faq-group" aria-labelledby="delivery-heading">
+            <header class="faq-group__head">
+              <span class="faq-group__index" aria-hidden="true">02</span>
+              <h2 id="delivery-heading">Delivery and technical specs</h2>
+            </header>
 
-          <details class="faq-item">
-            <summary>What are the standard delivery file formats?</summary>
-            <p>Multi-channel interleaved or split WAV files at 24-bit/48kHz (or 96kHz upon request).</p>
-          </details>
+            <details class="faq-item">
+              <summary>What are the standard delivery file formats?</summary>
+              <div class="faq-item__body">
+                <p>Multi-channel interleaved or split WAV files at 24-bit/48kHz (or 96kHz upon request).</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>Do you provide M&amp;E (Music and Effects) stems?</summary>
-            <p>Yes, we deliver fully compliant international M&amp;E stems alongside the final print master.</p>
-          </details>
+            <details class="faq-item">
+              <summary>Do you provide M&amp;E (Music and Effects) stems?</summary>
+              <div class="faq-item__body">
+                <p>Yes, we deliver fully compliant international M&amp;E stems alongside the final print master.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>What loudness standards do you mix to?</summary>
-            <p>We mix to exact target standards including EBU R128, ATSC A/85, and specific streaming platform requirements (Netflix, HBO, Amazon).</p>
-          </details>
+            <details class="faq-item">
+              <summary>What loudness standards do you mix to?</summary>
+              <div class="faq-item__body">
+                <p>We mix to exact target standards including EBU R128, ATSC A/85, and specific streaming platform requirements (Netflix, HBO, Amazon).</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>What tools do you use for post-production?</summary>
-            <p>Post sessions typically run in Pro Tools with iZotope RX for dialogue clean-up, FabFilter for mixing, and Altiverb for reverberation, alongside the plug-ins required by each project's deliverable spec.</p>
-          </details>
-        </section>
+            <details class="faq-item">
+              <summary>What tools do you use for post-production?</summary>
+              <div class="faq-item__body">
+                <p>Post sessions typically run in Pro Tools with iZotope RX for dialogue clean-up, FabFilter for mixing, and Altiverb for reverberation, alongside the plug-ins required by each project's deliverable spec.</p>
+              </div>
+            </details>
+          </section>
 
-        <section id="booking" class="faq-group" aria-labelledby="booking-heading">
-          <h2 id="booking-heading">Booking and workflow</h2>
+          <section id="booking" class="faq-group" aria-labelledby="booking-heading">
+            <header class="faq-group__head">
+              <span class="faq-group__index" aria-hidden="true">03</span>
+              <h2 id="booking-heading">Booking and workflow</h2>
+            </header>
 
-          <details class="faq-item">
-            <summary>How do I book a project?</summary>
-            <p>Submit your timeline, cue sheets, and rough cut via our contact portal for a custom project quote. Email <a href="mailto:info@aurallabsound.com">info@aurallabsound.com</a> or call Shreyank Nanjappa or Suresh Bagali on the <a href="../#contact">contact page</a>.</p>
-          </details>
+            <details class="faq-item">
+              <summary>How do I book a project?</summary>
+              <div class="faq-item__body">
+                <p>Submit your timeline, cue sheets, and rough cut via our contact portal for a custom project quote. Email <a href="mailto:info@aurallabsound.com">info@aurallabsound.com</a> or call Shreyank Nanjappa or Suresh Bagali on the <a href="../#contact">contact page</a>.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>How do I hire for sound design?</summary>
-            <p>Share your cut status, picture lock date, deliverable format (stereo, 5.1, Atmos), and creative brief. We scope dialogue edit, ambience, FX, Foley, and mix as needed, then confirm schedule and quote before starting.</p>
-          </details>
+            <details class="faq-item">
+              <summary>How do I hire for sound design?</summary>
+              <div class="faq-item__body">
+                <p>Share your cut status, picture lock date, deliverable format (stereo, 5.1, Atmos), and creative brief. We scope dialogue edit, ambience, FX, Foley, and mix as needed, then confirm schedule and quote before starting.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>Where is Aural Lab Sound based?</summary>
-            <p>We are based in Bangalore, India, and work with productions across India and internationally through on-set recording and remote post collaboration.</p>
-          </details>
-        </section>
+            <details class="faq-item">
+              <summary>Where is Aural Lab Sound based?</summary>
+              <div class="faq-item__body">
+                <p>We are based in Bangalore, India, and work with productions across India and internationally through on-set recording and remote post collaboration.</p>
+              </div>
+            </details>
+          </section>
 
-        <section id="rental" class="faq-group" aria-labelledby="rental-heading">
-          <h2 id="rental-heading">Equipment rental</h2>
+          <section id="rental" class="faq-group" aria-labelledby="rental-heading">
+            <header class="faq-group__head">
+              <span class="faq-group__index" aria-hidden="true">04</span>
+              <h2 id="rental-heading">Equipment rental</h2>
+            </header>
 
-          <details class="faq-item">
-            <summary>Do you rent production sound equipment?</summary>
-            <p>Yes. Equipment rental is available for production sync sound kits, boom microphones, wireless lavaliers, and related location recording gear. Kits can be rented with or without an engineer.</p>
-          </details>
+            <details class="faq-item">
+              <summary>Do you rent production sound equipment?</summary>
+              <div class="faq-item__body">
+                <p>Yes. Equipment rental is available for production sync sound kits, boom microphones, wireless lavaliers, and related location recording gear. Kits can be rented with or without an engineer.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>What equipment is available for rental?</summary>
-            <p>Typical rental inventory includes Sound Devices mixer/recorders (788T, 688, 664, 633, MixPre series), Schoeps and Sennheiser boom mics, Lectrosonics wireless with Sanken COS-11 or DPA capsules, and ambience pairs (MS, XY, ORTF). Studio Foley mics such as Neumann and Rode are available for session work.</p>
-          </details>
+            <details class="faq-item">
+              <summary>What equipment is available for rental?</summary>
+              <div class="faq-item__body">
+                <p>Typical rental inventory includes Sound Devices mixer/recorders (788T, 688, 664, 633, MixPre series), Schoeps and Sennheiser boom mics, Lectrosonics wireless with Sanken COS-11 or DPA capsules, and ambience pairs (MS, XY, ORTF). Studio Foley mics such as Neumann and Rode are available for session work.</p>
+              </div>
+            </details>
 
-          <details class="faq-item">
-            <summary>Can I rent gear without booking a full post package?</summary>
-            <p>Yes. Equipment rental is offered as a standalone service for productions that already have a sound team, as well as bundled with our sync sound and post-production packages.</p>
-          </details>
-        </section>
+            <details class="faq-item">
+              <summary>Can I rent gear without booking a full post package?</summary>
+              <div class="faq-item__body">
+                <p>Yes. Equipment rental is offered as a standalone service for productions that already have a sound team, as well as bundled with our sync sound and post-production packages.</p>
+              </div>
+            </details>
+          </section>
+        </div>
 
-        <p class="faq-cta">Still have a question? <a href="../#contact">Get in touch</a> or email <a href="mailto:info@aurallabsound.com">info@aurallabsound.com</a>.</p>
+        <aside class="faq-cta" aria-labelledby="faq-cta-heading">
+          <h2 id="faq-cta-heading">Still have a question?</h2>
+          <p>Tell us about your cut, deliverables, and timeline. We will come back with a clear quote.</p>
+          <div class="faq-cta__actions">
+            <a class="faq-cta__primary" href="../#contact">Contact the studio</a>
+            <a class="faq-cta__secondary" href="mailto:info@aurallabsound.com">info@aurallabsound.com</a>
+          </div>
+        </aside>
       </div>
     </div>
   </main>
@@ -331,6 +390,7 @@
 
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
   <script src="../assets/js/theme-toggle.js" defer></script>
+  <script src="../assets/js/faq.js" defer></script>
 </body>
 
 </html>
