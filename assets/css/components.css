@@ -1024,8 +1024,8 @@
   width: max-content;
   max-width: 9.5rem;
   min-width: 0;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
 }
 
 .gallery-item__award-stamp {
@@ -1758,8 +1758,8 @@
   width: max-content;
   max-width: 100%;
   min-width: 0;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
 }
 
 .credits-award__stamp {

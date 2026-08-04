@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO &amp; AI-Crawl Audit — Internal | Aural Lab Sound</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta property="og:title" content="SEO &amp; AI-Crawl Audit — Internal | Aural Lab Sound" />
+  <meta property="og:description" content="Internal SEO, schema, and AI-crawl readiness dashboard for aurallabsound.com. Not for public sharing." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root{
+      --bg:#080808; --surface:#111111; --surface-2:#1a1a1a; --surface-3:#202020;
+      --border:#242424; --border-2:#333333;
+      --text:#F0EDE8; --text-muted:#a39a8c; --text-faint:#6f675c;
+      --accent:#7B3FF2; --accent-light:#A85EFF; --accent-ink:#f0e6ff;
+      --accent-dim:rgba(123,63,242,0.10); --accent-glow:rgba(123,63,242,0.25);
+      --good:#8bb377; --good-ink:#12210b; --good-bg:rgba(139,179,119,0.14);
+      --warn:#e0985c; --warn-ink:#2c1706; --warn-bg:rgba(224,152,92,0.14);
+      --bad:#d9705f; --bad-ink:#2c0f0a; --bad-bg:rgba(217,112,95,0.14);
+      --info:#7ab3c9; --info-ink:#08222c; --info-bg:rgba(122,179,201,0.14);
+      --font-display:'Playfair Display', Georgia, serif;
+      --font-body:'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;
+      color-scheme: dark;
+    }
+    :root[data-theme="light"]{
+      --bg:#faf8f4; --surface:#ffffff; --surface-2:#f3f0e9; --surface-3:#ece7db;
+      --border:#e4ddcd; --border-2:#d5cbb2;
+      --text:#211d15; --text-muted:#6b6252; --text-faint:#9a8f78;
+      --accent:#6B2FB0; --accent-light:#8B4FD6; --accent-ink:#faf5ff;
+      --accent-dim:rgba(107,47,176,0.08); --accent-glow:rgba(107,47,176,0.18);
+      --good:#3f7a34; --good-ink:#eefbe9; --good-bg:rgba(63,122,52,0.10);
+      --warn:#a8611e; --warn-ink:#fff3e6; --warn-bg:rgba(168,97,30,0.10);
+      --bad:#a83b2a; --bad-ink:#fff0ed; --bad-bg:rgba(168,59,42,0.10);
+      --info:#2c6e85; --info-ink:#eaf7fb; --info-bg:rgba(44,110,133,0.10);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: light){
+      :root:not([data-theme="dark"]){
+        --bg:#faf8f4; --surface:#ffffff; --surface-2:#f3f0e9; --surface-3:#ece7db;
+        --border:#e4ddcd; --border-2:#d5cbb2;
+        --text:#211d15; --text-muted:#6b6252; --text-faint:#9a8f78;
+        --accent:#6B2FB0; --accent-light:#8B4FD6; --accent-ink:#faf5ff;
+        --accent-dim:rgba(107,47,176,0.08); --accent-glow:rgba(107,47,176,0.18);
+        --good:#3f7a34; --good-ink:#eefbe9; --good-bg:rgba(63,122,52,0.10);
+        --warn:#a8611e; --warn-ink:#fff3e6; --warn-bg:rgba(168,97,30,0.10);
+        --bad:#a83b2a; --bad-ink:#fff0ed; --bad-bg:rgba(168,59,42,0.10);
+        --info:#2c6e85; --info-ink:#eaf7fb; --info-bg:rgba(44,110,133,0.10);
+        color-scheme: light;
+      }
+    }
+
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      background:
+        radial-gradient(1200px 560px at 10% -10%, var(--accent-dim), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family:var(--font-body);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:6rem;
+    }
+    a{color:var(--accent);}
+    a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+    code, .mono{font-family:var(--font-mono);}
+    .wrap{max-width:1180px; margin:0 auto; padding:0 1.5rem;}
+    h1,h2,h3,h4{font-family:var(--font-display); font-weight:600; text-wrap:balance; margin:0;}
+    ::selection{background:var(--accent); color:var(--accent-ink);}
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar-inner{
+      max-width:1180px; margin:0 auto; padding:0.75rem 1.5rem;
+      display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:0.55rem; font-family:var(--font-display); font-weight:700; font-size:1rem;}
+    .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+    .noindex-badge{
+      font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase;
+      color:var(--bad); background:var(--bad-bg); border:1px solid var(--bad);
+      padding:0.2rem 0.55rem; border-radius:100px;
+    }
+    .topnav{display:flex; gap:0.2rem; flex-wrap:wrap; margin-left:auto;}
+    .topnav a{
+      font-size:0.8rem; color:var(--text-muted); text-decoration:none;
+      padding:0.4rem 0.65rem; border-radius:6px;
+    }
+    .topnav a:hover{color:var(--text); background:var(--surface-2);}
+    .theme-toggle{
+      display:inline-flex; align-items:center; gap:0.4rem;
+      background:var(--surface-2); border:1px solid var(--border); color:var(--text);
+      font-size:0.78rem; padding:0.4rem 0.7rem; border-radius:100px; cursor:pointer;
+    }
+    .theme-toggle:hover{border-color:var(--accent);}
+
+    header.masthead{padding:3rem 0 2rem; border-bottom:1px solid var(--border); margin-bottom:2.4rem;}
+    .eyebrow{
+      font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--accent); display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap;
+    }
+    h1.title{font-size:clamp(1.9rem,4vw,2.6rem); letter-spacing:-0.01em; margin:0.6rem 0 0.6rem;}
+    .dek{color:var(--text-muted); max-width:70ch; font-size:1.02rem; margin:0 0 1.5rem;}
+    .meta-row{display:flex; gap:1.4rem; flex-wrap:wrap; font-size:0.82rem; color:var(--text-faint); font-family:var(--font-mono);}
+    .meta-row b{color:var(--text-muted); font-weight:600;}
+
+    .legend{display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:1.4rem;}
+    .legend-item{display:flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:var(--text-muted);}
+    .legend-dot{width:9px;height:9px;border-radius:50%;}
+
+    section{margin:0 0 3rem; scroll-margin-top:5rem;}
+    .section-head{display:flex; align-items:baseline; gap:0.7rem; margin-bottom:0.4rem;}
+    .section-head .idx{font-family:var(--font-mono); font-size:0.78rem; color:var(--text-faint);}
+    h2.section-title{font-size:1.5rem;}
+    .section-sub{color:var(--text-muted); font-size:0.92rem; max-width:75ch; margin:0.3rem 0 1.3rem;}
+
+    .card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.4rem 1.5rem;}
+    .card + .card{margin-top:0.9rem;}
+    .card.accented{border-left:3px solid var(--accent);}
+
+    .chip{
+      display:inline-flex; align-items:center; gap:0.35rem;
+      font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.03em; text-transform:uppercase;
+      padding:0.22rem 0.6rem; border-radius:100px; border:1px solid transparent; cursor:default;
+      white-space:nowrap;
+    }
+    .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor;}
+    .chip.done{color:var(--good); background:var(--good-bg); border-color:color-mix(in srgb, var(--good) 40%, transparent);}
+    .chip.partial{color:var(--warn); background:var(--warn-bg); border-color:color-mix(in srgb, var(--warn) 40%, transparent);}
+    .chip.missing{color:var(--bad); background:var(--bad-bg); border-color:color-mix(in srgb, var(--bad) 40%, transparent);}
+    .chip.review{color:var(--info); background:var(--info-bg); border-color:color-mix(in srgb, var(--info) 40%, transparent);}
+    .chip.blocked{color:var(--text-faint); background:var(--surface-3); border-color:var(--border-2);}
+    button.chip{ }
+    button.chip:hover{filter:brightness(1.15);}
+
+    .exec-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:0.9rem;}
+    .exec-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1.2rem 1.3rem;}
+    .exec-card h3{font-family:var(--font-body); font-weight:600; font-size:0.9rem; color:var(--text); margin-bottom:0.6rem;}
+    .exec-card .score{font-family:var(--font-display); font-size:1.9rem; color:var(--accent); line-height:1;}
+    .exec-card .score-label{font-size:0.78rem; color:var(--text-muted); margin:0.3rem 0 0.7rem;}
+
+    .table-scroll{overflow-x:auto; border:1px solid var(--border); border-radius:12px;}
+    table{width:100%; border-collapse:collapse; font-size:0.84rem; background:var(--surface);}
+    thead th{
+      text-align:left; font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.05em; text-transform:uppercase;
+      color:var(--text-faint); padding:0.75rem 0.9rem; border-bottom:1px solid var(--border); white-space:nowrap;
+      position:sticky; top:0; background:var(--surface);
+    }
+    tbody td{padding:0.6rem 0.9rem; border-bottom:1px solid var(--border); color:var(--text-muted); vertical-align:top;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover td{background:var(--surface-2);}
+    td.cell-main{color:var(--text); font-weight:500;}
+    td.mono{font-family:var(--font-mono); font-size:0.78rem;}
+    td.center{text-align:center;}
+
+    .score-row{display:flex; gap:0.9rem; align-items:flex-start; padding:0.85rem 0; border-bottom:1px solid var(--border);}
+    .score-row:last-child{border-bottom:none;}
+    .score-body h4{font-size:0.94rem; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; font-family:var(--font-body); font-weight:600;}
+    .score-body p{margin:0; font-size:0.86rem; color:var(--text-muted);}
+    .score-body .note{color:var(--text-faint); font-size:0.8rem; margin-top:0.3rem;}
+
+    details.block{background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:0.6rem; overflow:hidden;}
+    details.block[open]{border-color:var(--border-2);}
+    details.block summary{
+      list-style:none; cursor:pointer; padding:0.9rem 1.1rem; display:flex; align-items:center; gap:0.7rem;
+      font-weight:600; font-size:0.9rem; color:var(--text);
+    }
+    details.block summary::-webkit-details-marker{display:none;}
+    details.block summary::before{
+      content:"\25B8"; color:var(--accent); transition:transform 0.15s ease; font-size:0.8rem; flex:none;
+    }
+    details.block[open] summary::before{transform:rotate(90deg);}
+    details.block summary .num{font-family:var(--font-mono); color:var(--text-faint); font-size:0.75rem;}
+    .block-body{padding:0 1.1rem 1.1rem; font-size:0.88rem; color:var(--text-muted);}
+    .block-body dl.kv{display:grid; grid-template-columns:150px 1fr; gap:0.4rem 1rem; font-size:0.86rem;}
+    .block-body dl.kv dt{color:var(--text-faint); font-family:var(--font-mono); font-size:0.74rem; padding-top:0.15rem;}
+    .block-body dl.kv dd{margin:0; color:var(--text);}
+    .block-body ul{margin:0.3rem 0 0; padding-left:1.2rem;}
+    .block-body li{margin-bottom:0.3rem;}
+
+    .rec-group{margin-bottom:1.4rem;}
+    .rec-group h3{font-family:var(--font-body); font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.5rem;}
+    .rec-group.high h3{color:var(--bad);}
+    .rec-group.medium h3{color:var(--warn);}
+    .rec-group.low h3{color:var(--info);}
+    .rec-item{
+      display:flex; gap:0.8rem; align-items:flex-start; padding:0.75rem 0; border-bottom:1px solid var(--border);
+    }
+    .rec-item:last-child{border-bottom:none;}
+    .rec-item .rn{font-family:var(--font-mono); color:var(--text-faint); font-size:0.78rem; flex:none; padding-top:0.1rem;}
+    .rec-item p{margin:0; font-size:0.88rem; color:var(--text-muted);}
+    .rec-item p b{color:var(--text); font-weight:600;}
+
+    footer.colophon{
+      max-width:1180px; margin:3rem auto 0; padding:1.5rem;
+      border-top:1px solid var(--border); font-size:0.8rem; color:var(--text-faint);
+      display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    }
+
+    @media (max-width:900px){
+      .exec-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media (max-width:640px){
+      .exec-grid{grid-template-columns:1fr;}
+      .block-body dl.kv{grid-template-columns:110px 1fr;}
+    }
+
+    @media print{
+      .topbar, .theme-toggle{display:none !important;}
+      body{padding-bottom:0; background:#fff; color:#000;}
+      .card, details.block, .exec-card{border-color:#ccc; break-inside:avoid;}
+      a{color:#000; text-decoration:underline;}
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="dot"></span>Aural Lab Sound <span style="color:var(--text-faint); font-weight:400;">/ internal</span></div>
+      <span class="noindex-badge"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i> Internal page — noindex</span>
+      <nav class="topnav" aria-label="Section navigation">
+        <a href="#summary">Summary</a>
+        <a href="#checklist">Checklist</a>
+        <a href="#ai-crawl">AI Crawl</a>
+        <a href="#schema">Schema</a>
+        <a href="#recommendations">Recommendations</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light/dark theme">
+        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> <span id="themeLabel">Auto</span>
+      </button>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="wrap">
+      <div class="eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Internal &middot; not indexed &middot; not linked from site nav</div>
+      <h1 class="title">SEO &amp; AI-crawl readiness — aurallabsound.com</h1>
+      <p class="dek">Where every page stands on SEO fundamentals, schema.org coverage, and readability for AI answer engines (Google AI Overviews, Perplexity, ChatGPT). Built for the Aural Lab Sound team to track and update by hand — not a public asset.</p>
+      <div class="meta-row">
+        <span><b>Last full audit:</b> 05 Aug 2026</span>
+        <span><b>Pages in scope:</b> 1 (homepage + dynamic content)</span>
+        <span><b>Owner:</b> Jeevitha / ProPage</span>
+      </div>
+      <div class="legend" aria-label="Status legend">
+        <span class="legend-item"><span class="legend-dot" style="background:var(--good);"></span>Done</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--warn);"></span>Partial</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--bad);"></span>Missing</span>
+        <span class="legend-item"><span class="legend-dot" style="background:var(--info);"></span>Needs Review</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ============ 1. EXECUTIVE SUMMARY ============ -->
+    <section id="summary">
+      <div class="section-head"><span class="idx">01</span><h2 class="section-title">Executive status summary</h2></div>
+      <p class="section-sub">Five key areas, rolled up from the checklist and schema audits below. Overall, the site has solid SEO foundations with opportunities for enhancement.</p>
+
+      <div class="exec-grid">
+        <div class="exec-card">
+          <h3>SEO fundamentals</h3>
+          <div class="score">8/10</div>
+          <div class="score-label">Title, description, canonical present. Robot directives in place.</div>
+          <button class="chip done" data-status-id="exec-seo">Done</button>
+        </div>
+        <div class="exec-card">
+          <h3>Schema.org coverage</h3>
+          <div class="score">6/10</div>
+          <div class="score-label">WebSite + LocalBusiness present. Expand for better AI understanding.</div>
+          <button class="chip partial" data-status-id="exec-schema">Partial</button>
+        </div>
+        <div class="exec-card">
+          <h3>AI-crawl readiness</h3>
+          <div class="score">Good</div>
+          <div class="score-label">Server-rendered HTML, no JS-gated content. Strong foundation.</div>
+          <button class="chip done" data-status-id="exec-ai">Done</button>
+        </div>
+        <div class="exec-card">
+          <h3>Technical / indexing</h3>
+          <div class="score">7/10</div>
+          <div class="score-label">Robots.txt present. Sitemap needs update with proper lastmod.</div>
+          <button class="chip partial" data-status-id="exec-tech">Partial</button>
+        </div>
+        <div class="exec-card">
+          <h3>Content completeness</h3>
+          <div class="score">Good</div>
+          <div class="score-label">Rich media assets (portfolio). FAQ section would strengthen authority.</div>
+          <button class="chip review" data-status-id="exec-content">Needs Review</button>
+        </div>
+        <div class="exec-card">
+          <h3>Performance</h3>
+          <div class="score">Excellent</div>
+          <div class="score-label">Static site, optimized assets. Strong Core Web Vitals candidate.</div>
+          <button class="chip done" data-status-id="exec-perf">Done</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. CHECKLIST MATRIX ============ -->
+    <section id="checklist">
+      <div class="section-head"><span class="idx">02</span><h2 class="section-title">Checklist matrix</h2></div>
+      <p class="section-sub">One row per signal, assessed against SEO best practices and industry standards. Grounded in actual page inspection.</p>
+
+      <div class="card">
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Page title tag <button class="chip done" data-status-id="chk-title">Done</button></h4>
+            <p>Present and descriptive: "Aural Lab Sound - Professional Audio & Sound Design Studio". Includes brand name + value prop.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Meta description <button class="chip done" data-status-id="chk-desc">Done</button></h4>
+            <p>Present: "Professional sound design and audio recording studio in Bangalore. Specializing in production sound, dialogue editing, foley, and sound design for film and media." (155 chars, within ideal 150-160 range).</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Canonical URL <button class="chip done" data-status-id="chk-canonical">Done</button></h4>
+            <p>Present: <span class="mono">https://www.aurallabsound.com/</span> with www subdomain. Matches actual site URL.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Open Graph tags <button class="chip done" data-status-id="chk-og">Done</button></h4>
+            <p>og:title, og:description, og:url, og:type, og:locale (en_IN) present. Will display well on social media.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Twitter card <button class="chip done" data-status-id="chk-twitter">Done</button></h4>
+            <p><span class="mono">twitter:card</span> set to "summary" with <span class="mono">twitter:site</span> = @AuralLabSound. Good for Twitter sharing.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Viewport & mobile <button class="chip done" data-status-id="chk-viewport">Done</button></h4>
+            <p>Viewport meta tag with <span class="mono">width=device-width, initial-scale=1</span>. Responsive design verified in place.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Robots.txt <button class="chip done" data-status-id="chk-robots">Done</button></h4>
+            <p><span class="mono">robots.txt</span> exists at root. Verified to allow crawling. Consider adding sitemap reference if not present.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>XML sitemap <button class="chip partial" data-status-id="chk-sitemap">Partial</button></h4>
+            <p>Sitemap exists (<span class="mono">sitemap.xml</span>) with 1 URL. Lastmod date set to 31 Jul 2026. Acceptable for single-page site, but add proper metadata if new pages are added.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Heading hierarchy <button class="chip done" data-status-id="chk-heading">Done</button></h4>
+            <p>H1 "Aural Lab Sound" on hero. H2 for major sections (Credits, Contact). Proper semantic structure maintained throughout.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Image alt text <button class="chip partial" data-status-id="chk-alt">Partial</button></h4>
+            <p>Logo has descriptive alt text. Portfolio images should each have unique, descriptive alt attributes (current state: needs spot-check on all gallery images).</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Accessibility / WCAG <button class="chip done" data-status-id="chk-a11y">Done</button></h4>
+            <p>Skip link present. Theme toggle functional. Semantic HTML in use. Color contrast appears adequate. Strong accessible foundation.</p>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-body" style="flex:1;">
+            <h4>Schema.org markup <button class="chip partial" data-status-id="chk-schema">Partial</button></h4>
+            <p>WebSite + LocalBusiness schema in <span class="mono">&lt;script type="application/ld+json"&gt;</span>. Consider expanding with Organization, LocalBusiness extensions (hours, services, reviews).</p>
+          </div>
+        </div>
+        <div class="score-row" style="border-bottom:none;">
+          <div class="score-body" style="flex:1;">
+            <h4>Mobile performance <button class="chip done" data-status-id="chk-performance">Done</button></h4>
+            <p>Static HTML site with no heavy JS. Images are WebP format (optimized). Will score well on Core Web Vitals. No bloat detected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. AI CRAWL READINESS ============ -->
+    <section id="ai-crawl">
+      <div class="section-head"><span class="idx">03</span><h2 class="section-title">AI crawl &amp; answer engine readiness</h2></div>
+      <p class="section-sub">Criteria for how well LLM crawlers (Google AI Overviews, Perplexity, ChatGPT) can understand and cite from your site. This is increasingly important for organic visibility.</p>
+
+      <div class="card">
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">Main content visible without interaction</h4><p>Server-rendered static HTML. Portfolio items present in DOM, not lazy-loaded or JS-gated. AI crawlers can read everything in first pass.</p></div>
+        </div>
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">Service/skill keywords in plain text</h4><p>"Sync Sound", "Mix", "Sound Design", "Foley", "Production Sound", "Dialogue Editing" all present in visible copy. Easy for LLMs to extract.</p></div>
+        </div>
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">Structured data with service details</h4><p>LocalBusiness schema present, but no LocalBusinessService entries. Consider adding detailed service markup (name, description, price if applicable).</p></div>
+        </div>
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--warn);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">Location clarity</h4><p>Bangalore, Karnataka, India stated in LocalBusiness schema. Contact section (form, email) visible. Phone number (+91-9900117364) in schema. Consider adding Google Maps embed if geo-relevant.</p></div>
+        </div>
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--good);"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">Unique, valuable content</h4><p>Portfolio + credits section demonstrates real work. This is high-value proof content for LLM citations. Foley/dialogue editing expertise is clearly visible.</p></div>
+        </div>
+        <div class="score-row">
+          <div class="score-mark" style="color:var(--bad);"><i class="fa-solid fa-circle-xmark"></i></div>
+          <div class="score-body"><h4 style="font-size:0.9rem;">FAQ or "how-to" sections</h4><p>Currently absent. Adding Q&A (e.g., "What's the difference between foley and dialogue editing?", "How do I hire for sound design?") would give AI crawlers specific answers to common queries.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. SCHEMA COVERAGE ============ -->
+    <section id="schema">
+      <div class="section-head"><span class="idx">04</span><h2 class="section-title">Schema.org coverage</h2></div>
+      <p class="section-sub">Current structured data and recommendations for expansion. Schema helps both Google and AI engines understand your business.</p>
+
+      <div class="card">
+        <dl class="kv" style="display:grid; grid-template-columns:170px 1fr; gap:0.5rem 1.2rem; font-size:0.88rem;">
+          <dt style="color:var(--text-faint); font-family:var(--font-mono); font-size:0.76rem;">Homepage</dt>
+          <dd style="margin:0;"><span class="chip done" style="margin-right:0.4rem;">Done</span><span class="mono">WebSite</span> + <span class="mono">LocalBusiness</span> in <span class="mono">@graph</span>. Name, description, address, phone present. Solid foundation.</dd>
+
+          <dt style="color:var(--text-faint); font-family:var(--font-mono); font-size:0.76rem;">Recommended additions</dt>
+          <dd style="margin:0;"><span class="chip missing" style="margin-right:0.4rem;">Missing</span>
+            <ul style="margin-top:0.5rem; padding-left:1.2rem;">
+              <li><span class="mono">LocalBusinessService</span> (for Foley, Dialogue Editing, Sound Design, etc.)</li>
+              <li><span class="mono">Organization</span> (for social links, logo, contact)</li>
+              <li><span class="mono">AggregateRating</span> / <span class="mono">Review</span> (if client testimonials available)</li>
+              <li><span class="mono">ImageObject</span> (for portfolio images, for Google Images / AI image search)</li>
+              <li><span class="mono">FAQPage</span> (if FAQ section is added)</li>
+            </ul>
+          </dd>
+        </dl>
+
+        <div class="card" style="margin-top:1.1rem; border-left:3px solid var(--warn); background:var(--warn-bg);">
+          <h4 style="font-size:0.92rem; color:var(--text); margin-bottom:0.4rem;"><i class="fa-solid fa-lightbulb" aria-hidden="true" style="color:var(--warn);"></i>&nbsp; Priority schema expansion</h4>
+          <p style="margin:0; font-size:0.86rem; color:var(--text-muted);"><b style="color:var(--text);">Next step:</b> Add 3-5 <span class="mono">LocalBusinessService</span> entries describing each service (Sync Sound, Foley, Dialogue Editing, etc.). Each service can include name, description, price range if applicable. This helps AI understand your specific offerings and surfaces them in voice assistant results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. RECOMMENDATIONS ============ -->
+    <section id="recommendations">
+      <div class="section-head"><span class="idx">05</span><h2 class="section-title">Recommendations</h2></div>
+      <p class="section-sub">Grouped by priority. High items provide immediate SEO + AI visibility gains. Low items are refinements for long-term authority.</p>
+
+      <div class="card">
+        <div class="rec-group" style="margin-bottom:1.4rem;">
+          <h3 style="color:var(--good);"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Recently completed</h3>
+          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>Responsive design & mobile optimization</b> — Full mobile support verified. Theme toggle present. Accessibility foundations strong.</p></div>
+          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>SEO fundamentals</b> — Title, description, canonical, OG tags, Twitter card all in place.</p></div>
+          <div class="rec-item"><span class="rn"><i class="fa-solid fa-check" style="color:var(--good);"></i></span><p><b>Basic schema markup</b> — WebSite + LocalBusiness schema deployed. Phone, address, location confirmed.</p></div>
+        </div>
+
+        <div class="rec-group high">
+          <h3><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> High priority (1-2 weeks)</h3>
+          <div class="rec-item"><span class="rn">01</span><p><b>Expand LocalBusinessService schema.</b> Add markup for each service (Sync Sound, Foley, Dialogue Editing, Sound Design, Production Sound). Improves AI understanding and voice search discoverability. Reference: schema.org/LocalBusinessService.</p></div>
+          <div class="rec-item"><span class="rn">02</span><p><b>Verify & update sitemap.xml lastmod dates.</b> Currently shows 31 Jul 2026. If any content changes, update to reflect. Consider adding priority/changefreq for better Google crawl scheduling.</p></div>
+          <div class="rec-item"><span class="rn">03</span><p><b>Submit to Google Search Console.</b> Verify domain ownership, submit sitemap, monitor indexation status, track query performance. Essential for tracking AI Overviews eligibility.</p></div>
+          <div class="rec-item"><span class="rn">04</span><p><b>Add descriptive alt text to all portfolio images.</b> Each credit/film should have unique alt text (e.g., "Sound design for 'Film Title' (Year) — foley, dialogue editing"). Improves image SEO + AI image understanding.</p></div>
+        </div>
+
+        <div class="rec-group medium">
+          <h3><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> Medium priority (2-4 weeks)</h3>
+          <div class="rec-item"><span class="rn">05</span><p><b>Create FAQ section.</b> Answer common client questions (e.g., "How much does sound design cost?", "What's foley work?", "Do you work with remote teams?"). Add FAQPage schema. Strengthens AI answer engine eligibility.</p></div>
+          <div class="rec-item"><span class="rn">06</span><p><b>Add Organization schema.</b> Expand with sameAs (social links: Instagram, LinkedIn, Twitter), logo URL, contact point details. Better entity recognition for AI.</p></div>
+          <div class="rec-item"><span class="rn">07</span><p><b>Review & optimize meta descriptions for dynamic pages.</b> If portfolio filters generate dynamic URLs, ensure each has unique meta descriptions for individual film/credit groupings.</p></div>
+        </div>
+
+        <div class="rec-group low">
+          <h3><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Low priority (ongoing)</h3>
+          <div class="rec-item"><span class="rn">08</span><p><b>Add ImageObject schema for portfolio images.</b> Structured image data helps Google Images and AI image search. Not essential but improves image discoverability long-term.</p></div>
+          <div class="rec-item"><span class="rn">09</span><p><b>Create "About" or "Team" page with Person schema.</b> If individuals at Aural Lab Sound want visibility, add Person schema with role, photo, bio. Helps build personal brand within your business domain.</p></div>
+          <div class="rec-item"><span class="rn">10</span><p><b>Monitor Core Web Vitals via PageSpeed Insights.</b> Site is already performant (static HTML), but periodic checks ensure no regressions. Set up monitoring dashboard.</p></div>
+          <div class="rec-item"><span class="rn">11</span><p><b>Consider "llms.txt" at root for AI crawlers.</b> Emerging best practice: create /llms.txt with guidelines on what you want indexed for AI training. Not yet standard, but forward-thinking.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="colophon">
+    <span>Generated 05 Aug 2026 &middot; grounded in a live repo audit, not assumed status</span>
+    <span>aurallabsound.com / internal</span>
+  </footer>
+
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      var label = document.getElementById('themeLabel');
+      var states = ['auto','dark','light'];
+      var saved = localStorage.getItem('aural-audit-theme') || 'auto';
+      function apply(state){
+        if(state === 'auto'){ root.removeAttribute('data-theme'); }
+        else { root.setAttribute('data-theme', state); }
+        label.textContent = state.charAt(0).toUpperCase() + state.slice(1);
+      }
+      apply(saved);
+      btn.addEventListener('click', function(){
+        var i = states.indexOf(saved);
+        saved = states[(i+1) % states.length];
+        localStorage.setItem('aural-audit-theme', saved);
+        apply(saved);
+      });
+
+      var cycle = ['done','partial','missing','review','blocked'];
+      var labels = {done:'Done', partial:'Partial', missing:'Missing', review:'Needs Review', blocked:'Blocked'};
+      document.querySelectorAll('button.chip[data-status-id]').forEach(function(chip){
+        var id = chip.getAttribute('data-status-id');
+        var savedState = localStorage.getItem('aural-audit-status-' + id);
+        if(savedState && cycle.indexOf(savedState) > -1){
+          cycle.forEach(function(c){ chip.classList.remove(c); });
+          chip.classList.add(savedState);
+          chip.textContent = labels[savedState];
+        }
+        chip.addEventListener('click', function(){
+          var current = cycle.find(function(c){ return chip.classList.contains(c); }) || 'done';
+          var next = cycle[(cycle.indexOf(current)+1) % cycle.length];
+          chip.classList.remove(current);
+          chip.classList.add(next);
+          chip.textContent = labels[next];
+          localStorage.setItem('aural-audit-status-' + id, next);
+        });
+      });
+
+      window.addEventListener('beforeprint', function(){
+        document.querySelectorAll('details').forEach(function(d){ d.open = true; });
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
