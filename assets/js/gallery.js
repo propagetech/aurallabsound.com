@@ -132,6 +132,8 @@ const creditsWorkType = document.getElementById("credits-work-type");
 const creditsImdb = document.getElementById("credits-imdb");
 const creditsTeam = document.getElementById("credits-team");
 const progressDotsContainer = document.getElementById("progress-dots");
+const progressWrap = document.getElementById("lightbox-progress-wrap");
+const scrubTitle = document.getElementById("lightbox-scrub-title");
 const counterText = document.getElementById("counter-text");
 
 let currentIndex = 0;
@@ -299,6 +301,33 @@ function clearProgressTips() {
   });
 }
 
+function clearScrubPreview() {
+  clearProgressTips();
+  progressWrap?.classList.remove("is-scrubbing");
+  if (scrubTitle) {
+    scrubTitle.hidden = true;
+    scrubTitle.textContent = "";
+    scrubTitle.classList.remove("is-pop");
+  }
+}
+
+function setScrubTitle(title, { pop = false } = {}) {
+  if (!scrubTitle) {
+    return;
+  }
+
+  scrubTitle.hidden = false;
+  scrubTitle.textContent = title;
+  progressWrap?.classList.add("is-scrubbing");
+
+  if (pop) {
+    scrubTitle.classList.remove("is-pop");
+    // Force reflow so the pop can replay on each film while scrubbing
+    void scrubTitle.offsetWidth;
+    scrubTitle.classList.add("is-pop");
+  }
+}
+
 function showProgressTip(segment) {
   if (!segment) {
     return;
@@ -330,13 +359,19 @@ function initProgressScrub() {
     return el ? el.closest(".lightbox-progress__seg") : null;
   }
 
-  function tipFor(segment, { buzz = false } = {}) {
+  function tipFor(segment, { buzz = false, pop = false } = {}) {
     if (!segment) {
       return;
     }
 
     const index = Number(segment.getAttribute("data-index"));
+    const movie = filteredMovies[index];
     showProgressTip(segment);
+
+    if (movie) {
+      const didChange = lastTipIndex !== index;
+      setScrubTitle(movie.title, { pop: Boolean(pop && didChange) });
+    }
 
     if (buzz && lastTipIndex !== null && lastTipIndex !== index) {
       hapticTick();
@@ -349,7 +384,7 @@ function initProgressScrub() {
     activePointerId = null;
     isScrubbing = false;
     lastTipIndex = null;
-    window.setTimeout(clearProgressTips, 700);
+    window.setTimeout(clearScrubPreview, 480);
   }
 
   progressDotsContainer.addEventListener("click", (event) => {
@@ -377,8 +412,8 @@ function initProgressScrub() {
 
     if (event.pointerType === "touch" || event.pointerType === "pen") {
       progressDotsContainer.setPointerCapture?.(event.pointerId);
-      // Instant title feedback — no long-press wait
-      tipFor(segment);
+      // Instant title + zoom feedback — no long-press wait
+      tipFor(segment, { pop: true });
     }
   });
 
@@ -401,7 +436,7 @@ function initProgressScrub() {
     }
 
     if (isScrubbing) {
-      tipFor(segment, { buzz: true });
+      tipFor(segment, { buzz: true, pop: true });
     }
   });
 
@@ -437,7 +472,7 @@ function initProgressScrub() {
 
   progressDotsContainer.addEventListener("pointerleave", () => {
     if (activePointerId === null) {
-      clearProgressTips();
+      clearScrubPreview();
     }
   });
 }
