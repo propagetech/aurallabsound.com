@@ -134,6 +134,8 @@ const creditsTeam = document.getElementById("credits-team");
 const progressDotsContainer = document.getElementById("progress-dots");
 const progressWrap = document.getElementById("lightbox-progress-wrap");
 const scrubTitle = document.getElementById("lightbox-scrub-title");
+const scrubLetter = document.getElementById("lightbox-scrub-letter");
+const scrubName = document.getElementById("lightbox-scrub-name");
 const counterText = document.getElementById("counter-text");
 
 let currentIndex = 0;
@@ -244,38 +246,79 @@ function preloadNeighbours(index) {
   });
 }
 
+function getTitleLetter(title) {
+  const match = String(title || "").trim().match(/[A-Za-z0-9]/);
+  if (!match) {
+    return "#";
+  }
+  const character = match[0].toUpperCase();
+  return /[0-9]/.test(character) ? "#" : character;
+}
+
+function buildLetterEntries(movieList) {
+  const entries = [];
+  let lastLetter = null;
+
+  movieList.forEach((movie, index) => {
+    const letter = getTitleLetter(movie.title);
+    if (letter === lastLetter) {
+      return;
+    }
+    entries.push({
+      letter,
+      index,
+      title: movie.title
+    });
+    lastLetter = letter;
+  });
+
+  return entries;
+}
+
 function renderProgress(index) {
   if (!progressDotsContainer) {
     return;
   }
 
-  const signature = filteredMovies.map((movie) => movie.id).join(",");
+  const entries = buildLetterEntries(filteredMovies);
+  const signature = `${filteredMovies.map((movie) => movie.id).join(",")}|${entries.map((entry) => entry.letter).join("")}`;
+  const currentLetter = getTitleLetter(filteredMovies[index]?.title || "");
 
   if (progressDotsContainer.dataset.signature !== signature) {
     progressDotsContainer.dataset.signature = signature;
     progressDotsContainer.replaceChildren(
-      ...filteredMovies.map((movie, i) => {
+      ...entries.map((entry) => {
         const segment = document.createElement("button");
         segment.type = "button";
         segment.className = "lightbox-progress__seg";
-        segment.setAttribute("data-index", String(i));
-        segment.setAttribute("aria-label", movie.title);
-        segment.setAttribute("aria-current", i === index ? "true" : "false");
+        segment.setAttribute("data-index", String(entry.index));
+        segment.setAttribute("data-letter", entry.letter);
+        segment.setAttribute("aria-label", `Jump to films starting with ${entry.letter}`);
+        segment.setAttribute("aria-current", entry.letter === currentLetter ? "true" : "false");
+
+        const letter = document.createElement("span");
+        letter.className = "lightbox-progress__letter";
+        letter.setAttribute("aria-hidden", "true");
+        letter.textContent = entry.letter;
+        segment.append(letter);
 
         const tip = document.createElement("span");
         tip.className = "lightbox-progress__tip";
         tip.setAttribute("aria-hidden", "true");
-        tip.textContent = movie.title;
+        tip.textContent = entry.title;
         segment.append(tip);
+
         return segment;
       })
     );
   }
 
-  Array.from(progressDotsContainer.children).forEach((segment, i) => {
-    segment.classList.toggle("is-past", i < index);
-    segment.classList.toggle("is-active", i === index);
-    segment.setAttribute("aria-current", i === index ? "true" : "false");
+  Array.from(progressDotsContainer.children).forEach((segment) => {
+    const letter = segment.getAttribute("data-letter") || "";
+    const isActive = letter === currentLetter;
+    segment.classList.toggle("is-active", isActive);
+    segment.classList.toggle("is-past", currentLetter !== "#" && letter !== "#" && letter < currentLetter);
+    segment.setAttribute("aria-current", isActive ? "true" : "false");
   });
 }
 
@@ -305,25 +348,34 @@ function clearScrubPreview() {
   clearProgressTips();
   progressWrap?.classList.remove("is-scrubbing");
   if (scrubTitle) {
-    scrubTitle.textContent = "";
     scrubTitle.classList.remove("is-pop");
     scrubTitle.setAttribute("aria-hidden", "true");
   }
+  if (scrubLetter) {
+    scrubLetter.textContent = "";
+  }
+  if (scrubName) {
+    scrubName.textContent = "";
+  }
 }
 
-function setScrubTitle(title, { pop = false } = {}) {
+function setScrubPreview(letter, title, { pop = false } = {}) {
   if (!scrubTitle) {
     return;
   }
 
   scrubTitle.hidden = false;
   scrubTitle.setAttribute("aria-hidden", "false");
-  scrubTitle.textContent = title;
+  if (scrubLetter) {
+    scrubLetter.textContent = letter;
+  }
+  if (scrubName) {
+    scrubName.textContent = title;
+  }
   progressWrap?.classList.add("is-scrubbing");
 
   if (pop) {
     scrubTitle.classList.remove("is-pop");
-    // Force reflow so the pop can replay on each film while scrubbing
     void scrubTitle.offsetWidth;
     scrubTitle.classList.add("is-pop");
   }
@@ -366,12 +418,13 @@ function initProgressScrub() {
     }
 
     const index = Number(segment.getAttribute("data-index"));
+    const letter = segment.getAttribute("data-letter") || getTitleLetter(filteredMovies[index]?.title || "");
     const movie = filteredMovies[index];
     showProgressTip(segment);
 
     if (movie) {
       const didChange = lastTipIndex !== index;
-      setScrubTitle(movie.title, { pop: Boolean(pop && didChange) });
+      setScrubPreview(letter, movie.title, { pop: Boolean(pop && didChange) });
     }
 
     if (buzz && lastTipIndex !== null && lastTipIndex !== index) {
@@ -413,7 +466,6 @@ function initProgressScrub() {
 
     if (event.pointerType === "touch" || event.pointerType === "pen") {
       progressDotsContainer.setPointerCapture?.(event.pointerId);
-      // Instant title + zoom feedback — no long-press wait
       tipFor(segment, { pop: true });
     }
   });
