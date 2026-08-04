@@ -1661,20 +1661,30 @@ html[data-theme="light"] .faq-hero__veil {
 @media (max-width: 47.99rem) {
   .lightbox {
     --backdrop-alpha: 0.95;
-    display: block;
+    display: flex;
+    flex-direction: column;
     padding: 0;
+    /* Fill the fixed inset box — more reliable than 100vh behind mobile chrome */
+    height: 100%;
+    max-height: 100%;
   }
 
   .lightbox-content {
     width: 100%;
     max-width: 100%;
-    height: 100vh;
+    flex: 1 1 auto;
+    /* Fallback for older browsers, then svh/dvh for mobile chrome */
+    height: 100%;
+    max-height: 100%;
+    height: 100svh;
+    max-height: 100dvh;
     border: none;
     border-radius: 0;
     box-shadow: none;
     animation: none;
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 }
 
@@ -2006,22 +2016,24 @@ html[data-theme="light"] .faq-hero__veil {
 
 @media (max-width: 47.99rem) {
   .lightbox-viewport {
-    flex: 1 1 auto;
+    /* Zero basis so toolbar + filmstrip keep their space first */
+    flex: 1 1 0%;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   .lightbox-body {
     padding: 0;
     max-height: none;
-    overflow-y: visible;
+    overflow: hidden;
     -webkit-overflow-scrolling: auto;
     grid-template-columns: 1fr;
     gap: 0;
-    height: auto;
+    height: 100%;
     min-height: 0;
-    flex: 1;
+    flex: 1 1 0%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -2114,8 +2126,11 @@ html[data-theme="light"] .faq-hero__veil {
 
 @media (max-width: 47.99rem) {
   .lightbox-stage {
-    flex: 0 0 auto;
-    height: min(48vh, 24rem);
+    /* Shrink on short screens / award-heavy credits so the filmstrip stays on-screen */
+    flex: 1 1 auto;
+    height: auto;
+    max-height: min(42svh, 24rem);
+    min-height: 9rem;
     width: 100%;
     min-width: 0;
     overflow: hidden;
@@ -2207,10 +2222,10 @@ html[data-theme="light"] .faq-hero__veil {
 @media (max-width: 47.99rem) {
   .lightbox-credits {
     gap: 0;
-    padding: var(--space-5) var(--space-5) var(--space-8);
+    padding: var(--space-5) var(--space-5) var(--space-4);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    flex: 1;
+    flex: 1 1 auto;
     min-height: 0;
   }
 }
@@ -2392,7 +2407,10 @@ html[data-theme="light"] .faq-hero__veil {
 }
 
 .lightbox-filmstrip {
+  flex: 0 0 auto;
   flex-shrink: 0;
+  position: relative;
+  z-index: 8;
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -2566,15 +2584,17 @@ html[data-theme="light"] .faq-hero__veil {
 @media (max-width: 47.99rem) {
   .lightbox-toolbar {
     background: rgba(0, 0, 0, 0.4);
-    padding: var(--space-3) var(--space-4);
+    padding: calc(var(--space-3) + env(safe-area-inset-top, 0px)) var(--space-4) var(--space-3);
     gap: var(--space-3);
   }
 }
 
 @media (max-width: 47.99rem) {
   .credits-award-slot {
-    min-height: 4.5rem;
-    margin-top: var(--space-4);
+    flex: 0 0 auto;
+    min-height: 0;
+    margin-top: var(--space-3);
+    padding-bottom: var(--space-1);
   }
 
   .credits-award {
