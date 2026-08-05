@@ -43,7 +43,11 @@ const moviesRaw = [
   { file: "THE SIGNAL MAN.jpeg", type: "Feature Film", contribution: "Sync Sound, Mix, Sound Design, Dialogue Edit, Foley", year: 2023, director: "K Shivarudraiah", imdb: "https://www.imdb.com/title/tt27302882/" },
   { file: "VAGACHIPANI.jpeg", type: "Feature Film", contribution: "Sync Sound, Sound Design, Dialogue Edit, Foley", year: 2025, director: "Natesh Hegde", imdb: "https://www.imdb.com/title/tt22640628/", awards: [{ stamp: "Berlinale • 2025", detail: "Official Selection" }] },
   { file: "VILLAGE ROCKSTARS 2.jpeg", type: "Feature Film", contribution: "Mix, Sound Design, Dialogue Edit, Foley", year: 2024, director: "Rima Das", imdb: "https://www.imdb.com/title/tt33575372/", awards: [{ stamp: "Busan / Berlinale • 2025", detail: "Feature • Official Selection" }] },
-  { file: "ZUAS.jpeg", type: "Feature Film", contribution: "Mix", year: 2026, director: "Garvit Singh", imdb: "—" }
+  { file: "ZUAS.jpeg", type: "Feature Film", contribution: "Mix", year: 2026, director: "Garvit Singh", imdb: "—" },
+  { file: "APPAVIN PARISU.jpg", type: "Short Film", contribution: "Mix, Sound Design, Foley", year: 2022, director: "Jagannath Radhakrishnan", imdb: "https://www.imdb.com/title/tt15018248/" },
+  { file: "THE FIRST LEARNERS.jpg", type: "Short Film", contribution: "Sync Sound", year: 2018, director: "Anita Ramesh", imdb: "https://www.imdb.com/title/tt10055938/" },
+  { file: "PATHUMMA.jpg", type: "Feature Film", contribution: "Dialogue Edit, Sound Edit", year: 2017, director: "Panchakshari", imdb: "https://www.imdb.com/name/nm14760409/bio/?ref_=nm_ov_ql_1" },
+  { file: "THE PLAN.jpg", type: "Feature Film", contribution: "Dialogue Edit, Sound Edit", year: 2015, director: "Manjunath B L Keerthi", imdb: "https://www.imdb.com/title/tt5156652/" }
 ];
 
 const ALLOWED_TYPES = [
